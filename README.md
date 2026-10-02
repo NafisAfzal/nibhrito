@@ -4,6 +4,19 @@
 
 This repository starts with an implementation-ready planning pack. The goal is to let a coding agent such as Codex or OpenCode build the product phase by phase without having to redesign the architecture.
 
+Phase 0 adds a local React/Vite + Worker/D1 foundation. Messaging and cryptographic
+features are not implemented yet. See `PROJECT_STATUS.md` for current acceptance
+evidence, `docs/13_ARCHITECTURE_REVIEW.md` for audit decisions, and
+`docs/14_LOCAL_DEVELOPMENT.md` for setup and checks.
+
+```powershell
+npm ci
+npm run db:migrate:local
+npm run dev
+```
+
+Open `http://127.0.0.1:8787`. No Cloudflare login is needed for local development.
+
 ## Start here
 
 Read in this order:

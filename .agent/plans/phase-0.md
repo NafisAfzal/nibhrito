@@ -90,7 +90,10 @@ lists evidence, limitations, decisions, and Phase 1 as next.
   Local migration applied and a second listing showed none pending. Full npm audit
   reports 0 vulnerabilities. Worker dry-run produced 3.28 KiB without runtime npm
   dependencies. Reviewed source/bundled Worker, ignored paths, and diff for secrets.
-- Final configuration/format/diff review and phase commit pending.
+- 2026-10-03: Final config dry-run and full `npm run test:e2e` passed. Updated
+  PROJECT_STATUS.md, reviewed all staged paths and exact dependency pins, and
+  recorded audit/scaffold as separate logical commits. Phase 0 complete; next is
+  Phase 1's serialization clarification and crypto ExecPlan.
 
 ## Decisions and surprises
 

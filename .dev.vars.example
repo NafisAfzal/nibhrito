@@ -1,0 +1,5 @@
+# Worker-only local configuration. Phase 0 requires no secrets.
+# Copy to .dev.vars when a later phase requires local server secrets.
+# Never put owner tokens, recipient keys, or recovery secrets here.
+# Phase 6 will require RATE_LIMIT_SECRET, generated locally with secure randomness.
+# Do not add a sample secret or fallback value.

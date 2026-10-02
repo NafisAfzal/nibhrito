@@ -1,0 +1,21 @@
+node_modules/
+dist/
+.wrangler/
+coverage/
+playwright-report/
+test-results/
+package-lock.json
+# Preserve the original planning pack's formatting.
+AGENTS.md
+NIBHRITO_MASTER_PLAN.md
+docs/00_START_HERE.md
+docs/01_MASTER_PLAN.md
+docs/03_E2EE_PROTOCOL.md
+docs/04_SECURITY_THREAT_MODEL.md
+docs/06_IMPLEMENTATION_ROADMAP.md
+docs/07_DEPLOYMENT_FREE_TIER.md
+docs/08_PRIVACY_LEGAL_ABUSE.md
+docs/09_TESTING_ACCEPTANCE.md
+docs/10_AGENT_RUNBOOK.md
+docs/11_SOURCES.md
+docs/12_PRODUCT_UX.md
