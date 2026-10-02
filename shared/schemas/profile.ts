@@ -68,3 +68,45 @@ export function createProfile(value: unknown): CreateProfile {
     recovery,
   };
 }
+export type ProfileUpdate = Partial<
+  Pick<
+    PublicProfile,
+    | 'display_name'
+    | 'public_prompt'
+    | 'theme'
+    | 'retention_days'
+    | 'is_disabled'
+  >
+>;
+export function profileUpdate(value: unknown): ProfileUpdate {
+  const data = object(value, [
+    'display_name',
+    'public_prompt',
+    'theme',
+    'retention_days',
+    'is_disabled',
+  ]);
+  if (Object.keys(data).length === 0) throw new ValidationError();
+  const result: ProfileUpdate = {};
+  if ('display_name' in data)
+    result.display_name = text(data['display_name'], 256, 64);
+  if ('public_prompt' in data)
+    result.public_prompt = text(data['public_prompt'], 1120, 280, true);
+  if ('theme' in data) {
+    if (!['sage', 'rose', 'ocean'].includes(data['theme'] as string))
+      throw new ValidationError();
+    result.theme = data['theme'] as PublicProfile['theme'];
+  }
+  if ('retention_days' in data) {
+    if (![1, 7, 30, 90].includes(data['retention_days'] as number))
+      throw new ValidationError();
+    result.retention_days = data[
+      'retention_days'
+    ] as PublicProfile['retention_days'];
+  }
+  if ('is_disabled' in data) {
+    if (typeof data['is_disabled'] !== 'boolean') throw new ValidationError();
+    result.is_disabled = data['is_disabled'];
+  }
+  return result;
+}

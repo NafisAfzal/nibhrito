@@ -60,6 +60,17 @@ export async function boundedJson(
     reader.releaseLock();
   }
 }
-export function noBody(request: Request) {
-  if (request.body !== null) throw new ValidationError();
+export async function noBody(request: Request) {
+  // Workers may expose an empty stream for a bodyless DELETE (Content-Length: 0).
+  if (!request.body) return;
+  const reader = request.body.getReader();
+  try {
+    const chunk = await reader.read();
+    if (!chunk.done) {
+      await reader.cancel();
+      throw new ValidationError();
+    }
+  } finally {
+    reader.releaseLock();
+  }
 }

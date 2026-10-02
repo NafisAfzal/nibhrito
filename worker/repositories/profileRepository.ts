@@ -1,6 +1,7 @@
 import type {
   CreateProfile,
   PublicProfile,
+  ProfileUpdate,
 } from '../../shared/schemas/profile';
 import type { RecoveryEnvelope } from '../../shared/protocol/envelope';
 import { HttpError } from '../security/request';
@@ -9,6 +10,8 @@ interface Row extends Omit<PublicProfile, 'is_disabled'> {
   owner_token_hash: string;
 }
 export interface ProfileRepository {
+  update(id: string, input: ProfileUpdate, now: number): Promise<void>;
+  remove(id: string): Promise<void>;
   create(input: CreateProfile, now: number): Promise<PublicProfile>;
   bySlug(slug: string): Promise<PublicProfile | null>;
   byVerifier(
@@ -30,6 +33,25 @@ const publicRow = (row: Row): PublicProfile => ({
 });
 export class D1ProfileRepository implements ProfileRepository {
   constructor(private readonly db: D1Database) {}
+  async update(id: string, input: ProfileUpdate, now: number) {
+    await this.db
+      .prepare(
+        'UPDATE profiles SET display_name=COALESCE(?,display_name),public_prompt=COALESCE(?,public_prompt),theme=COALESCE(?,theme),retention_days=COALESCE(?,retention_days),is_disabled=COALESCE(?,is_disabled),updated_at=? WHERE id=?',
+      )
+      .bind(
+        input.display_name ?? null,
+        input.public_prompt ?? null,
+        input.theme ?? null,
+        input.retention_days ?? null,
+        input.is_disabled === undefined ? null : Number(input.is_disabled),
+        now,
+        id,
+      )
+      .run();
+  }
+  async remove(id: string) {
+    await this.db.prepare('DELETE FROM profiles WHERE id=?').bind(id).run();
+  }
   async create(input: CreateProfile, now: number): Promise<PublicProfile> {
     const id = crypto.randomUUID(),
       b = input.recovery;

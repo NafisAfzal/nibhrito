@@ -1,9 +1,14 @@
-import { slug, ValidationError } from '../../shared/protocol/encoding';
-import { createProfile } from '../../shared/schemas/profile';
+import { slug, uuid, ValidationError } from '../../shared/protocol/encoding';
+import { createProfile, profileUpdate } from '../../shared/schemas/profile';
 import { owner } from '../middleware/auth';
 import { secureResponse } from '../middleware/securityHeaders';
 import type { ProfileRepository } from '../repositories/profileRepository';
-import { boundedJson, HttpError, noBody } from '../security/request';
+import {
+  boundedJson,
+  checkOrigin,
+  HttpError,
+  noBody,
+} from '../security/request';
 import { apiError } from './api';
 export function success(data: unknown, status = 200) {
   return secureResponse(
@@ -27,14 +32,34 @@ export async function profileRoutes(
         201,
       );
     if (url.pathname === '/api/v1/owner' && request.method === 'GET') {
-      noBody(request);
+      await noBody(request);
       return success(await owner(request, profiles));
     }
     const match = /^\/api\/v1\/(profiles|recovery)\/([^/]+)$/.exec(
       url.pathname,
     );
+    if (
+      match?.[1] === 'profiles' &&
+      ['PATCH', 'DELETE'].includes(request.method)
+    ) {
+      checkOrigin(request);
+      const profile = await owner(request, profiles);
+      if (uuid(match[2]) !== profile.id)
+        throw new HttpError(404, 'NOT_FOUND', 'Profile not available.');
+      if (request.method === 'DELETE') {
+        await noBody(request);
+        await profiles.remove(profile.id);
+        return success({ deleted: true });
+      }
+      await profiles.update(
+        profile.id,
+        profileUpdate(await boundedJson(request, 4096)),
+        now,
+      );
+      return success(await profiles.bySlug(profile.slug));
+    }
     if (match && request.method === 'GET') {
-      noBody(request);
+      await noBody(request);
       const name = slug(match[2]);
       const result =
         match[1] === 'profiles'

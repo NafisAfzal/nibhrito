@@ -5,7 +5,7 @@ no chat history is required to continue.
 
 ## Current phase
 
-Phases 0–3 complete. Continuing immediately with Phase 4, encrypted inbox.
+Phases 0–4 complete. Continuing immediately with Phase 5, expiry and quotas.
 The following Phase 0 handoff is historical; subsequent completed-phase entries
 record current work and checks. No production deployment has occurred.
 
@@ -141,3 +141,15 @@ the composer before re-verification. Full check passed: 72 Vitest / 6 Chromium t
 lint/format/TS/build/Worker dry-run and zero-vulnerability audit. Network and real D1
 tests confirm ciphertext-only submission/storage. Diff reviewed: no sensitive logs,
 fallback keys or remote QR/scripts. Next: Phase 4 owner-scoped inbox and lifecycle.
+
+## Phase 4 completed — 2026-10-03
+
+Owner-scoped ciphertext inbox, bounded cursor pagination, client-only decryption,
+in-memory search/mood filters, safe text rendering, corruption errors and message
+deletion. Added profile settings/pause/delete with immutable identity/key/auth, SQL
+cascades, local profile selection, screen lock and device forgetting. Full check:
+83 Vitest and 6 Chromium tests; successful second-context recovery decrypts a stored
+note; injected corruption displays no partial text; HTML stays inert; decrypted text
+is absent from persistent browser storage. Fixed empty Worker DELETE streams with a
+bounded body check; nonempty bodies still reject. Diff/privacy review passed.
+Next: Phase 5 indexed bounded cleanup and concurrent quota tests.

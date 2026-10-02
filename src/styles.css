@@ -1,6 +1,71 @@
 @import 'tailwindcss';
 
 @layer components {
+  .share {
+    display: flow-root;
+  }
+  summary {
+    cursor: pointer;
+    font-weight: 650;
+    padding-block: 0.5rem;
+  }
+  summary:focus-visible {
+    outline: 3px solid #527b65;
+    outline-offset: 4px;
+  }
+  .note-list {
+    display: grid;
+    gap: 1rem;
+    margin-block: 1.5rem;
+  }
+  .note-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .message-text {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font-size: 1.15rem;
+    line-height: 1.8;
+  }
+  .note {
+    margin-block: 0;
+  }
+  .fingerprint {
+    font-family: monospace;
+    overflow-wrap: anywhere;
+    font-size: 0.85rem;
+  }
+  .profile-picker {
+    max-width: 320px;
+    margin-bottom: 1rem;
+  }
+  .danger {
+    color: #a53434;
+    background: transparent;
+    border: 1px solid currentColor;
+  }
+  .empty {
+    text-align: center;
+    padding-block: 3rem;
+  }
+  .settings {
+    margin-top: 2rem;
+  }
+  @media (max-width: 640px) {
+    .share-qr {
+      float: none;
+      display: block;
+      margin: 1rem auto;
+    }
+  }
+}
+
+@layer components {
   .share-qr {
     width: 180px;
     height: 180px;

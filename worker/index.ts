@@ -6,6 +6,7 @@ import { D1ProfileRepository } from './repositories/profileRepository';
 import { profileRoutes } from './routes/profiles';
 import { D1MessageRepository } from './repositories/messageRepository';
 import { messageRoutes } from './routes/messages';
+import { inboxRoutes } from './routes/inbox';
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -14,6 +15,11 @@ export default {
       if (pathname === '/api/v1/health')
         return handleApi(request, new D1ReadinessRepository(env.DB));
       const profiles = new D1ProfileRepository(env.DB);
+      if (
+        pathname === '/api/v1/inbox' ||
+        pathname.startsWith('/api/v1/messages/')
+      )
+        return inboxRoutes(request, profiles, new D1MessageRepository(env.DB));
       if (/^\/api\/v1\/profiles\/[^/]+\/messages$/.test(pathname))
         return messageRoutes(
           request,
