@@ -1,205 +1,145 @@
 # Nibhrito Project Status
 
-Updated 2026-10-03. This file and the phase ExecPlan are the persistent handoff;
-no chat history is required to continue.
+Updated 2026-10-03. This file, IMPLEMENTATION.md, SECURITY_REVIEW.md and the phase
+ExecPlans provide the handoff; no chat history is needed.
 
-## Current phase
+## Current state
 
-Phases 0–7 complete. Continuing immediately with Phase 8, deployment preparation.
-The following Phase 0 handoff is historical; subsequent completed-phase entries
-record current work and checks. No production deployment has occurred.
+All locally executable MVP work is complete: Phases 0–7 and Phase 8 deployment
+preparation. Final clean-install verification passes; changes are being recorded
+in the Phase 8 and verification commits.
+Package is 1.0.0-rc.1. No Cloudflare provisioning, production secret/configuration,
+deployment or v1.0.0 tag has occurred. External production acceptance remains pending.
 
-## Completed work
+## Implemented
 
-### Phase 7 — completed 2026-10-03
+- Strict native browser P-256 ECDH / HKDF-SHA-256 / AES-256-GCM v1, canonical
+  envelopes/AAD, native interoperability fixtures, malformed/tamper/wrong-key failures,
+  Unicode/Bangla and complete 4 KiB boundaries. Protocol algorithms are unchanged.
+- Recipient setup, independent random owner token/verifier, encrypted recovery bundle,
+  saved-code confirmation, nonextractable IndexedDB key, second-browser restore.
+  No email/password account, plaintext fallback or operator decryption/reset.
+- Verified complete fragment link, version/profile/key/fingerprint checks and local
+  QR. Browser encryption before anonymous submission; safe exact-envelope retries.
+- Authenticated cursor inbox, local-only decryption/search/mood filter, inert text,
+  corruption/error/empty/loading states, expiry and deletion. Public settings,
+  retention choices, pause/resume, forget-device and permanent profile deletion.
+- Local encrypted backups and archive reader using existing recovery/crypto; no
+  uploads, raw key export or plaintext export. Strict version/bindings/4 MiB/500 rows.
+- Worker API with strict schemas, streamed byte caps, same-origin checks, HTTPS-only
+  production APIs, auth-derived SQL scopes, parameterized repositories, no broad CORS.
+- D1 strict schema, indexes/FK/cascades and migrations 0001/0002. Atomic active/global
+  capacity and admission limits, aggregate trigger counters and bounded Cron cleanup.
+  Daily HMAC network buckets store no raw IP. Challenges remain explicitly disabled.
+- Responsive light/dark UI, centralized English copy, Bangla branding/Unicode content,
+  semantic labelled forms, focus/skip link, unsupported browser and generic errors.
+  Privacy, terms, acceptable-use, security and configurable actual operator contact.
+- No analytics/remote scripts/fonts; CSP/security headers on assets/API, no runtime
+  logging, disabled Worker metrics/instrumentation/observability. Locked minimal
+  dependencies, strict separate TS projects, tests and privacy/tracked-secret scan.
+- Guarded production config and separate secret generators, atomic code/secret upload
+  through pinned Wrangler, exact provisioning/migration/live smoke/backup/rollback
+  instructions in docs/16. No local-config fallback or invented production UUID.
+- Disposable D1 integration/portability tests and isolated three-engine E2E. A native
+  export/import is restored/decrypted and its migrations/triggers/cascades checked.
 
-- Complete privacy, terms, acceptable-use, security and configurable operator contact
-  pages; responsive/dark/focus review; centralized English copy and correct Bangla.
-- Explicit native-crypto/browser failure state and privacy-preserving error boundary.
-- Local encrypted backup/export/import reader using the existing protocol, no uploads
-  or plaintext key export; capped/versioned file format and corrupt-record handling.
-- Migration 0002 aggregate counters enforces 20000 global physical messages without
-  hot table scans; preserves cleanup/cascade consistency and free-tier headroom.
-- Dedicated adversarial self-review in SECURITY_REVIEW.md; no unresolved Critical or
-  High findings identified. Fixed stale fragment trust, origin admission ordering,
-  secret-bearing diagnostics, async plaintext lifetime, skip-link fragment changes,
-  duplicate React keys and production insecure-transport handling.
-- Full `npm run check` passes: 103 Vitest tests, 27 browser cases across Chromium,
-  Firefox and WebKit, strict typecheck, lint/format/privacy scan, production build,
-  Worker dry run and audit with zero vulnerabilities. Native local migration passed.
-  Desktop/mobile/light/dark visuals inspected with public, empty setup forms only.
-- External gates: operator legal details/review, real hosting/account/configuration,
-  production CPU/quota/headers/Cron/logs, second-device recovery and real Safari/Edge.
-  WebKit Windows skip-link activation uses explicit focus; actual Tab is tested in
-  Chromium/Firefox. Encrypted exports implemented early by explicit user request;
-  other Phase 9 options remain conditional post-launch work.
+## Verification
 
-### Historical Phase 0 record
+Final clean verification from repository root: npm ci succeeds (228 installed
+packages, zero audit vulnerabilities); both migrations applied and repeat application
+is a no-op. Full npm run check exits 0:
 
-- Read the required planning documents, inspected all repository files/toolchain,
-  and preserved the original planning pack in Git (baseline `451488c`).
-- Recorded the architecture audit in `docs/13_ARCHITECTURE_REVIEW.md` and the
-  self-contained ExecPlan in `.agent/plans/phase-0.md`.
-- React/Vite/Tailwind static SPA with centralized copy, Bangla brand text, light/dark
-  styles, no remote scripts/fonts, and an accurate development status.
-- Native TypeScript Worker with GET/HEAD `/api/v1/health`, repository-backed real
-  D1 readiness, no-store JSON errors, method/query rejection, and no diagnostics/logs.
-- API/SPA routing with strict CSP and security headers on HTML, CSS, JS, and API.
-- Committed SQL migration for profiles, opaque messages, encrypted recovery blobs,
-  and short-lived rate buckets; indexes, strict tables, limits, duplicate protection,
-  profile identity foreign key, and deletion cascades. No write API is exposed.
-- Exact dependency pins, portable integrity lockfile, Node 24 policy, separate
-  strict browser/Worker/tooling TS configs, ESLint, formatting, Vitest, Playwright,
-  loopback development commands, and local D1 migration workflow.
-- Secret-free environment examples, ignored local state/secrets/artifacts,
-  disabled telemetry/observability/instrumentation, Worker dry-run bundling, and
-  deployment guard. Local setup is in `docs/14_LOCAL_DEVELOPMENT.md`.
+- 111 Vitest tests in 17 files: native crypto/unit, D1/API/authorization/security,
+  configuration/generator/deployment guards and real encrypted export/import/decrypt.
+- 30 browser cases (10 journeys/checks × Chromium, Firefox, WebKit), no skips/retries,
+  isolated database/root; plaintext/network/persistence, XSS, CSP, recovery, archive,
+  settings, deletion/expiry, malformed/substituted link, unsupported crypto, clipboard
+  absence and encoded contact-link tests pass.
+- Strict TypeScript, lint, format, privacy/tracked-secret checks, production build,
+  Worker dry run and npm audit --audit-level=low pass. Audit finds zero vulnerabilities.
+- Diff/secret/import review passes. Bundled Worker has no browser decryption or
+  recipient private-key payload; schemas/data tests find no plaintext-message/raw
+  private-key/recovery-secret persistence. Operator SQL export preserves ciphertext
+  and is decryptable after restore; all six counter triggers/cascades work.
 
-## Important decisions
+Desktop/mobile/light/dark public UI visually reviewed. Production config and secret
+files do not exist locally; no external credentials, provisioning or deployment used.
 
-- No changes to v1 crypto algorithms or envelope semantics. Phase 0 contains no
-  crypto implementation, mock encryption, or placeholder authentication.
-- Split `docs/` files are authoritative. `NIBHRITO_MASTER_PLAN.md` remains the
-  original planning snapshot; audit decisions are linked from architecture/README.
-- Immutable MVP slugs, preserved message `profile_slug` for AAD, epoch milliseconds,
-  and generic 409 collisions; identical retry acceptance requires exact matching.
-  No replay protection is promised after row deletion/expiry.
-- Limits/validation/expiry/ownership must exist from each route's first write,
-  despite expanded acceptance suites in later roadmap phases.
-- Static `_headers` and Worker middleware keep static requests out of Worker-first
-  routing. `/api` and `/api/*` always receive API behavior, including navigation.
-- Hono is optional and deferred. Runtime dependencies are React and React DOM only;
-  the Worker bundle contains no third-party runtime package.
-- TypeScript 6.0.3 is supported by typescript-eslint; TS 7 is currently outside its
-  declared range. Tooling-only skipLibCheck handles overlapping runtime declarations;
-  browser/Worker projects check source/declarations independently without that escape.
-- Stable Wrangler 4.116.0 / Miniflare 4.20260730.0 are pinned with compatibility date
-  2026-07-30. Latest Wrangler brings a changed Miniflare 5 alpha API. Exact tool-only
-  overrides to Sharp 0.35.4 and Undici 7.29.1 remove known transitive vulnerabilities;
-  the clean install, local runtime/browser tests, and full audit pass with them.
-- No invented remote D1 ID: the binding is genuinely local-only. Production account,
-  DB UUID, secrets, HTTPS hostname, and Cron configuration remain Phase 8 work.
+## Security decisions and review
 
-## Verification history (2026-10-03)
+SECURITY_REVIEW.md records adversarial self-review, with no unresolved Critical/High
+findings identified. Resolved: stale fragment trust, Origin admission ordering,
+unbounded physical/rate storage, secret-bearing diagnostics, async plaintext lifetime,
+skip-link fragment overwrite, duplicate sibling React keys and production HTTP APIs.
+Regression tests exercise these cases. This is not an independent security audit.
 
-| Check                            | Result                                                                                     |
-| -------------------------------- | ------------------------------------------------------------------------------------------ |
-| `npm ci`                         | Pass; repeat install, 227 installed packages, 0 audit vulnerabilities                      |
-| `npm run lint`                   | Pass; no warnings                                                                          |
-| `npm run format:check`           | Pass                                                                                       |
-| `npm run typecheck`              | Pass; browser, Worker, and tooling/test projects                                           |
-| `npm run build`                  | Pass; bundled local JS/CSS and SPA HTML                                                    |
-| `npm test`                       | Pass; 6 unit tests and 4 real local D1 integration tests                                   |
-| `npm run db:migrate:local`       | Pass; 0001_initial.sql applied to local D1                                                 |
-| `npm run db:list:local`          | Pass; no pending migration on repeat                                                       |
-| `npm run test:e2e`               | Pass; 4 Chromium tests against Wrangler, including CSP inline blocking                     |
-| `npm run worker:check`           | Pass; local-only dry-run, 3.28 KiB Worker; no login/deployment                             |
-| `npm audit --audit-level=low`    | Pass; 0 known vulnerabilities, including development tree                                  |
-| Diff/source/bundle/ignore review | Pass; no real credentials, sensitive logging, storage, broad CORS, or remote scripts found |
+Documentation decisions are in docs/13 and docs/15: immutable slugs and v1 AAD,
+strict encoding/JSON sizes, server timestamps, backend token verification independent
+from browser keys, atomic writes, separate local/production config, direct Cloudflare
+edge source handling, and 500 MB free per-database capacity. 0002 is additive; triggers
+affect meta.changes, so repositories use explicit RETURNING for success decisions.
+No hot full scans for aggregate capacity. Physical caps include cleanup backlog.
 
-Initial failures were fixed: install network timeout/partial native binding,
-strict optional response headers typing, incompatible latest Miniflare harness,
-transitive dependency advisories, and duplicate E2E port argument. Automatic review
-blocked manual generated-file deletion; npm reinstall/isolated lock generation
-completed safely instead. No test requirement or security invariant was waived.
+Limits: 4 KiB complete plaintext JSON, 12 KiB message/16 KiB creation/4 KiB update,
+500 active notes/profile, 20000 physical notes globally, 10000 profiles, 2000 rate rows.
+Production rates/grouping and retry behavior are specified in docs/15. Provider
+availability/CPU/storage must be measured at staging; caps are conservative headroom.
 
-## Phase 0 limitations (historical)
+## Known limitations and external gates
 
-- Messaging, browser crypto, key persistence, profile/recovery APIs, authorization,
-  expiry handlers, quotas, and rate limiting are not implemented. Their feature
-  tests have not run and no acceptance claim is made for them.
-- Health checks table presence, not every column/migration integrity. Full migration
-  validity is tested through committed SQL/local D1. Existing DB corruption still
-  needs operational handling in later phases.
-- Browser acceptance currently uses Chromium only; add Firefox/WebKit checks for
-  actual Web Crypto and IndexedDB flows, then enforce the production browser matrix.
-- Local Vite HMR is an iteration aid; production CSP is verified on built assets
-  through Wrangler. Do not handle real secrets in development tooling.
-- Tool/runtime pins and overrides require review before production. Full provider
-  capacity, backup policy, deployment logging, and staging behavior remain unverified.
-- No Cloudflare account/login, remote resource, credentials, domain, challenge config,
-  migrations, deployment, or Git remote was created or supplied.
+- Trust in current frontend/browser/device/hosting TLS, malicious future frontend
+  risk, no full forward secrecy/sender identity proof/per-device revocation, no
+  post-deletion replay tombstones or lost-code reset. Prior copies/archives and
+  temporary provider backups cannot be erased by server deletion.
+- Hosting sees network metadata; HMAC buckets are pseudonymous and a compromised
+  root can correlate them. Shared-network limits/distributed abuse may deny service.
+  Public slugs/settings/existence and server timestamps are not hidden/authenticated
+  sender identity. Native keys and JS strings cannot defeat origin/device compromise.
+- Device/browser data loss requires the saved recovery code; setup network ambiguity
+  can leave a created profile recoverable by that code even if local persistence fails.
+  Local archive imports read copied content; they do not restore server rows.
+- UI is English with Bangla branding and tested Bangla messages. Full localization
+  and independent accessibility review remain optional. Headless Windows WebKit
+  skip-link test uses focus+Enter; Chromium/Firefox use actual Tab. Real Safari/iOS,
+  Edge and assistive technologies need manual review.
+- Actual Cloudflare login, returned D1 UUID, production operator/contact/jurisdiction,
+  protected server root, legal review and live HTTPS/headers/no injected scripts,
+  quotas/CPU, Cron/log review and second-device recovery require the operator.
+  No deployment or release acceptance is claimed locally.
 
-## Phase 0 next-phase handoff (historical)
+## Run and next action
 
-Phase 1: crypto core. First create its ExecPlan and document exact v1 canonical JSON,
-optional fields, strict base64url, UUID/slug formats, recovery checksum, and full
-serialized UTF-8 size accounting as required by the audit. Explain any protocol
-semantic change before making it. Then implement small React/backend-independent
-Web Crypto modules and deterministic vectors plus tamper/wrong-key/malformed-input
-tests. Require all phase checks before profile creation/recovery (Phase 2).
+```powershell
+npm ci
+npx playwright install chromium firefox webkit
+npm run check
+npm run dev
+```
 
-## Security deviations
+Open http://127.0.0.1:8787. Local dev auto-generates ignored server rate secret and
+applies migrations. No account/credentials needed. Follow docs/16 for the exact
+external deployment procedure; do not bypass the guard or tag v1.0.0 before live checks.
 
-None to implemented privacy/E2EE constraints. Conservative contract refinements and
-toolchain decisions are documented above and in the architecture audit. Nibhrito v1
-has not been independently audited or deployed.
+## Commit history and continuation
 
-## Phase 1 completed — 2026-10-03
+| Phase | Commit                | Outcome                                                               |
+| ----- | --------------------- | --------------------------------------------------------------------- |
+| 0     | db74924               | Existing accepted foundation; earlier audit 0e1b44f, baseline 451488c |
+| 1     | 7e39a09               | Browser crypto/recovery protocol and tests                            |
+| 2     | d6b7450               | Profile creation/authentication/browser restore                       |
+| 3     | 538a138               | Verified encrypted sender and local QR                                |
+| 4     | 0873ea8               | Owner-scoped inbox/settings/deletion                                  |
+| 5     | 4cdbd11               | Bounded expiry cleanup and atomic quotas                              |
+| 6     | 93e64c9               | Bounded privacy-preserving abuse controls                             |
+| 7     | 3f1515e               | Legal UX, encrypted backups and adversarial hardening                 |
+| 8     | See final Git history | Guarded deployment/operations and clean local acceptance              |
 
-Documented exact v1 canonical serialization/encoding/checksum limits. Added isolated
-Web Crypto key, message and recovery modules; strict shared envelope validation;
-non-extractable working keys and private/public consistency checks during recovery.
-`npm run check` passed: formatting, lint, all TS projects, builds, 41 Vitest tests
-(31 crypto cases), 4 Chromium E2E tests, Worker dry-run and 0-vulnerability audit.
-Diff review found no secret logging, remote calls, browser secret storage, or crypto
-algorithm changes. Next: Phase 2 authenticated profiles, IndexedDB and recovery UI.
+Each phase has a self-contained plan in .agent/plans. Original planning snapshot
+NIBHRITO_MASTER_PLAN.md is preserved; split docs plus documented audit decisions
+describe the implementation. Phase 9 is conditional post-launch; encrypted exports
+were implemented early by explicit user instruction. Reporting disclosure, key
+rotation, per-device authorization, challenges, native clients and prekeys are not
+MVP requirements and need reviewed plans and evidence of need.
 
-## Phase 2 completed — 2026-10-03
-
-Implemented atomic profile/recovery storage, strict byte-limited schemas, same-origin
-write checks, independent bearer-token hashing/owner authorization, public metadata
-and encrypted recovery endpoints. Browser setup requires saved-code confirmation,
-persists a non-extractable CryptoKey/token in IndexedDB, and restores on a new context.
-Responsive semantic screens and error states are in place. `npm run check` passed:
-55 Vitest tests, 5 Chromium tests, all lint/format/TS/build/dry-run checks and audit.
-Network/storage assertions found no plaintext private JWK or recovery secret.
-Only explicit owner requests send the bearer token. Reviewed diff; no security waiver.
-Next: Phase 3 verified fragment handling, opaque encrypted submission and local QR.
-
-## Phase 3 completed — 2026-10-03
-
-Verified full fragment links, local QR, Unicode byte-limited sender, browser-only
-encryption, opaque storage, server expiry and atomic 500-message quota. Exact retries
-are acknowledged; conflicting UUIDs reject safely. Fragment changes reload and clear
-the composer before re-verification. Full check passed: 72 Vitest / 6 Chromium tests,
-lint/format/TS/build/Worker dry-run and zero-vulnerability audit. Network and real D1
-tests confirm ciphertext-only submission/storage. Diff reviewed: no sensitive logs,
-fallback keys or remote QR/scripts. Next: Phase 4 owner-scoped inbox and lifecycle.
-
-## Phase 4 completed — 2026-10-03
-
-Owner-scoped ciphertext inbox, bounded cursor pagination, client-only decryption,
-in-memory search/mood filters, safe text rendering, corruption errors and message
-deletion. Added profile settings/pause/delete with immutable identity/key/auth, SQL
-cascades, local profile selection, screen lock and device forgetting. Full check:
-83 Vitest and 6 Chromium tests; successful second-context recovery decrypts a stored
-note; injected corruption displays no partial text; HTML stays inert; decrypted text
-is absent from persistent browser storage. Fixed empty Worker DELETE streams with a
-bounded body check; nonempty bodies still reject. Diff/privacy review passed.
-Next: Phase 5 indexed bounded cleanup and concurrent quota tests.
-
-## Phase 5 completed — 2026-10-03
-
-Indexed scheduled cleanup removes at most 100 messages/100 rate buckets per hourly
-invocation. Successful new sends opportunistically remove ten expired profile rows;
-cleanup runs after insertion to preserve conflicting-ID rejection while a row exists.
-Concurrent quota test seeds 490 rows and races twenty writes: exactly ten succeed;
-all further attempts reject. Backlog/retry/unexpired isolation tests pass. Full gate:
-85 Vitest / 6 Chromium, lint/format/TS/build/dry-run/audit. No ciphertext is read or
-logged by cleanup. Production Cron execution/CPU remain manual deployment gates.
-Next: Phase 6 daily HMAC network buckets, profile/global throttles and secure config.
-
-## Phase 6 completed — 2026-10-03
-
-Daily HMAC network buckets with IPv4/mapped canonicalization and IPv6 /64 grouping,
-atomic general/profile/network/global counters and window reset; hard 2000 bucket /
-10000 profile caps. Cross-site requests reject before consuming counters. Production
-requires secret/edge source and rejects Worker proxies; loopback-only local mode uses
-explicit shared-network allowances. Secure ignored .dev.vars initializer; no sample
-secret, raw IP persistence or remote challenge. Challenge flag fails closed unless
-false. Limits and metadata qualifications documented in docs/15_ABUSE_CONTROLS.md.
-Full gate passed: 93 Vitest / 6 Chromium, lint/format/TS/build/dry-run/audit. Independent
-HMAC vector, burst/atomic/reset/cardinality/spoofing/privacy regressions pass. Updated
-cross-site preflight expectation to the stronger 403. Diff reviewed, .dev.vars ignored.
-Next: Phase 7 complete legal/security UX, accessibility, browser matrix and final audit.
+Ignored local state/dependencies/build/test artifacts and .dev.vars are intentional.
+Production configuration and production secret file have not been created.

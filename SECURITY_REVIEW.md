@@ -86,6 +86,10 @@ Headless Windows WebKit does not expose normal Tab navigation consistently: the
 test explicitly focuses the skip link before Enter, while Chromium/Firefox use Tab.
 Real Safari/iOS, assistive technology and OS keyboard preferences need manual review.
 
+L1 fixed during deployment review: RFC-valid mailbox characters could be interpreted
+as mailto headers. Encode the mailbox as a URI component in Legal.tsx; browser
+regression verifies a mailbox containing query delimiters cannot introduce headers.
+
 ## Evidence and remaining release gates
 
 Security tests cover modified ciphertext/tag/IV/salt/ephemeral key/AAD, wrong key,
@@ -99,3 +103,19 @@ Production account/DB/secret/operator details, actual hosting configuration, liv
 CPU/quota behavior, headers, Cron, a second device recovery and log review require
 the operator. Do not tag v1.0.0 until those gates pass. Final local check results and
 deployment guard review will be recorded in PROJECT_STATUS.md and the Phase 8 plan.
+
+Phase 8 review: configuration guard enforces exact public vars, actual UUID shape,
+separate canonical server root, local-root nonreuse, logging/telemetry disabled,
+same-origin routing and disabled challenges/previews. Unknown configuration fields,
+unsafe overrides and example values fail before build/upload. Generators exclusively
+create files without printing secrets. Code/secret deploy together with pinned CLI;
+no automatic login/provisioning/migration. Unit tests exercise unsafe configuration,
+argument prototypes, overwrite refusal and deployment refusal. Real UUID ownership,
+legal identity and cloud account settings cannot be verified locally.
+
+Native D1 export/import test preserves actual encrypted recovery/message data,
+restores/decrypts using existing modules, checks migrations and all six counter
+triggers, and verifies cascades. It never exports the developer database. E2E now
+isolates D1 and the server rate root per run; interrupted test directories contain
+test-only ciphertext/configuration and remain ignored. Narrow privacy scanner and
+manual diff/import review find no plaintext/private-key backend persistence path.

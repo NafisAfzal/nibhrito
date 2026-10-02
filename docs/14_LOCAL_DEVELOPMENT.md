@@ -1,84 +1,87 @@
-# Local foundation development
+# Local development
 
-Use Node 24.14.1 or a later Node 24 patch (see `.node-version`) and npm >= 9.
-Run commands in the repository root. Dependencies are pinned in package.json and
-package-lock.json; use `npm ci` for repeat installs. No Cloudflare account, login,
-secret, remote database, or domain is required for Phase 0.
+Use Node 24.14.1 or a later Node 24 patch and npm >=9. Run from the repository root.
+Versions/integrity are locked; use npm ci. No Cloudflare login or credentials needed.
 
 ```powershell
 npm ci
-npm run db:migrate:local
+npx playwright install chromium firefox webkit
+npm run check
 npm run dev
 ```
 
-Open `http://127.0.0.1:8787`. `GET /api/v1/health` checks that all four application
-tables exist through the real D1 binding. An unmigrated database returns generic 503. This is a readiness probe, not a full migration-integrity check. No user data
-or internal diagnostics are returned. The only implemented API is health.
+Open `http://127.0.0.1:8787`. Dev generates an ignored **local server** HMAC root,
+applies both migrations, builds the SPA and runs the actual Worker/D1. Recipient
+keys/recovery codes are browser material, never Worker variables. Save recovery
+codes privately: no operator reset exists. Use harmless local feedback.
 
-`npm run dev` builds the SPA and serves it with Wrangler; rerun after client changes.
-Wrangler reloads Worker changes. For faster UI-only iteration, keep `npm run
-dev:worker` running after a build and start `npm run dev:web` in another terminal.
-Vite proxies `/api` to Wrangler at the same browser origin. Its development runtime
-uses HMR scripts/styles; validate production CSP exclusively against built assets
-served by Wrangler. Do not use real recovery codes or private messages in dev tools.
+## Iteration
 
-## Configuration and state
+Wrangler reloads Worker changes. Rerun build/dev for frontend edits. Faster UI-only
+iteration: after a build, keep `npm run dev:worker` at 8787 and run `npm run dev:web`
+in another terminal (Vite at `http://127.0.0.1:5173`). Vite proxies /api at the same
+browser origin. HMR scripts/styles are development tools; test production CSP using
+built assets served by Wrangler. Do not enter real sensitive content in dev tools.
 
-- `wrangler.jsonc` binds DB locally without a remote `database_id`. Persisted local
-  database state lives under ignored `.wrangler/state`. Migration commands always
-  include `--local`. `npm run db:list:local` lists applied/pending migrations.
-- Phase 0 requires no environment variables. `.env.example` explains that `VITE_*`
-  is public. Same-origin API paths need no external host setting.
-- Copy `.dev.vars.example` to ignored `.dev.vars` only when a later phase requires
-  local Worker secrets. Browser keys, owner tokens, and recovery secrets are user
-  material and must never become server configuration.
-- Wrangler metrics, dependency instrumentation, and persisted Worker observability/invocation logs are disabled.
-  No application console/request logging exists. Local tool diagnostics and browser
-  developer tools are not private storage. Providers still process network metadata.
-- Static asset responses use `public/_headers`; API responses use Worker middleware.
-  A unit test prevents policy drift. The CSP has no inline/eval/remote-script exception.
-- Browser, Worker, and tooling TypeScript configs have separate environment types.
-  `skipLibCheck` applies only to tooling where Node/DOM/Workers test-proxy declarations
-  overlap; application and Worker source are checked strictly in separate projects.
-- Wrangler 4.116.0 and matching Miniflare 4.20260730.0 use a stable test/runtime API.
-  Compatibility behavior is frozen at 2026-07-30. The latest Wrangler at scaffold
-  time depends on Miniflare 5 alpha; review that migration separately before release.
-  Exact overrides patch Miniflare's Sharp and Undici dependencies to 0.35.4 and
-  7.29.1. These are development tools, absent from the browser/Worker bundles.
-  Keep the full audit and runtime tests passing when updating them.
+## Configuration and persistence
+
+- Local config `wrangler.jsonc` has no remote database ID and disables metrics,
+  instrumentation, previews and persisted observability/invocation logs.
+- Local D1 state is ignored under .wrangler/state; all dev migrations use --local.
+  `npm run db:list:local` lists applied/pending migrations.
+- `npm run local:init` exclusively generates .dev.vars with a securely random rate
+  root if missing; no hardcoded fallback. Keep this file ignored. Delete/replace only
+  for an intentional local rate reset, not to bypass production controls.
+- Same-origin API needs no browser environment variables or configurable API host.
+  VITE variables are public; never place secrets in them. Production values use
+  separate ignored config and secret files, described in docs/16.
+- Working recipient key is a nonextractable IndexedDB CryptoKey, with a separate
+  owner bearer token. Browser profile storage is user access, not a password lock.
+  Private search, notes and drafts remain in memory; forget-device removes local
+  access after confirmation. Clearing browser data needs the saved recovery code.
+- Application logging is absent. Wrangler/developer tools can show request metadata:
+  never record bodies, bearer headers, secrets or private screenshots.
+- Public operator config is empty locally; legal/contact pages show an evaluation
+  notice. No fake email, entity or jurisdiction is supplied.
+- Security headers are enforced by public/_headers on assets and middleware on API.
+  Policy drift and injected inline scripts are tested. No inline/eval/remote exception.
+- Separate strict browser/Worker/tooling TS projects avoid mixed environment globals.
+  Only tooling uses skipLibCheck for Node/DOM/Workers test-proxy declarations.
+- Pinned Wrangler 4.116.0/Miniflare 4.20260730.0 and compatibility date 2026-07-30
+  use the stable runtime interface. Tool-only overrides patch Sharp/Undici; review
+  runtime tests and audit before changing dependencies. No third-party crypto library.
 
 ## Verification
 
-Install the E2E browser once (or after a Playwright upgrade):
+`npm run check` runs lint, format/privacy checks, build/typecheck, all Vitest layers,
+E2E, Worker dry run and low-threshold dependency audit. Individual commands:
+`test:unit`, `test:integration`, `test:e2e`, `db:portability`, `worker:check`.
+No remote deployment/provisioning occurs. Vitest uses two workers; Playwright uses
+one to bound local runtime/browser memory, with no retries or skipped security cases.
 
-```powershell
-npx playwright install chromium
-npm run check
-```
+Integration tests apply all committed migrations to disposable real D1 runtimes.
+The portability test uses native protocol ciphertext, exports and imports a fresh
+D1 fixture through pinned Wrangler, restores/decrypts, and checks migration records,
+counter triggers and cascades. It never reads/modifies your development database.
 
-Individual commands: `lint`, `format:check`, `typecheck`, `build`, `test:unit`,
-`test:integration`, `test:e2e`, `worker:check`, and `npm audit --audit-level=low`.
-`npm test` runs both Vitest layers. Integration tests use a disposable in-memory
-local D1 runtime, apply the committed SQL, and check constraints/cascades/readiness.
-The E2E runner applies local migrations and starts its own Wrangler at 8788; no
-existing server is reused. E2E tests use only foundation fixtures and never store
-traces, screenshots, or videos, since later flows will contain secrets.
+E2E starts a separate loopback Worker at 8788 with isolated .wrangler/e2e-* config,
+D1 and test-only rate root; it never reuses your server or your dev profiles. Tests
+run in Chromium, Firefox and WebKit, with actual browser crypto and IndexedDB.
+Traces, videos, screenshots and secret-bearing DOM failure snapshots are disabled.
+Normal shutdown cleans owned test state. An interrupted Windows process tree may
+leave ignored fixture directories; remove only after confirming their servers have
+stopped. Private browser artifacts should never be enabled casually.
 
-No crypto, auth, abuse limits, or encrypted-message tests are claimed yet. Implement
-and validate those in phase order. Other browser engines are part of later feature
-acceptance and the production release gate.
+Health checks all five application tables but expose only readiness. It is not a
+full migration-integrity check. Missing schema/secrets return generic failure. Cron
+is tested by invoking the Worker scheduled handler in integration tests; it does
+not automatically run hourly locally.
 
-## Production boundary
+## Deployment boundary
 
-`npm run deploy` intentionally exits with instructions; no production config exists.
-`worker:check` builds and bundles with `wrangler deploy --dry-run`; it performs no
-remote deployment or provisioning. Its output is ignored build data.
-
-At Phase 8 the operator must supply a Cloudflare account and login, create the real
-D1 production database, and provide its returned UUID in a reviewed production
-configuration based on the local config. Keep production config independent of local
-state, configure required secrets with Wrangler secret management, enable the chosen
-HTTPS hostname, apply remote migrations explicitly, add cleanup Cron, and run the
-documented staging/production gates. Do not use an invented ID or fall back to local
-DB for deployment. No automatic login, remote migration, deployment, or secret upload
-is part of the Phase 0 commands.
+`npm run deploy` validates the separately generated production config and protected
+server root before any build/upload. It fails when these are absent, malformed,
+local, telemetry-enabled or placeholders. Use docs/16 for actual Cloudflare login,
+real D1 UUID, legal operator details, secret creation, migrations, code/secret upload,
+live smoke tests and rollback. `worker:check` is a local bundle dry run and cannot
+establish live HTTPS, account settings, Cron delivery or provider CPU billing.

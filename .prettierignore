@@ -4,6 +4,8 @@ dist/
 coverage/
 playwright-report/
 test-results/
+backups/
+wrangler.production.jsonc
 package-lock.json
 # Preserve the original planning pack's formatting.
 AGENTS.md

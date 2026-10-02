@@ -3,7 +3,8 @@
   "compilerOptions": {
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "types": ["node", "@cloudflare/workers-types"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true
   },
-  "include": ["*.config.ts", "tests", "worker", "shared"]
+  "include": ["*.config.ts", "tests", "worker", "shared", "scripts/**/*.ts"]
 }

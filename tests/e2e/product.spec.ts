@@ -71,3 +71,25 @@ test('unsupported crypto fails explicitly without requests or fallback', async (
   ).toBeVisible();
   expect(calls).toBe(0);
 });
+test('operator contact mailbox cannot inject mailto headers', async ({
+  page,
+}) => {
+  const email = 'support+safe?bcc=extra@nibhrito.org';
+  await page.route('**/api/v1/site', (route) =>
+    route.fulfill({
+      json: {
+        ok: true,
+        data: {
+          operator_name: 'Contact fixture',
+          contact_email: email,
+          jurisdiction: 'Bangladesh',
+          local: true,
+        },
+      },
+    }),
+  );
+  await page.goto('/contact');
+  await expect(
+    page.getByRole('link', { name: email, exact: true }),
+  ).toHaveAttribute('href', `mailto:${encodeURIComponent(email)}`);
+});

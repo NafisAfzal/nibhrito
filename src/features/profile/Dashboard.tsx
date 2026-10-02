@@ -136,6 +136,10 @@ export function Dashboard() {
         <input id="share-link" readOnly value={link} />
         <button
           onClick={() => {
+            if (!navigator.clipboard) {
+              setError(copy.dashboard.copyUnavailableSelectAndCopyTheFull);
+              return;
+            }
             void navigator.clipboard
               .writeText(link)
               .then(() => setCopied(true))

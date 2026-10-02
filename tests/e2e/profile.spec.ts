@@ -4,6 +4,9 @@ test('setup and restore keep keys and recovery code out of requests', async ({
   browser,
 }) => {
   const name = `test-${crypto.randomUUID().slice(0, 8)}`;
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'clipboard', { value: undefined });
+  });
   let code = '';
   let leaked = false;
   const errors: string[] = [];
@@ -30,6 +33,12 @@ test('setup and restore keep keys and recovery code out of requests', async ({
   await expect(
     page.getByLabel('Verified share link', { exact: true }),
   ).toBeVisible();
+  await page
+    .getByRole('button', { name: 'Copy full link', exact: true })
+    .click();
+  await expect(page.getByRole('alert')).toHaveText(
+    'Copy unavailable. Select and copy the full link.',
+  );
   const protectedKey = await page.evaluate(
     () =>
       new Promise<boolean>((resolve, reject) => {

@@ -1,6 +1,6 @@
 {
   "name": "nibhrito",
-  "version": "0.0.0",
+  "version": "1.0.0-rc.1",
   "private": true,
   "type": "module",
   "engines": {
@@ -26,6 +26,9 @@
     "worker:check": "npm run build && wrangler deploy --dry-run --outdir .wrangler/dry-run",
     "privacy:check": "node scripts/privacy-check.mjs",
     "check": "npm run lint && npm run format:check && npm run privacy:check && npm run build && npm test && npm run test:e2e && npm run worker:check && npm audit --audit-level=low",
+    "production:init": "node scripts/configure-production.mjs",
+    "production:secret": "node scripts/init-production-secret.mjs",
+    "db:portability": "vitest run tests/integration/portability.test.ts",
     "deploy": "node scripts/deploy.mjs"
   },
   "dependencies": {

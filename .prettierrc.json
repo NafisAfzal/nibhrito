@@ -1,5 +1,11 @@
 {
   "singleQuote": true,
   "trailingComma": "all",
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "overrides": [
+    {
+      "files": "wrangler.production*.jsonc",
+      "options": { "trailingComma": "none" }
+    }
+  ]
 }

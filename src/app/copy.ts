@@ -289,5 +289,7 @@ export const copy = {
     emailIsVoluntaryDisclosureToYourMail:
       'Email is voluntary disclosure to your mail provider and the operator. It is outside the encrypted feedback flow.',
     loadingOperatorDetails: 'Loading operator details…',
+    operatorDetailsCouldNotBeLoaded:
+      'Operator details could not be loaded. Please refresh.',
   },
 } as const;

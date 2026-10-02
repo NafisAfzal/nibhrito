@@ -81,7 +81,7 @@ Because Nibhrito stores message content as ciphertext, this residual backup risk
 Use:
 
 ```text
-https://<project>.workers.dev
+https://<project>.<account-subdomain>.workers.dev
 ```
 
 ### Branded production later
@@ -99,16 +99,17 @@ At least monthly during active development:
 
 If Cloudflare pricing or limits stop fitting, migrate storage/API without changing existing ciphertext format.
 
-## Initial deployment command outline
+## Implemented deployment workflow
 
-The agent should produce exact project-specific commands after scaffold, typically around:
+Use the full guarded procedure in `16_DEPLOYMENT_OPERATIONS.md`. Required operator
+configuration and server secret must be prepared before these remote actions:
 
 ```powershell
 npx wrangler login
 npx wrangler d1 create nibhrito-prod
-npx wrangler d1 migrations apply nibhrito-prod --remote
-npm run build
-npx wrangler deploy
+# Generate reviewed production config/secret as documented in docs/16.
+npx wrangler d1 migrations apply DB --remote --config wrangler.production.jsonc
+npm run deploy
 ```
 
 Do not paste secrets into committed config. Use Wrangler secret management for server secrets.

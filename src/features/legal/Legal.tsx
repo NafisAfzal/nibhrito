@@ -56,7 +56,10 @@ export function Legal({ path }: { path: keyof typeof policies }) {
               <p>
                 {site.operator_name} {copy.legal.text} {site.jurisdiction}
               </p>
-              <a className="text-link" href={`mailto:${site.contact_email}`}>
+              <a
+                className="text-link"
+                href={`mailto:${encodeURIComponent(site.contact_email)}`}
+              >
                 {site.contact_email}
               </a>
               <p className="hint">
@@ -65,7 +68,7 @@ export function Legal({ path }: { path: keyof typeof policies }) {
             </>
           )
         ) : error ? (
-          <Notice message="Operator details could not be loaded. Please refresh." />
+          <Notice message={copy.legal.operatorDetailsCouldNotBeLoaded} />
         ) : (
           <p role="status">{copy.legal.loadingOperatorDetails}</p>
         )}

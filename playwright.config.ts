@@ -22,8 +22,7 @@ export default defineConfig({
     { name: 'webkit', use: { ...devices['Desktop Safari'] } },
   ],
   webServer: {
-    command:
-      'npm run local:init && npm run db:migrate:local && wrangler dev --local --ip 127.0.0.1 --port 8788',
+    command: 'node scripts/e2e-server.mjs',
     url: 'http://127.0.0.1:8788/api/v1/health',
     reuseExistingServer: false,
     timeout: 60000,

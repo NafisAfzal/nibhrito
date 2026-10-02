@@ -12,6 +12,12 @@ See `PROJECT_STATUS.md` for current acceptance
 evidence, `docs/13_ARCHITECTURE_REVIEW.md` for audit decisions, and
 `docs/14_LOCAL_DEVELOPMENT.md` for setup and checks.
 
+The local release candidate includes all locally executable MVP functionality.
+Read [IMPLEMENTATION.md](IMPLEMENTATION.md) for the flow and limitations and
+[deployment/operations](docs/16_DEPLOYMENT_OPERATIONS.md) for exact Cloudflare
+commands, external configuration and live acceptance gates. No production deployment
+or v1.0.0 release tag has been made.
+
 ```powershell
 npm ci
 npm run db:migrate:local
