@@ -1,38 +1,65 @@
-import { messages } from './messages';
-
+import { Layout } from '../components/Layout';
+import { Setup } from '../features/profile/Setup';
+import { Restore } from '../features/recovery/Restore';
+import { Dashboard } from '../features/profile/Dashboard';
 export function App() {
-  const copy = messages.en;
-
+  const path = window.location.pathname;
   return (
-    <main className="mx-auto flex min-h-svh max-w-2xl flex-col justify-center px-6 py-16">
-      <header className="mb-14 flex items-baseline gap-3">
-        <span className="text-lg font-semibold tracking-tight">
-          {copy.brand}
-        </span>
-        <span lang="bn-BD" className="text-lg text-teal-800 dark:text-teal-300">
-          {copy.name}
-        </span>
-      </header>
-      <p className="mb-4 text-sm font-medium text-teal-800 dark:text-teal-300">
-        {copy.eyebrow}
-      </p>
-      <h1 className="max-w-xl text-4xl leading-tight font-semibold tracking-tight sm:text-5xl">
-        {copy.title}
-      </h1>
-      <p className="mt-6 max-w-lg text-lg leading-relaxed text-stone-600 dark:text-stone-300">
-        {copy.description}
-      </p>
-      <section
-        aria-labelledby="development-status"
-        className="mt-12 rounded-2xl border border-stone-200 bg-white p-6 dark:border-stone-700 dark:bg-stone-900"
-      >
-        <h2 id="development-status" className="font-semibold">
-          {copy.status}
-        </h2>
-        <p className="mt-2 leading-relaxed text-stone-600 dark:text-stone-300">
-          {copy.detail}
-        </p>
-      </section>
-    </main>
+    <Layout>
+      {path === '/create' ? (
+        <Setup />
+      ) : path === '/restore' ? (
+        <Restore />
+      ) : path === '/inbox' ? (
+        <Dashboard />
+      ) : path === '/' ? (
+        <div className="hero">
+          <p className="eyebrow">A quieter space for feedback</p>
+          <h1>
+            Private words.
+            <br />
+            Thoughtful conversations.
+          </h1>
+          <p className="lede">
+            A personal space for honest feedback. Built around browser
+            encryption, with no email or password.
+          </p>
+          <div className="actions">
+            <a className="button" href="/create">
+              Create your space <span aria-hidden="true">↗</span>
+            </a>
+            <a className="text-link" href="/restore">
+              Already have a recovery code?
+            </a>
+          </div>
+          <div className="feature-grid">
+            <section>
+              <span className="feature-number">01</span>
+              <h2>Your browser, your keys</h2>
+              <p>Your private encryption key stays on your device.</p>
+            </section>
+            <section>
+              <span className="feature-number">02</span>
+              <h2>A link with a purpose</h2>
+              <p>Share a full link carrying your encryption public key.</p>
+            </section>
+            <section>
+              <span className="feature-number">03</span>
+              <h2>Recovery you control</h2>
+              <p>A saved code restores your inbox on another browser.</p>
+            </section>
+          </div>
+        </div>
+      ) : (
+        <div className="narrow card">
+          <p className="eyebrow">404</p>
+          <h1>This space isn’t here</h1>
+          <p>Check the link, or head back to Nibhrito.</p>
+          <a className="button" href="/">
+            Back home
+          </a>
+        </div>
+      )}
+    </Layout>
   );
 }

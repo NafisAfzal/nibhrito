@@ -8,15 +8,15 @@ test('Worker serves the built SPA and deep links with same-origin assets', async
   const errors: string[] = [];
   page.on('request', (request) => requests.push(request.url()));
   page.on('pageerror', (error) => errors.push(error.message));
-  const response = await page.goto('/u/foundation#v=1&pk=public-test-fragment');
+  const response = await page.goto('/create#v=1&pk=public-test-fragment');
   expect(response?.status()).toBe(200);
   await expect(
     page.getByRole('heading', {
-      name: 'Private words. Thoughtful conversations.',
+      name: 'Create your profile',
     }),
   ).toBeVisible();
   await expect(
-    page.getByRole('heading', { name: 'In development' }),
+    page.getByRole('button', { name: 'Prepare my recovery code' }),
   ).toBeVisible();
   expect(errors).toEqual([]);
   expect(

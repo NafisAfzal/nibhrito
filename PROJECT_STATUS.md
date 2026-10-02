@@ -5,7 +5,7 @@ no chat history is required to continue.
 
 ## Current phase
 
-Phases 0–1 complete. Continuing immediately with Phase 2, profile creation/recovery.
+Phases 0–2 complete. Continuing immediately with Phase 3, verified encrypted sending.
 The following Phase 0 handoff is historical; subsequent completed-phase entries
 record current work and checks. No production deployment has occurred.
 
@@ -119,3 +119,15 @@ non-extractable working keys and private/public consistency checks during recove
 (31 crypto cases), 4 Chromium E2E tests, Worker dry-run and 0-vulnerability audit.
 Diff review found no secret logging, remote calls, browser secret storage, or crypto
 algorithm changes. Next: Phase 2 authenticated profiles, IndexedDB and recovery UI.
+
+## Phase 2 completed — 2026-10-03
+
+Implemented atomic profile/recovery storage, strict byte-limited schemas, same-origin
+write checks, independent bearer-token hashing/owner authorization, public metadata
+and encrypted recovery endpoints. Browser setup requires saved-code confirmation,
+persists a non-extractable CryptoKey/token in IndexedDB, and restores on a new context.
+Responsive semantic screens and error states are in place. `npm run check` passed:
+55 Vitest tests, 5 Chromium tests, all lint/format/TS/build/dry-run checks and audit.
+Network/storage assertions found no plaintext private JWK or recovery secret.
+Only explicit owner requests send the bearer token. Reviewed diff; no security waiver.
+Next: Phase 3 verified fragment handling, opaque encrypted submission and local QR.
