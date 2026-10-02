@@ -1,0 +1,32 @@
+Perform an adversarial security review of the completed Nibhrito repository.
+
+Read AGENTS.md, docs/03_E2EE_PROTOCOL.md, docs/04_SECURITY_THREAT_MODEL.md, and docs/09_TESTING_ACCEPTANCE.md first.
+
+Act as a defensive application-security reviewer. Do not merely summarize code. Try to disprove the system's security claims.
+
+Audit at least:
+- whether any message plaintext can reach backend/network/logs,
+- whether private keys or recovery secrets can leave the browser,
+- cryptographic envelope correctness,
+- AES-GCM IV uniqueness assumptions,
+- ECDH/HKDF usage,
+- deterministic AAD and serialization,
+- public-key fragment verification and fail-closed behavior,
+- recovery bundle security,
+- owner auth and IDOR,
+- SQL/query scoping,
+- XSS and DOM injection,
+- CSP and other security headers,
+- remote script/dependency risk,
+- IndexedDB/local storage handling,
+- rate limit privacy and bypasses,
+- message expiry behavior,
+- accidental secret logging,
+- production configuration drift,
+- error messages and stack traces,
+- dependency vulnerabilities,
+- browser compatibility failure modes.
+
+Create SECURITY_REVIEW.md with findings grouped Critical/High/Medium/Low/Informational. For every Critical or High finding, include an exploit scenario, affected files, and concrete fix.
+
+Then fix all Critical and High findings that can be fixed without changing the product's documented security model. Add regression tests for each fixed issue. Run the full verification suite and update PROJECT_STATUS.md.

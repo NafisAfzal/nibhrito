@@ -1,0 +1,5 @@
+Open this repository as the working directory and treat AGENTS.md plus docs/03_E2EE_PROTOCOL.md and docs/04_SECURITY_THREAT_MODEL.md as authoritative project constraints.
+
+Read docs/00_START_HERE.md, docs/01_MASTER_PLAN.md, docs/05_DATA_API.md, docs/06_IMPLEMENTATION_ROADMAP.md, docs/09_TESTING_ACCEPTANCE.md, and docs/10_AGENT_RUNBOOK.md before editing.
+
+Implement the roadmap phase by phase. Preserve E2EE invariants. Do not improvise alternate cryptography, remote analytics, server-side plaintext processing, or insecure fallbacks. Run tests and update PROJECT_STATUS.md after each phase.

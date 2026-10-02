@@ -1,0 +1,30 @@
+You are implementing Nibhrito from this repository.
+
+First read AGENTS.md and these files in order:
+- docs/00_START_HERE.md
+- docs/01_MASTER_PLAN.md
+- docs/03_E2EE_PROTOCOL.md
+- docs/04_SECURITY_THREAT_MODEL.md
+- docs/05_DATA_API.md
+- docs/06_IMPLEMENTATION_ROADMAP.md
+- docs/09_TESTING_ACCEPTANCE.md
+- docs/10_AGENT_RUNBOOK.md
+
+Do not redesign the crypto protocol and do not add features outside the documented MVP.
+
+Start by inspecting the repository and toolchain. Then create an ExecPlan for Phase 0 and Phase 1 together, because the crypto module depends on the scaffold. Implement those phases completely, run all relevant tests, update PROJECT_STATUS.md, and commit the work in small logical commits.
+
+After Phase 0 and Phase 1 pass, continue through the remaining phases sequentially. For each phase:
+1. write/update an ExecPlan if the change is substantial,
+2. implement the smallest complete version,
+3. add tests for security and failure cases,
+4. run lint, typecheck, unit/integration/E2E tests as applicable,
+5. inspect for plaintext/key leakage,
+6. update PROJECT_STATUS.md,
+7. commit before starting the next phase.
+
+Security invariants are more important than feature count. Never log message plaintext, private keys, recovery secrets, owner tokens, ciphertext request bodies, or raw IP addresses. Never store private keys in localStorage. Never load remote JavaScript on crypto routes. A missing/invalid #pk share-link fragment must fail closed.
+
+Build a polished mobile-first Bangla/English-ready UI, but keep sensitive code small and auditable.
+
+Continue autonomously unless there is a genuine blocker that cannot be resolved from the repository or official documentation. Do not ask the user to choose details that are already decided by the plan.
