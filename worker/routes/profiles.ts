@@ -10,6 +10,7 @@ import {
   noBody,
 } from '../security/request';
 import { apiError } from './api';
+import type { WriteLimits } from '../middleware/rateLimit';
 export function success(data: unknown, status = 200) {
   return secureResponse(
     Response.json(
@@ -22,15 +23,16 @@ export async function profileRoutes(
   request: Request,
   profiles: ProfileRepository,
   now = Date.now(),
+  limits?: WriteLimits,
 ): Promise<Response> {
   try {
     const url = new URL(request.url);
     if (url.search || url.pathname.length > 256) throw new ValidationError();
-    if (url.pathname === '/api/v1/profiles' && request.method === 'POST')
-      return success(
-        await profiles.create(createProfile(await boundedJson(request)), now),
-        201,
-      );
+    if (url.pathname === '/api/v1/profiles' && request.method === 'POST') {
+      const input = createProfile(await boundedJson(request));
+      await limits?.creation();
+      return success(await profiles.create(input, now), 201);
+    }
     if (url.pathname === '/api/v1/owner' && request.method === 'GET') {
       await noBody(request);
       return success(await owner(request, profiles));

@@ -58,7 +58,7 @@ export class D1ProfileRepository implements ProfileRepository {
     const results = await this.db.batch([
       this.db
         .prepare(
-          'INSERT INTO profiles (id,slug,display_name,public_prompt,theme,owner_token_hash,current_key_id,retention_days,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?) ON CONFLICT DO NOTHING',
+          'INSERT INTO profiles (id,slug,display_name,public_prompt,theme,owner_token_hash,current_key_id,retention_days,created_at,updated_at) SELECT ?,?,?,?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM profiles)<10000 ON CONFLICT DO NOTHING',
         )
         .bind(
           id,

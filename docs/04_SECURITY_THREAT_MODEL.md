@@ -107,6 +107,18 @@ bucket = HMAC-SHA-256(server_rate_secret_for_day, normalized_source_ip)
 
 Store only the bucket, time window, and count. Rotate the HMAC secret and expire bucket rows quickly.
 
+Implementation refinement: derive the daily secret as HMAC-SHA-256(root secret,
+`nibhrito:rate:day:<UTC epoch day>`), then HMAC the scope and normalized network.
+IPv4 groups by address; IPv6 by /64. Day separation does not provide forward secrecy
+against root-secret compromise. Rotate the root periodically in Worker secrets.
+Network rows expire one hour after their window (at most two hours); global daily
+rows at most 25 hours. Only direct Cloudflare edge requests are supported in
+production; Worker subrequests are rejected to avoid their special source-IP
+semantics. See [Cloudflare header reference](https://developers.cloudflare.com/fundamentals/reference/http-headers/).
+Local development uses one loopback group and still requires a generated local
+secret. It is never a production fallback. Unknown environment/secret/missing
+edge source fails closed. Client Forwarded/X-Forwarded-For headers are ignored.
+
 Important: the hosting/network provider still processes source IP to deliver traffic. Privacy copy must distinguish “not stored by the application” from “never processed anywhere.”
 
 ## Recommended security headers

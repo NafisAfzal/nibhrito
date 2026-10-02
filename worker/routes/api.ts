@@ -22,7 +22,11 @@ export function apiError(
   headers?: HeadersInit,
 ): Response {
   return secureResponse(
-    json({ ok: false, error: { code, message } }, status, headers),
+    json(
+      { ok: false, error: { code, message } },
+      status,
+      status === 429 ? { 'Retry-After': '3600', ...headers } : headers,
+    ),
   );
 }
 

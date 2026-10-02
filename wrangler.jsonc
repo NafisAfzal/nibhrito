@@ -7,6 +7,7 @@
   "dependencies_instrumentation": { "enabled": false },
   "workers_dev": false,
   "preview_urls": false,
+  "vars": { "APP_ENV": "local", "CHALLENGE_ENABLED": "false" },
   "triggers": { "crons": ["17 * * * *"] },
   "observability": {
     "enabled": false,

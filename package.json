@@ -8,9 +8,10 @@
     "npm": ">=9"
   },
   "scripts": {
-    "dev": "npm run build && wrangler dev --local --ip 127.0.0.1 --port 8787",
+    "dev": "npm run local:init && npm run db:migrate:local && npm run build && wrangler dev --local --ip 127.0.0.1 --port 8787",
+    "local:init": "node scripts/init-local.mjs",
     "dev:web": "vite --host 127.0.0.1",
-    "dev:worker": "wrangler dev --local --ip 127.0.0.1 --port 8787",
+    "dev:worker": "npm run local:init && wrangler dev --local --ip 127.0.0.1 --port 8787",
     "build": "npm run typecheck && vite build",
     "typecheck": "tsc -p tsconfig.app.json && tsc -p tsconfig.worker.json && tsc -p tsconfig.tools.json",
     "lint": "eslint . --max-warnings 0",

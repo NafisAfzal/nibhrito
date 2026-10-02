@@ -67,7 +67,7 @@ test('health and API failures bypass SPA fallback and have security headers', as
     method: 'OPTIONS',
     headers: { Origin: 'https://other.invalid' },
   });
-  expect(preflight.status()).toBe(405);
+  expect(preflight.status()).toBe(403);
   expect(preflight.headers()['access-control-allow-origin']).toBeUndefined();
 });
 

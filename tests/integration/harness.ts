@@ -2,6 +2,8 @@ import { readFile, readdir } from 'node:fs/promises';
 import { Miniflare } from 'miniflare';
 import worker from '../../worker/index';
 import type { Env } from '../../worker/types';
+import { randomBytes } from 'node:crypto';
+import { encode } from '../../shared/protocol/encoding';
 export async function harness() {
   const runtime = new Miniflare({
     modules: true,
@@ -27,6 +29,9 @@ export async function harness() {
   }
   const env = {
     DB: db,
+    APP_ENV: 'local',
+    RATE_LIMIT_SECRET: encode(new Uint8Array(randomBytes(32))),
+    CHALLENGE_ENABLED: 'false',
     ASSETS: { fetch: async () => new Response('asset') },
   } as unknown as Env;
   return {
@@ -34,6 +39,6 @@ export async function harness() {
     db,
     env,
     fetch: (path: string, init?: RequestInit) =>
-      worker.fetch(new Request(`https://local.invalid${path}`, init), env),
+      worker.fetch(new Request(`http://127.0.0.1${path}`, init), env),
   };
 }

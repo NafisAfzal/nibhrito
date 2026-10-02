@@ -5,11 +5,13 @@ import type { ProfileRepository } from '../repositories/profileRepository';
 import { boundedJson, HttpError } from '../security/request';
 import { apiError } from './api';
 import { success } from './profiles';
+import type { WriteLimits } from '../middleware/rateLimit';
 export async function messageRoutes(
   request: Request,
   profiles: ProfileRepository,
   messages: MessageRepository,
   now = Date.now(),
+  limits?: WriteLimits,
 ): Promise<Response> {
   try {
     const url = new URL(request.url),
@@ -28,6 +30,7 @@ export async function messageRoutes(
     if (!profile || profile.is_disabled)
       throw new HttpError(404, 'NOT_FOUND', 'Profile not available.');
     if (profile.current_key_id !== e.key_id) throw new ValidationError();
+    await limits?.submission(name);
     const created = await messages.submit(e, now);
     return success(
       { accepted: true, message_id: e.message_id },

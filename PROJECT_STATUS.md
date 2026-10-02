@@ -5,7 +5,7 @@ no chat history is required to continue.
 
 ## Current phase
 
-Phases 0–5 complete. Continuing immediately with Phase 6, abuse resistance.
+Phases 0–6 complete. Continuing immediately with Phase 7, hardening and legal UX.
 The following Phase 0 handoff is historical; subsequent completed-phase entries
 record current work and checks. No production deployment has occurred.
 
@@ -164,3 +164,17 @@ all further attempts reject. Backlog/retry/unexpired isolation tests pass. Full 
 85 Vitest / 6 Chromium, lint/format/TS/build/dry-run/audit. No ciphertext is read or
 logged by cleanup. Production Cron execution/CPU remain manual deployment gates.
 Next: Phase 6 daily HMAC network buckets, profile/global throttles and secure config.
+
+## Phase 6 completed — 2026-10-03
+
+Daily HMAC network buckets with IPv4/mapped canonicalization and IPv6 /64 grouping,
+atomic general/profile/network/global counters and window reset; hard 2000 bucket /
+10000 profile caps. Cross-site requests reject before consuming counters. Production
+requires secret/edge source and rejects Worker proxies; loopback-only local mode uses
+explicit shared-network allowances. Secure ignored .dev.vars initializer; no sample
+secret, raw IP persistence or remote challenge. Challenge flag fails closed unless
+false. Limits and metadata qualifications documented in docs/15_ABUSE_CONTROLS.md.
+Full gate passed: 93 Vitest / 6 Chromium, lint/format/TS/build/dry-run/audit. Independent
+HMAC vector, burst/atomic/reset/cardinality/spoofing/privacy regressions pass. Updated
+cross-site preflight expectation to the stronger 403. Diff reviewed, .dev.vars ignored.
+Next: Phase 7 complete legal/security UX, accessibility, browser matrix and final audit.
