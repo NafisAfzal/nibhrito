@@ -5,11 +5,36 @@ no chat history is required to continue.
 
 ## Current phase
 
-Phases 0–6 complete. Continuing immediately with Phase 7, hardening and legal UX.
+Phases 0–7 complete. Continuing immediately with Phase 8, deployment preparation.
 The following Phase 0 handoff is historical; subsequent completed-phase entries
 record current work and checks. No production deployment has occurred.
 
 ## Completed work
+
+### Phase 7 — completed 2026-10-03
+
+- Complete privacy, terms, acceptable-use, security and configurable operator contact
+  pages; responsive/dark/focus review; centralized English copy and correct Bangla.
+- Explicit native-crypto/browser failure state and privacy-preserving error boundary.
+- Local encrypted backup/export/import reader using the existing protocol, no uploads
+  or plaintext key export; capped/versioned file format and corrupt-record handling.
+- Migration 0002 aggregate counters enforces 20000 global physical messages without
+  hot table scans; preserves cleanup/cascade consistency and free-tier headroom.
+- Dedicated adversarial self-review in SECURITY_REVIEW.md; no unresolved Critical or
+  High findings identified. Fixed stale fragment trust, origin admission ordering,
+  secret-bearing diagnostics, async plaintext lifetime, skip-link fragment changes,
+  duplicate React keys and production insecure-transport handling.
+- Full `npm run check` passes: 103 Vitest tests, 27 browser cases across Chromium,
+  Firefox and WebKit, strict typecheck, lint/format/privacy scan, production build,
+  Worker dry run and audit with zero vulnerabilities. Native local migration passed.
+  Desktop/mobile/light/dark visuals inspected with public, empty setup forms only.
+- External gates: operator legal details/review, real hosting/account/configuration,
+  production CPU/quota/headers/Cron/logs, second-device recovery and real Safari/Edge.
+  WebKit Windows skip-link activation uses explicit focus; actual Tab is tested in
+  Chromium/Firefox. Encrypted exports implemented early by explicit user request;
+  other Phase 9 options remain conditional post-launch work.
+
+### Historical Phase 0 record
 
 - Read the required planning documents, inspected all repository files/toolchain,
   and preserved the original planning pack in Git (baseline `451488c`).

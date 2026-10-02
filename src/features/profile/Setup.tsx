@@ -1,3 +1,4 @@
+import { copy } from '../../app/copy';
 import { useState, type FormEvent } from 'react';
 import {
   settings,
@@ -53,9 +54,7 @@ export function Setup() {
       void jwk;
       setPrepared({ settings: publicSettings, key, token, code, blob });
     } catch {
-      setError(
-        'Check your profile details. Link names use 3–32 lowercase letters, digits, or hyphens. Your browser must support Web Crypto.',
-      );
+      setError(copy.setup.checkYourProfileDetailsLinkNamesUse);
     } finally {
       setBusy(false);
     }
@@ -97,18 +96,15 @@ export function Setup() {
   }
   return (
     <div className="narrow">
-      <p className="eyebrow">Your private space</p>
-      <h1>Create your profile</h1>
-      <p className="lede">No email. No password. Your browser holds the key.</p>
+      <p className="eyebrow">{copy.setup.yourPrivateSpace}</p>
+      <h1>{copy.setup.createYourProfile}</h1>
+      <p className="lede">{copy.setup.noEmailNoPasswordYourBrowserHolds}</p>
       {error ? <Notice message={error} /> : null}
       {prepared ? (
         <section className="card">
-          <h2>Save your recovery code</h2>
-          <p>
-            Anyone with this code can open your inbox. Save it in a password
-            manager or somewhere safe.
-          </p>
-          <label htmlFor="recovery-code">Recovery code</label>
+          <h2>{copy.setup.saveYourRecoveryCode}</h2>
+          <p>{copy.setup.anyoneWithThisCodeCanOpenYour}</p>
+          <label htmlFor="recovery-code">{copy.setup.recoveryCode}</label>
           <textarea
             id="recovery-code"
             readOnly
@@ -117,17 +113,17 @@ export function Setup() {
             spellCheck={false}
           />
           <p className="muted">
-            Nibhrito cannot recover this code for you. If you lose both this
-            device and the recovery code, old messages may become permanently
-            unreadable.
+            {copy.setup.nibhritoCannotRecoverThisCodeForYou}
           </p>
           <form onSubmit={create}>
             <label className="check">
-              <input type="checkbox" required />I saved my recovery code
-              somewhere safe
+              <input type="checkbox" required />
+              {copy.setup.iSavedMyRecoveryCodeSomewhereSafe}
             </label>
             <button disabled={busy}>
-              {busy ? 'Creating profile…' : 'Create my private profile'}
+              {busy
+                ? copy.setup.creatingProfile
+                : copy.setup.createMyPrivateProfile}
             </button>
           </form>
           <button
@@ -136,23 +132,23 @@ export function Setup() {
             onClick={() => setPrepared(null)}
             disabled={busy}
           >
-            Back
+            {copy.setup.back}
           </button>
         </section>
       ) : (
         <form className="card form" onSubmit={prepare}>
           <label>
-            Display name
+            {copy.setup.displayName}
             <input
               name="display_name"
               required
               maxLength={64}
               autoComplete="off"
-              placeholder="How should people know you?"
+              placeholder={copy.setup.howShouldPeopleKnowYou}
             />
           </label>
           <label>
-            Link name
+            {copy.setup.linkName}
             <input
               name="slug"
               required
@@ -162,46 +158,41 @@ export function Setup() {
               autoCapitalize="none"
               autoComplete="off"
               spellCheck={false}
-              placeholder="your-name"
+              placeholder={copy.setup.yourName}
             />
           </label>
-          <p className="hint">
-            Your link name is public and cannot be changed.
-          </p>
+          <p className="hint">{copy.setup.yourLinkNameIsPublicAndCannot}</p>
           <label>
-            Public prompt
+            {copy.setup.publicPrompt}
             <textarea
               name="public_prompt"
               maxLength={280}
               rows={3}
-              defaultValue="What should I keep doing? What could I improve?"
+              defaultValue={copy.setup.whatShouldIKeepDoingWhatCould}
             />
           </label>
           <div className="form-grid">
             <label>
-              Keep messages for
+              {copy.setup.keepMessagesFor}
               <select name="retention_days" defaultValue="30">
-                <option value="1">1 day</option>
-                <option value="7">7 days</option>
-                <option value="30">30 days</option>
-                <option value="90">90 days</option>
+                <option value="1">{copy.setup.text1Day}</option>
+                <option value="7">{copy.setup.text7Days}</option>
+                <option value="30">{copy.setup.text30Days}</option>
+                <option value="90">{copy.setup.text90Days}</option>
               </select>
             </label>
             <label>
-              Profile accent
+              {copy.setup.profileAccent}
               <select name="theme" defaultValue="sage">
-                <option value="sage">Sage</option>
-                <option value="rose">Rose</option>
-                <option value="ocean">Ocean</option>
+                <option value="sage">{copy.setup.sage}</option>
+                <option value="rose">{copy.setup.rose}</option>
+                <option value="ocean">{copy.setup.ocean}</option>
               </select>
             </label>
           </div>
-          <p className="hint">
-            Display name and prompt are public. Keep identifying or sensitive
-            details out of them.
-          </p>
+          <p className="hint">{copy.setup.displayNameAndPromptArePublicKeep}</p>
           <button disabled={busy}>
-            {busy ? 'Preparing keys…' : 'Prepare my recovery code'}
+            {busy ? copy.setup.preparingKeys : copy.setup.prepareMyRecoveryCode}
           </button>
         </form>
       )}

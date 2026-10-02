@@ -80,3 +80,17 @@ authorization, concurrency, recovery, browser compatibility, and plaintext netwo
 inspection must pass feature-specific tests before production. Turnstile executes
 remote JavaScript, conflicting with the current crypto-route policy: leave disabled;
 any later challenge design must resolve that conflict explicitly in documentation.
+
+## Phase 7 capacity correction — 2026-10-03
+
+The 5 GB account allowance is not the per-database limit: Workers Free D1 databases
+are limited to 500 MB ([official limits](https://developers.cloudflare.com/d1/platform/limits/)).
+Per-profile quotas and daily send admission alone could accumulate more than this
+under 90-day retention. Before changing storage, choose a conservative 20000 physical
+message ceiling globally, alongside 10000 profiles and 2000 rate rows. Aggregate
+SQLite counters maintained by insert/delete triggers avoid hot full-table scans and
+remain correct across cleanup/cascades. Migration seeds counters from existing rows;
+it does not delete content. Existing over-cap data prevents new inserts until cleanup
+or explicit owner deletion, without hiding valid ciphertext. No new identity data,
+plaintext, secret or cryptographic envelope change. Production size/query/CPU metrics
+still require staging validation; caps do not guarantee provider availability.

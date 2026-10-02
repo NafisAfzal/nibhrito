@@ -1,3 +1,4 @@
+import { copy } from '../../app/copy';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { parseShareLink } from '../../crypto/shareLink';
 import { canonicalMessage, encryptMessage } from '../../crypto/protocol';
@@ -23,7 +24,18 @@ export function Send() {
     // A changed fragment is a new trust decision. Reload clears the composer
     // and reruns verification rather than retaining a previously verified key.
     const changed = () => window.location.reload();
+    const clear = () => {
+      active = false;
+      pending.current = null;
+      setBody('');
+      setMood('');
+    };
+    const resumed = (event: PageTransitionEvent) => {
+      if (event.persisted) window.location.reload();
+    };
     window.addEventListener('hashchange', changed);
+    window.addEventListener('pagehide', clear);
+    window.addEventListener('pageshow', resumed);
     void (async () => {
       try {
         const link = await parseShareLink(new URL(window.location.href)),
@@ -38,10 +50,7 @@ export function Send() {
           throw new Error();
         if (active) setState({ link, profile });
       } catch {
-        if (active)
-          setError(
-            'This link is incomplete, cannot be verified, or is no longer accepting messages. Ask the profile owner for the full Nibhrito link.',
-          );
+        if (active) setError(copy.send.thisLinkIsIncompleteCannotBeVerified);
       } finally {
         if (active) setLoaded(true);
       }
@@ -49,6 +58,8 @@ export function Send() {
     return () => {
       active = false;
       window.removeEventListener('hashchange', changed);
+      window.removeEventListener('pagehide', clear);
+      window.removeEventListener('pageshow', resumed);
     };
   }, []);
   const plain = {
@@ -87,66 +98,69 @@ export function Send() {
       setMood('');
       setSent(true);
     } catch {
-      setError(
-        'Delivery could not be confirmed. Retry sends the same encrypted message safely. If you edit it, a new message will be sent.',
-      );
+      setError(copy.send.deliveryCouldNotBeConfirmedRetrySends);
     } finally {
       setBusy(false);
     }
   }
-  if (!loaded) return <p role="status">Verifying the full share link…</p>;
+  if (!loaded)
+    return <p role="status">{copy.send.verifyingTheFullShareLink}</p>;
   if (!state)
     return (
       <div className="narrow">
-        <h1>Check this link</h1>
+        <h1>{copy.send.checkThisLink}</h1>
         <Notice message={error} />
         <a className="text-link" href="/security">
-          How verified links work
+          {copy.send.howVerifiedLinksWork}
         </a>
       </div>
     );
   if (sent)
     return (
       <div className="narrow card">
-        <p className="eyebrow">Delivered as ciphertext</p>
-        <h1>Your words are on their way.</h1>
-        <p>Only the recipient’s browser holds the key to read this message.</p>
+        <p className="eyebrow">{copy.send.deliveredAsCiphertext}</p>
+        <h1>{copy.send.yourWordsAreOnTheirWay}</h1>
+        <p>{copy.send.onlyTheRecipientSBrowserHoldsThe}</p>
         <button onClick={() => setSent(false)} className="secondary">
-          Send another message
+          {copy.send.sendAnotherMessage}
         </button>
         <p className="hint">
-          Anonymous to the recipient. Hosting providers still process network
-          metadata.
+          {copy.send.anonymousToTheRecipientHostingProvidersStill}
         </p>
       </div>
     );
   return (
     <div className={`narrow accent-${state.profile.theme}`}>
-      <p className="eyebrow">A private note for</p>
+      <p className="eyebrow">{copy.send.aPrivateNoteFor}</p>
       <h1>{state.profile.display_name}</h1>
       <p className="lede user-text">{state.profile.public_prompt}</p>
       {error ? <Notice message={error} /> : null}
       <form className="card form" onSubmit={submit}>
         <label>
-          Your message
+          {copy.send.yourMessage}
           <textarea
             rows={7}
+            maxLength={4096}
+            name="message"
+            autoComplete="off"
+            spellCheck={false}
             required
             value={body}
             onChange={(e) => {
               setBody(e.target.value);
               pending.current = null;
             }}
-            placeholder="একটি ভালো দিক, একটি উন্নতির জায়গা…"
+            placeholder={copy.send.text}
             disabled={busy}
           />
         </label>
         <p className={bytes > 4096 ? 'notice' : 'hint'} aria-live="polite">
-          {bytes} / 4096 encrypted-payload bytes · Bangla and emoji welcome
+          {bytes} {copy.send.text4096EncryptedPayloadBytesBanglaAndEmoji}
         </p>
         <label>
-          Type of feedback (optional)
+          {copy.send.typeOfFeedbackOptional}
           <select
+            name="mood"
             value={mood}
             disabled={busy}
             onChange={(e) => {
@@ -154,29 +168,31 @@ export function Send() {
               pending.current = null;
             }}
           >
-            <option value="">Just a note</option>
-            <option value="appreciation">Appreciation</option>
-            <option value="constructive">Constructive feedback</option>
-            <option value="question">A question</option>
+            <option value="">{copy.send.justANote}</option>
+            <option value="appreciation">{copy.send.appreciation}</option>
+            <option value="constructive">
+              {copy.send.constructiveFeedback}
+            </option>
+            <option value="question">{copy.send.aQuestion}</option>
           </select>
         </label>
         <p className="privacy-label">
-          Encrypted in your browser before sending.
+          {copy.send.encryptedInYourBrowserBeforeSending}
         </p>
         <button disabled={!valid || busy}>
-          {busy ? 'Encrypting and sending…' : 'Send private message'}
+          {busy ? copy.send.encryptingAndSending : copy.send.sendPrivateMessage}
         </button>
         <p className="hint">
-          Expires after {state.profile.retention_days}{' '}
-          {state.profile.retention_days === 1 ? 'day' : 'days'}. Please be
-          respectful. <a href="/acceptable-use">Acceptable use</a>
+          {copy.send.expiresAfter} {state.profile.retention_days}{' '}
+          {state.profile.retention_days === 1 ? 'day' : 'days'}
+          {copy.send.pleaseBeRespectful}{' '}
+          <a href="/acceptable-use">{copy.send.acceptableUse}</a>
         </p>
       </form>
       <p className="muted">
-        Your identity is not shown to the recipient. Your device, your writing,
-        and network metadata can still reveal information.{' '}
+        {copy.send.yourIdentityIsNotShownToThe}{' '}
         <a className="text-link" href="/security">
-          Understand the limits
+          {copy.send.understandTheLimits}
         </a>
       </p>
     </div>

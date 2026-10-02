@@ -2,10 +2,13 @@
 
 **Privacy-first anonymous feedback with client-side end-to-end encryption.**
 
-This repository starts with an implementation-ready planning pack. The goal is to let a coding agent such as Codex or OpenCode build the product phase by phase without having to redesign the architecture.
+Nibhrito is a small React/TypeScript application with a same-origin Cloudflare
+Worker API and D1 storage. Messages are encrypted before upload and decrypted on
+the recipient's device. There is no email/password account or operator recovery key.
 
-Phase 0 adds a local React/Vite + Worker/D1 foundation. Messaging and cryptographic
-features are not implemented yet. See `PROJECT_STATUS.md` for current acceptance
+Profile setup, verified sending, encrypted inbox, recovery, encrypted local backups,
+settings, deletion/expiry, abuse limits and legal pages are implemented.
+See `PROJECT_STATUS.md` for current acceptance
 evidence, `docs/13_ARCHITECTURE_REVIEW.md` for audit decisions, and
 `docs/14_LOCAL_DEVELOPMENT.md` for setup and checks.
 
@@ -36,15 +39,15 @@ The remaining files are references for data/API, UX, deployment, legal/privacy, 
 
 - Frontend: React + TypeScript + Vite, static SPA
 - Styling: Tailwind CSS; CSS-first motion; no remote runtime UI scripts
-- API: Cloudflare Worker, TypeScript, Hono optional but recommended
+- API: Cloudflare Worker, strict TypeScript, native Web APIs
 - Database: Cloudflare D1
 - Crypto: browser-native Web Crypto API
 - Message encryption: ephemeral P-256 ECDH -> HKDF-SHA-256 -> AES-256-GCM
-- Recipient public key: carried in the share URL fragment (`#pk=...`) so it is not sent to the server in the initial HTTP request
+- Recipient public key: carried in the complete share URL fragment (`#v=1&pk=...`) so it is not sent to the server in the initial HTTP request
 - Private key: generated in the browser, persisted as a non-extractable `CryptoKey` in IndexedDB after an encrypted recovery bundle is prepared
 - Recovery: high-entropy recovery secret + server-stored encrypted recovery blob; server never receives the recovery secret
 - Owner authentication: random high-entropy owner token, server stores only a SHA-256 verifier; token is included in the encrypted recovery bundle
-- Abuse protection: request-size caps, per-profile quotas, short-lived HMAC-derived network buckets, optional challenge escalation; never persist raw IP in the application database
+- Abuse protection: byte caps, atomic storage/admission quotas, short-lived HMAC network buckets; challenge escalation is disabled pending a separately reviewed design
 - Message expiry: `expires_at`, indexed cleanup, scheduled deletion plus opportunistic cleanup
 - Hosting: Cloudflare free tier first, designed for migration rather than claiming guaranteed free hosting forever
 

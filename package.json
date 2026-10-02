@@ -24,7 +24,8 @@
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
     "db:list:local": "wrangler d1 migrations list DB --local",
     "worker:check": "npm run build && wrangler deploy --dry-run --outdir .wrangler/dry-run",
-    "check": "npm run lint && npm run format:check && npm run build && npm test && npm run test:e2e && npm run worker:check && npm audit --audit-level=low",
+    "privacy:check": "node scripts/privacy-check.mjs",
+    "check": "npm run lint && npm run format:check && npm run privacy:check && npm run build && npm test && npm run test:e2e && npm run worker:check && npm audit --audit-level=low",
     "deploy": "node scripts/deploy.mjs"
   },
   "dependencies": {

@@ -214,3 +214,16 @@ tombstones are planned after deletion or expiry.
 ## Time
 
 Server time is authoritative for retention and API ordering. Client timestamp is informational and encrypted inside message content.
+
+## Implemented capacity and site metadata
+
+Migration 0002 adds `storage_counters(name,value)` with three aggregate rows and
+insert/delete triggers; no identity or content is collected. Atomic insertion guards
+enforce 20000 physical messages globally, 500 active messages/profile, 10000 profiles
+and 2000 rate buckets. Global caps include expired rows until cleanup. Queries use
+RETURNING to count directly affected rows without counting trigger side effects.
+
+`GET /api/v1/site` returns `{operator_name,contact_email,jurisdiction,local}` for
+legal/contact pages. These are intentionally public configuration. Production must
+supply valid actual values; empty local values clearly show an evaluation notice.
+No admin, secrets, rate identifiers or infrastructure diagnostics are exposed.

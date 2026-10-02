@@ -1,4 +1,4 @@
-import { readFile, readdir } from 'node:fs/promises';
+import { applyMigrations } from './migrations';
 import { Miniflare } from 'miniflare';
 import worker from '../../worker/index';
 import type { Env } from '../../worker/types';
@@ -13,20 +13,7 @@ export async function harness() {
     d1Persist: false,
   });
   const db = (await runtime.getD1Database('DB')) as unknown as D1Database;
-  const dir = new URL('../../migrations/', import.meta.url);
-  for (const name of (await readdir(dir))
-    .filter((n) => n.endsWith('.sql'))
-    .sort()) {
-    const sql = await readFile(new URL(name, dir), 'utf8');
-    await db.batch(
-      sql
-        .replace(/^--.*$/gm, '')
-        .split(';')
-        .map((s) => s.trim())
-        .filter(Boolean)
-        .map((s) => db.prepare(s)),
-    );
-  }
+  await applyMigrations(db);
   const env = {
     DB: db,
     APP_ENV: 'local',

@@ -1,3 +1,4 @@
+import { copy } from '../../app/copy';
 import { useEffect, useState } from 'react';
 import { loadOwners, type LocalOwner } from '../../storage/indexedDb';
 import { api } from '../../lib/api';
@@ -28,7 +29,7 @@ export function Dashboard() {
       })
       .catch(() => {
         if (active) {
-          setError('Private browser storage is unavailable.');
+          setError(copy.dashboard.privateBrowserStorageIsUnavailable);
           setLoaded(true);
         }
       });
@@ -58,10 +59,7 @@ export function Dashboard() {
           if (active) setState({ owner: local, profile });
         })
         .catch(() => {
-          if (active)
-            setError(
-              'Could not open this profile. It may have been deleted. Try restoring with your saved recovery code.',
-            );
+          if (active) setError(copy.dashboard.couldNotOpenThisProfileItMay);
         })
         .finally(() => {
           if (active) setLoaded(true);
@@ -73,7 +71,7 @@ export function Dashboard() {
   const picker =
     owners.length > 1 ? (
       <label className="profile-picker">
-        Your profiles
+        {copy.dashboard.yourProfiles}
         <select value={selected} onChange={(e) => setSelected(e.target.value)}>
           {owners.map((owner) => (
             <option key={owner.profileSlug} value={owner.profileSlug}>
@@ -87,7 +85,7 @@ export function Dashboard() {
     return (
       <>
         {picker}
-        <p role="status">Opening your private space…</p>
+        <p role="status">{copy.dashboard.openingYourPrivateSpace}</p>
       </>
     );
   if (!state)
@@ -96,16 +94,13 @@ export function Dashboard() {
         {picker}
         {error ? <Notice message={error} /> : null}
         <div className="narrow card">
-          <h1>Your inbox lives here</h1>
-          <p>
-            Create a profile to receive private feedback, or restore one with
-            your saved code.
-          </p>
+          <h1>{copy.dashboard.yourInboxLivesHere}</h1>
+          <p>{copy.dashboard.createAProfileToReceivePrivateFeedback}</p>
           <a className="button" href="/create">
-            Create a profile
+            {copy.dashboard.createAProfile}
           </a>
           <a className="button secondary" href="/restore">
-            Restore a profile
+            {copy.dashboard.restoreAProfile}
           </a>
         </div>
       </>
@@ -116,29 +111,28 @@ export function Dashboard() {
       {picker}
       <div className="page-heading">
         <div>
-          <p className="eyebrow">Your private space</p>
+          <p className="eyebrow">{copy.dashboard.yourPrivateSpace}</p>
           <h1>{state.profile.display_name}</h1>
           <p className="muted">
-            /{state.profile.slug} · {state.profile.retention_days}-day retention
-            {state.profile.is_disabled ? ' · Incoming messages paused' : ''}
+            {copy.dashboard.text}
+            {state.profile.slug} {copy.dashboard.text2}{' '}
+            {state.profile.retention_days}
+            {copy.dashboard.dayRetention}
+            {state.profile.is_disabled
+              ? copy.dashboard.incomingMessagesPaused
+              : ''}
           </p>
         </div>
-        <button
-          className="secondary"
-          onClick={() => window.location.replace('/')}
-        >
-          Lock this screen
-        </button>
+        <a className="button secondary" href="/">
+          {copy.dashboard.lockThisScreen}
+        </a>
       </div>
       {error ? <Notice message={error} /> : null}
       <details className="card share" open>
-        <summary>Share your space</summary>
+        <summary>{copy.dashboard.shareYourSpace}</summary>
         <ShareQr link={link} />
-        <p>
-          Your full link carries your encryption public key. Share the whole
-          link.
-        </p>
-        <label htmlFor="share-link">Verified share link</label>
+        <p>{copy.dashboard.yourFullLinkCarriesYourEncryptionPublic}</p>
+        <label htmlFor="share-link">{copy.dashboard.verifiedShareLink}</label>
         <input id="share-link" readOnly value={link} />
         <button
           onClick={() => {
@@ -146,23 +140,22 @@ export function Dashboard() {
               .writeText(link)
               .then(() => setCopied(true))
               .catch(() =>
-                setError('Copy unavailable. Select and copy the full link.'),
+                setError(copy.dashboard.copyUnavailableSelectAndCopyTheFull),
               );
           }}
         >
-          {copied ? 'Link copied' : 'Copy full link'}
+          {copied ? copy.dashboard.linkCopied : copy.dashboard.copyFullLink}
         </button>
       </details>
-      <Inbox key={state.profile.id} owner={state.owner} />
+      <Inbox key={`inbox:${state.profile.id}`} owner={state.owner} />
       <Settings
-        key={state.profile.id}
+        key={`settings:${state.profile.id}`}
         owner={state.owner}
         profile={state.profile}
         onUpdate={(profile) => setState({ owner: state.owner, profile })}
       />
       <p className="hint">
-        Locking clears the screen, but this browser retains access. To remove
-        access, use “Forget this profile on this device” in settings.
+        {copy.dashboard.lockingClearsTheScreenButThisBrowser}
       </p>
     </div>
   );

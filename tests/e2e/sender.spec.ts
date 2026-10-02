@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises';
 import { test, expect } from '@playwright/test';
 test('full verified link encrypts Unicode before upload; incomplete link fails closed', async ({
   page,
@@ -5,7 +6,11 @@ test('full verified link encrypts Unicode before upload; incomplete link fails c
 }) => {
   const name = `send-${crypto.randomUUID().slice(0, 8)}`;
   await page.goto('/create');
-  await page.getByLabel('Display name', { exact: true }).fill('Recipient');
+  const publicName = '<img src=x onerror=alert(1)> Recipient';
+  await page.getByLabel('Display name', { exact: true }).fill(publicName);
+  await page
+    .getByRole('textbox', { name: 'Public prompt', exact: true })
+    .fill('</textarea><script>window.__xss=1</script>');
   await page.getByLabel('Link name', { exact: true }).fill(name);
   await page.getByRole('button', { name: 'Prepare my recovery code' }).click();
   const recovery = await page
@@ -46,6 +51,14 @@ test('full verified link encrypts Unicode before upload; incomplete link fails c
       sender.getByLabel('Your message', { exact: true }),
     ).toHaveCount(0);
     await sender.goto(link);
+    const beforeSkip = sender.url();
+    await sender.getByRole('link', { name: 'Skip to content' }).focus();
+    await sender.keyboard.press('Enter');
+    expect(sender.url()).toBe(beforeSkip);
+    await expect(
+      sender.getByRole('heading', { name: publicName, exact: true }),
+    ).toBeVisible();
+    await expect(sender.locator('img')).toHaveCount(0);
     await sender.getByLabel('Your message', { exact: true }).fill(note);
     await sender.getByRole('button', { name: 'Send private message' }).click();
     await expect(
@@ -55,6 +68,32 @@ test('full verified link encrypts Unicode before upload; incomplete link fails c
     expect(leaked).toBe(false);
     await page.getByRole('button', { name: 'Refresh inbox' }).click();
     await expect(page.locator('.message-text')).toHaveText(note);
+    await page
+      .getByText('Profile settings & security', { exact: true })
+      .click();
+    const downloaded = page.waitForEvent('download');
+    await page
+      .getByRole('button', { name: 'Download encrypted backup' })
+      .click();
+    const backup = await downloaded,
+      file = await backup.path();
+    if (!file) throw new Error('Backup unavailable.');
+    const rawBackup = await readFile(file, 'utf8');
+    expect(
+      rawBackup.includes(note) ||
+        rawBackup.includes(recovery) ||
+        rawBackup.includes('recipient_private_jwk'),
+    ).toBe(false);
+    await sender.goto('/backup');
+    await sender.getByLabel('Encrypted backup file').setInputFiles({
+      name: 'encrypted.json',
+      mimeType: 'application/json',
+      buffer: Buffer.from(rawBackup),
+    });
+    await sender.getByLabel('Recovery code', { exact: true }).fill(recovery);
+    await sender.getByRole('button', { name: 'Open backup locally' }).click();
+    await expect(sender.locator('.message-text')).toHaveText(note);
+    expect(leaked).toBe(false);
     await expect(page.locator('.message-text script')).toHaveCount(0);
     await sender.goto('/restore');
     await sender.getByLabel('Link name', { exact: true }).fill(name);

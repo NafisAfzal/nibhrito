@@ -23,7 +23,7 @@ Current official documentation states:
 - Static asset requests are free and unlimited.
 - D1 Workers Free: 5 million rows read/day.
 - D1 Workers Free: 100,000 rows written/day.
-- D1 total free storage allowance: 5 GB across account, with free per-database constraints documented separately.
+- D1 total free storage allowance: 5 GB across account; **500 MB per free database**.
 - Pages/Worker static deployment build limits and other platform limits can change.
 
 These numbers are capacity planning inputs, not promises that the provider will preserve identical terms forever.
@@ -45,7 +45,8 @@ Use:
 
 - 4 KiB plaintext cap,
 - ~12 KiB envelope hard cap,
-- max 500 stored messages/profile by default,
+- max 500 active messages/profile, 20000 physical messages globally,
+- max 10000 profiles and 2000 short-lived rate rows,
 - 30-day default expiry,
 - 90-day maximum expiry,
 - cursor pagination,

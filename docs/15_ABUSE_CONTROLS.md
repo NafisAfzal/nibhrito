@@ -20,7 +20,12 @@ Worker proxies. Worker subrequests reject. Missing metadata/secrets fail closed.
 The provider still sees network metadata. Root compromise permits correlation;
 daily derivation does not promise forward secrecy. Rotate the root periodically.
 
-Storage is bounded: 10000 profiles, 500 active notes/profile, 2000 rate rows total.
+Storage is bounded: 10000 profiles, 500 active notes/profile, 20000 physical notes
+globally (including expired rows awaiting cleanup), and 2000 rate rows total.
+Migration 0002 maintains atomic aggregate counts across insertion/deletion/cascades;
+capacity checks use these counters. This reserves headroom under the 500 MB free
+per-database limit; measure actual size/CPU on staging before launch. Triggers add
+row writes to the budget. Explicit RETURNING results count writes, not meta.changes.
 Existing rate rows update even at capacity; new groups fail closed until hourly
 cleanup frees space. This prevents unbounded stale-bucket growth under distributed
 abuse. Global counters precede network counters; no caller-controlled scope is

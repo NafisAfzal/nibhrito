@@ -10,7 +10,9 @@ import { inboxRoutes } from './routes/inbox';
 import { D1CleanupRepository } from './repositories/cleanupRepository';
 import { D1RateRepository } from './repositories/rateRepository';
 import { rateLimit, type WriteLimits } from './middleware/rateLimit';
-import { checkOrigin, HttpError } from './security/request';
+import { checkOrigin, HttpError, noBody } from './security/request';
+import { siteInfo } from '../shared/schemas/site';
+import { success } from './routes/profiles';
 
 export default {
   async scheduled(controller: ScheduledController, env: Env): Promise<void> {
@@ -21,8 +23,28 @@ export default {
     if (pathname === '/api' || pathname.startsWith('/api/')) {
       let limits: WriteLimits;
       try {
+        if (
+          env.APP_ENV === 'production' &&
+          new URL(request.url).protocol !== 'https:'
+        )
+          throw new HttpError(426, 'HTTPS_REQUIRED', 'HTTPS is required.');
         checkOrigin(request);
         limits = await rateLimit(request, env, new D1RateRepository(env.DB));
+        if (
+          pathname === '/api/v1/site' &&
+          request.method === 'GET' &&
+          !new URL(request.url).search
+        ) {
+          await noBody(request);
+          return success(
+            siteInfo({
+              operator_name: env.PUBLIC_OPERATOR_NAME ?? '',
+              contact_email: env.PUBLIC_CONTACT_EMAIL ?? '',
+              jurisdiction: env.PUBLIC_JURISDICTION ?? '',
+              local: env.APP_ENV === 'local',
+            }),
+          );
+        }
       } catch (error) {
         if (error instanceof HttpError)
           return apiError(

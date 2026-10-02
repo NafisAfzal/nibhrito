@@ -1,3 +1,4 @@
+import { copy } from '../../app/copy';
 import { useEffect, useRef, useState } from 'react';
 import type { InboxPage, StoredMessage } from '../../../shared/schemas/inbox';
 import { decryptMessage, type PlainMessage } from '../../crypto/protocol';
@@ -17,14 +18,16 @@ export function Inbox({ owner }: { owner: LocalOwner }) {
     [mood, setMood] = useState(''),
     [clock, setClock] = useState(() => Date.now());
   const active = useRef(false);
+  const request = useRef<AbortController | null>(null);
   async function load(next: string | null = null) {
     if (busy) return;
     setBusy(true);
     setError('');
+    request.current = new AbortController();
     try {
       const page = await api<InboxPage>(
         `/api/v1/inbox?limit=25${next ? `&cursor=${encodeURIComponent(next)}` : ''}`,
-        { token: owner.ownerToken },
+        { token: owner.ownerToken, signal: request.current.signal },
       );
       const decoded = await Promise.all(
         page.messages.map(async (item) => {
@@ -57,10 +60,10 @@ export function Inbox({ owner }: { owner: LocalOwner }) {
         );
         setCursor(page.next_cursor);
         setLoaded(true);
+        setClock(Date.now());
       }
     } catch {
-      if (active.current)
-        setError('Your inbox could not be loaded. Please try again.');
+      if (active.current) setError(copy.inbox.yourInboxCouldNotBeLoadedPlease);
     } finally {
       if (active.current) setBusy(false);
     }
@@ -74,22 +77,30 @@ export function Inbox({ owner }: { owner: LocalOwner }) {
       const now = Date.now();
       setClock(now);
       setNotes((previous) => previous.filter((n) => n.expires_at > now));
-    }, 30000);
+    }, 1000);
     const clear = () => {
+      active.current = false;
+      request.current?.abort();
       setNotes([]);
       setSearch('');
     };
+    const resumed = (event: PageTransitionEvent) => {
+      if (event.persisted) window.location.reload();
+    };
     window.addEventListener('pagehide', clear);
+    window.addEventListener('pageshow', resumed);
     return () => {
       active.current = false;
+      request.current?.abort();
       clearInterval(timer);
       window.removeEventListener('pagehide', clear);
+      window.removeEventListener('pageshow', resumed);
     };
     // This component is keyed by profile ID; changing profiles discards all state.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   async function remove(id: string) {
-    if (busy || !window.confirm('Delete this message? This cannot be undone.'))
+    if (busy || !window.confirm(copy.inbox.deleteThisMessageThisCannotBeUndone))
       return;
     setBusy(true);
     setError('');
@@ -102,12 +113,13 @@ export function Inbox({ owner }: { owner: LocalOwner }) {
         previous.filter((n) => n.envelope.message_id !== id),
       );
     } catch {
-      setError('Message could not be deleted. Please try again.');
+      setError(copy.inbox.messageCouldNotBeDeletedPleaseTry);
     } finally {
       setBusy(false);
     }
   }
-  const visible = notes.filter(
+  const current = notes.filter((note) => note.expires_at > clock);
+  const visible = current.filter(
     (n) =>
       n.expires_at > clock &&
       (!mood || n.plain?.mood === mood) &&
@@ -118,8 +130,8 @@ export function Inbox({ owner }: { owner: LocalOwner }) {
     <section aria-labelledby="inbox-heading">
       <div className="page-heading">
         <div>
-          <p className="eyebrow">Decrypted on this device</p>
-          <h2 id="inbox-heading">Your inbox</h2>
+          <p className="eyebrow">{copy.inbox.decryptedOnThisDevice}</p>
+          <h2 id="inbox-heading">{copy.inbox.yourInbox}</h2>
         </div>
         <button
           className="secondary"
@@ -128,46 +140,48 @@ export function Inbox({ owner }: { owner: LocalOwner }) {
             void load();
           }}
         >
-          Refresh inbox
+          {copy.inbox.refreshInbox}
         </button>
       </div>
       <div className="form-grid">
         <label>
-          Search loaded messages
+          {copy.inbox.searchLoadedMessages}
           <input
             type="search"
             value={search}
             autoComplete="off"
+            spellCheck={false}
             onChange={(e) => setSearch(e.target.value)}
           />
         </label>
         <label>
-          Filter feedback
+          {copy.inbox.filterFeedback}
           <select value={mood} onChange={(e) => setMood(e.target.value)}>
-            <option value="">All feedback</option>
-            <option value="appreciation">Appreciation</option>
-            <option value="constructive">Constructive feedback</option>
-            <option value="question">Questions</option>
+            <option value="">{copy.inbox.allFeedback}</option>
+            <option value="appreciation">{copy.inbox.appreciation}</option>
+            <option value="constructive">
+              {copy.inbox.constructiveFeedback}
+            </option>
+            <option value="question">{copy.inbox.questions}</option>
           </select>
         </label>
       </div>
-      <p className="hint">
-        Search runs only on loaded messages, in this browser. Nothing is sent to
-        the server.
-      </p>
+      <p className="hint">{copy.inbox.searchRunsOnlyOnLoadedMessagesIn}</p>
       {error ? <Notice message={error} /> : null}
       {!loaded && busy ? (
-        <p role="status">Fetching ciphertext and decrypting locally…</p>
+        <p role="status">{copy.inbox.fetchingCiphertextAndDecryptingLocally}</p>
       ) : null}
       {loaded && !visible.length ? (
         <div className="card empty">
           <h3>
-            {notes.length ? 'No matching notes' : 'A little quiet, for now'}
+            {current.length
+              ? copy.inbox.noMatchingNotes
+              : copy.inbox.aLittleQuietForNow}
           </h3>
           <p>
-            {notes.length
-              ? 'Try a different search or load more messages.'
-              : 'Share your full link to invite thoughtful feedback. Expired messages disappear automatically.'}
+            {current.length
+              ? copy.inbox.tryADifferentSearchOrLoadMore
+              : copy.inbox.shareYourFullLinkToInviteThoughtful}
           </p>
         </div>
       ) : null}
@@ -186,23 +200,21 @@ export function Inbox({ owner }: { owner: LocalOwner }) {
               </p>
             ) : (
               <p role="alert">
-                This message could not be authenticated or decrypted. No text
-                was displayed.
+                {copy.inbox.thisMessageCouldNotBeAuthenticatedOr}
               </p>
             )}
             <details>
-              <summary>Message details</summary>
+              <summary>{copy.inbox.messageDetails}</summary>
               <p className="hint">
-                Expires{' '}
+                {copy.inbox.expires}{' '}
                 <time dateTime={new Date(note.expires_at).toISOString()}>
                   {new Date(note.expires_at).toLocaleString()}
                 </time>
-                . Server time controls expiry; the sender’s device timestamp is
-                informational.
+                {copy.inbox.serverTimeControlsExpiryTheSenderS}
               </p>
               {note.plain ? (
                 <p className="hint">
-                  Sender device time:{' '}
+                  {copy.inbox.senderDeviceTime}{' '}
                   {new Date(note.plain.client_created_at).toLocaleString()}
                 </p>
               ) : null}
@@ -214,7 +226,7 @@ export function Inbox({ owner }: { owner: LocalOwner }) {
                 void remove(note.envelope.message_id);
               }}
             >
-              Delete message
+              {copy.inbox.deleteMessage}
             </button>
           </article>
         ))}
@@ -227,7 +239,7 @@ export function Inbox({ owner }: { owner: LocalOwner }) {
             void load(cursor);
           }}
         >
-          {busy ? 'Loading…' : 'Load older messages'}
+          {busy ? copy.inbox.loading : copy.inbox.loadOlderMessages}
         </button>
       ) : null}
     </section>

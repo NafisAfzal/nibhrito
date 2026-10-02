@@ -113,16 +113,22 @@ export async function encryptMessage(
     iv = random(12),
     id = crypto.randomUUID();
   const key = await messageKey(ephemeral.privateKey, recipient, salt);
-  const ciphertext = await crypto.subtle.encrypt(
-    {
-      name: 'AES-GCM',
-      iv,
-      additionalData: aad(profile, id, keyId),
-      tagLength: 128,
-    },
-    key,
-    utf8.encode(JSON.stringify(plaintext)),
-  );
+  const bytes = utf8.encode(JSON.stringify(plaintext));
+  let ciphertext: ArrayBuffer;
+  try {
+    ciphertext = await crypto.subtle.encrypt(
+      {
+        name: 'AES-GCM',
+        iv,
+        additionalData: aad(profile, id, keyId),
+        tagLength: 128,
+      },
+      key,
+      bytes,
+    );
+  } finally {
+    bytes.fill(0);
+  }
   return {
     v: 1,
     message_id: id,
@@ -164,7 +170,11 @@ export async function decryptMessage(
       key,
       decode(envelope.ciphertext, 16, 4112),
     );
-    return canonicalMessage(JSON.parse(decodeUtf8(plaintext)) as unknown);
+    try {
+      return canonicalMessage(JSON.parse(decodeUtf8(plaintext)) as unknown);
+    } finally {
+      new Uint8Array(plaintext).fill(0);
+    }
   } catch {
     throw new Error('Message could not be authenticated or decrypted.');
   }

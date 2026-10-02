@@ -50,6 +50,8 @@ export function object(
   if (
     !value ||
     typeof value !== 'object' ||
+    (Object.getPrototypeOf(value) !== Object.prototype &&
+      Object.getPrototypeOf(value) !== null) ||
     Array.isArray(value) ||
     Object.keys(value).some((k) => !fields.includes(k))
   )

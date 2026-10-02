@@ -1,9 +1,11 @@
+import { copy } from '../../app/copy';
 import { useState, type FormEvent } from 'react';
 import type { PublicProfile } from '../../../shared/schemas/profile';
 import type { LocalOwner } from '../../storage/indexedDb';
 import { forgetOwner } from '../../storage/indexedDb';
 import { api } from '../../lib/api';
 import { Notice } from '../../components/Layout';
+import { BackupExport } from '../recovery/Backup';
 export function Settings({
   owner,
   profile,
@@ -41,34 +43,25 @@ export function Settings({
       onUpdate(updated);
       setSaved(true);
     } catch {
-      setError(
-        'Settings could not be saved. Check the field lengths and try again.',
-      );
+      setError(copy.settings.settingsCouldNotBeSavedCheckThe);
     } finally {
       setBusy(false);
     }
   }
   async function forget() {
-    if (
-      !window.confirm(
-        'Remove this browser’s key and owner token? Make sure your recovery code is saved first. Messages on the server are unchanged.',
-      )
-    )
-      return;
+    if (!window.confirm(copy.settings.removeThisBrowserSKeyAndOwner)) return;
     try {
       await forgetOwner(owner.profileSlug);
       window.location.replace('/inbox');
     } catch {
-      setError('Browser storage could not be cleared.');
+      setError(copy.settings.browserStorageCouldNotBeCleared);
     }
   }
   async function remove() {
     if (
       confirmation !== profile.slug ||
       busy ||
-      !window.confirm(
-        'Permanently delete this profile, all messages and its encrypted recovery bundle?',
-      )
+      !window.confirm(copy.settings.permanentlyDeleteThisProfileAllMessagesAnd)
     )
       return;
     setBusy(true);
@@ -81,19 +74,19 @@ export function Settings({
       await forgetOwner(owner.profileSlug);
       window.location.replace('/inbox');
     } catch {
-      setError('Deletion could not be confirmed. Refresh and try again.');
+      setError(copy.settings.deletionCouldNotBeConfirmedRefreshAnd);
       setBusy(false);
     }
   }
   return (
     <details className="card settings">
-      <summary>Profile settings & security</summary>
-      <h2>Make this space yours</h2>
+      <summary>{copy.settings.profileSettingsSecurity}</summary>
+      <h2>{copy.settings.makeThisSpaceYours}</h2>
       {error ? <Notice message={error} /> : null}
-      {saved ? <p role="status">Settings saved.</p> : null}
+      {saved ? <p role="status">{copy.settings.settingsSaved}</p> : null}
       <form className="form" onSubmit={update}>
         <label>
-          Display name
+          {copy.settings.displayName}
           <input
             name="display_name"
             defaultValue={profile.display_name}
@@ -102,7 +95,7 @@ export function Settings({
           />
         </label>
         <label>
-          Public prompt
+          {copy.settings.publicPrompt}
           <textarea
             name="public_prompt"
             defaultValue={profile.public_prompt}
@@ -112,7 +105,7 @@ export function Settings({
         </label>
         <div className="form-grid">
           <label>
-            Keep new messages for
+            {copy.settings.keepNewMessagesFor}
             <select name="retention_days" defaultValue={profile.retention_days}>
               {[1, 7, 30, 90].map((d) => (
                 <option key={d} value={d}>
@@ -122,17 +115,16 @@ export function Settings({
             </select>
           </label>
           <label>
-            Profile accent
+            {copy.settings.profileAccent}
             <select name="theme" defaultValue={profile.theme}>
-              <option value="sage">Sage</option>
-              <option value="rose">Rose</option>
-              <option value="ocean">Ocean</option>
+              <option value="sage">{copy.settings.sage}</option>
+              <option value="rose">{copy.settings.rose}</option>
+              <option value="ocean">{copy.settings.ocean}</option>
             </select>
           </label>
         </div>
         <p className="hint">
-          Retention changes apply to new messages. Existing expiry dates stay
-          the same.
+          {copy.settings.retentionChangesApplyToNewMessagesExisting}
         </p>
         <label className="check">
           <input
@@ -140,18 +132,19 @@ export function Settings({
             name="is_disabled"
             defaultChecked={profile.is_disabled}
           />
-          Pause incoming messages
+          {copy.settings.pauseIncomingMessages}
         </label>
-        <button disabled={busy}>{busy ? 'Saving…' : 'Save settings'}</button>
+        <button disabled={busy}>
+          {busy ? copy.settings.saving : copy.settings.saveSettings}
+        </button>
       </form>
-      <h3>Your browser key</h3>
+      <h3>{copy.settings.yourBrowserKey}</h3>
       <p className="hint">
-        Non-extractable key stored in IndexedDB. Anyone able to run code in this
-        browser profile may still use it. Your saved recovery code restores
-        access; Nibhrito cannot reset it. This device cannot reveal the original
-        recovery code.
+        {copy.settings.nonExtractableKeyStoredInIndexeddbAnyone}
       </p>
-      <p className="fingerprint">Key fingerprint: {owner.keyId}</p>
+      <p className="fingerprint">
+        {copy.settings.keyFingerprint} {owner.keyId}
+      </p>
       <button
         type="button"
         className="secondary"
@@ -160,16 +153,13 @@ export function Settings({
         }}
         disabled={busy}
       >
-        Forget this profile on this device
+        {copy.settings.forgetThisProfileOnThisDevice}
       </button>
-      <h3>Delete your profile</h3>
-      <p>
-        This removes the profile, messages and encrypted recovery bundle from
-        active storage. Provider backups and copies others made may remain
-        temporarily.
-      </p>
+      <BackupExport owner={owner} />
+      <h3>{copy.settings.deleteYourProfile}</h3>
+      <p>{copy.settings.thisRemovesTheProfileMessagesAndEncrypted}</p>
       <label>
-        Type your link name to delete
+        {copy.settings.typeYourLinkNameToDelete}
         <input
           value={confirmation}
           onChange={(e) => setConfirmation(e.target.value)}
@@ -183,7 +173,7 @@ export function Settings({
           void remove();
         }}
       >
-        Permanently delete profile
+        {copy.settings.permanentlyDeleteProfile}
       </button>
     </details>
   );

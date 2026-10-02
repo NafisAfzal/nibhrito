@@ -1,65 +1,84 @@
+import { copy } from './copy';
 import { Layout } from '../components/Layout';
 import { Setup } from '../features/profile/Setup';
 import { Restore } from '../features/recovery/Restore';
 import { Dashboard } from '../features/profile/Dashboard';
 import { Send } from '../features/send/Send';
+import { Legal } from '../features/legal/Legal';
+import { policies } from './policies';
+import { BackupReader } from '../features/recovery/Backup';
+import { BrowserSupport } from '../components/BrowserSupport';
 export function App() {
   const path = window.location.pathname;
   return (
     <Layout>
-      {path.startsWith('/u/') ? (
-        <Send />
+      {Object.hasOwn(policies, path) ? (
+        <Legal path={path as keyof typeof policies} />
+      ) : path === '/backup' ? (
+        <BrowserSupport>
+          <BackupReader />
+        </BrowserSupport>
+      ) : path.startsWith('/u/') ? (
+        <BrowserSupport>
+          <Send />
+        </BrowserSupport>
       ) : path === '/create' ? (
-        <Setup />
+        <BrowserSupport>
+          <Setup />
+        </BrowserSupport>
       ) : path === '/restore' ? (
-        <Restore />
+        <BrowserSupport>
+          <Restore />
+        </BrowserSupport>
       ) : path === '/inbox' ? (
-        <Dashboard />
+        <BrowserSupport>
+          <Dashboard />
+        </BrowserSupport>
       ) : path === '/' ? (
         <div className="hero">
-          <p className="eyebrow">A quieter space for feedback</p>
+          <p className="eyebrow">{copy.app.aQuieterSpaceForFeedback}</p>
           <h1>
-            Private words.
+            {copy.app.privateWords}
             <br />
-            Thoughtful conversations.
+            {copy.app.thoughtfulConversations}
           </h1>
           <p className="lede">
-            A personal space for honest feedback. Built around browser
-            encryption, with no email or password.
+            {copy.app.aPersonalSpaceForHonestFeedbackBuilt}
           </p>
           <div className="actions">
             <a className="button" href="/create">
-              Create your space <span aria-hidden="true">↗</span>
+              {copy.app.createYourSpace}
+              <span aria-hidden="true">{copy.app.text}</span>
             </a>
             <a className="text-link" href="/restore">
-              Already have a recovery code?
+              {copy.app.alreadyHaveARecoveryCode}
             </a>
           </div>
           <div className="feature-grid">
             <section>
-              <span className="feature-number">01</span>
-              <h2>Your browser, your keys</h2>
-              <p>Your private encryption key stays on your device.</p>
+              <span className="feature-number">{copy.app.text01}</span>
+              <h2>{copy.app.yourBrowserYourKeys}</h2>
+              <p>{copy.app.yourPrivateEncryptionKeyStaysOnYour}</p>
             </section>
             <section>
-              <span className="feature-number">02</span>
-              <h2>A link with a purpose</h2>
-              <p>Share a full link carrying your encryption public key.</p>
+              <span className="feature-number">{copy.app.text02}</span>
+              <h2>{copy.app.aLinkWithAPurpose}</h2>
+              <p>{copy.app.shareAFullLinkCarryingYourEncryption}</p>
             </section>
             <section>
-              <span className="feature-number">03</span>
-              <h2>Recovery you control</h2>
-              <p>A saved code restores your inbox on another browser.</p>
+              <span className="feature-number">{copy.app.text03}</span>
+              <h2>{copy.app.recoveryYouControl}</h2>
+              <p>{copy.app.aSavedCodeRestoresYourInboxOn}</p>
             </section>
           </div>
         </div>
       ) : (
         <div className="narrow card">
-          <p className="eyebrow">404</p>
-          <h1>This space isn’t here</h1>
-          <p>Check the link, or head back to Nibhrito.</p>
+          <p className="eyebrow">{copy.app.text404}</p>
+          <h1>{copy.app.thisSpaceIsnTHere}</h1>
+          <p>{copy.app.checkTheLinkOrHeadBackTo}</p>
           <a className="button" href="/">
-            Back home
+            {copy.app.backHome}
           </a>
         </div>
       )}

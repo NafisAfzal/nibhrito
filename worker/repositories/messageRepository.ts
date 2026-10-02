@@ -68,16 +68,18 @@ export class D1MessageRepository implements MessageRepository {
   }
   async remove(profileId: string, messageId: string) {
     const result = await this.db
-      .prepare('DELETE FROM messages WHERE id=? AND profile_id=?')
+      .prepare(
+        'DELETE FROM messages WHERE id=? AND profile_id=? RETURNING 1 AS changed',
+      )
       .bind(messageId, profileId)
-      .run();
-    if (result.meta.changes !== 1)
+      .first<{ changed: number }>();
+    if (result?.changed !== 1)
       throw new HttpError(404, 'NOT_FOUND', 'Message not available.');
   }
   async submit(e: MessageEnvelope, now: number): Promise<boolean> {
     const inserted = await this.db
       .prepare(
-        'INSERT INTO messages (id,profile_id,profile_slug,envelope_version,key_id,ephemeral_pub,hkdf_salt,iv,ciphertext,created_at,expires_at) SELECT ?,p.id,?, ?,?,?,?,?,?,?, ? + p.retention_days * 86400000 FROM profiles p WHERE p.slug=? AND p.current_key_id=? AND p.is_disabled=0 AND (SELECT COUNT(*) FROM messages m WHERE m.profile_id=p.id AND m.expires_at>?)<500 ON CONFLICT(id) DO NOTHING',
+        "INSERT INTO messages (id,profile_id,profile_slug,envelope_version,key_id,ephemeral_pub,hkdf_salt,iv,ciphertext,created_at,expires_at) SELECT ?,p.id,?, ?,?,?,?,?,?,?, ? + p.retention_days * 86400000 FROM profiles p WHERE p.slug=? AND p.current_key_id=? AND p.is_disabled=0 AND (SELECT value FROM storage_counters WHERE name='messages')<20000 AND (SELECT COUNT(*) FROM messages m WHERE m.profile_id=p.id AND m.expires_at>?)<500 ON CONFLICT(id) DO NOTHING RETURNING 1 AS changed",
       )
       .bind(
         e.message_id,
@@ -94,8 +96,8 @@ export class D1MessageRepository implements MessageRepository {
         e.key_id,
         now,
       )
-      .run();
-    if (inserted.meta.changes === 1) {
+      .first<{ changed: number }>();
+    if (inserted?.changed === 1) {
       await this.db
         .prepare(
           'DELETE FROM messages WHERE id IN (SELECT id FROM messages WHERE profile_id=(SELECT id FROM profiles WHERE slug=?) AND expires_at<=? ORDER BY expires_at LIMIT 10)',

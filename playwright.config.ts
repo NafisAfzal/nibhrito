@@ -1,8 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
+// Failure snapshots could persist recovery codes or decrypted content.
+process.env['PLAYWRIGHT_NO_COPY_PROMPT'] = '1';
 
 export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
+  workers: 1,
+  timeout: 45000,
   forbidOnly: true,
   retries: 0,
   reporter: 'list',
@@ -12,7 +16,11 @@ export default defineConfig({
     screenshot: 'off',
     video: 'off',
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+  ],
   webServer: {
     command:
       'npm run local:init && npm run db:migrate:local && wrangler dev --local --ip 127.0.0.1 --port 8788',

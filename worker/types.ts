@@ -4,4 +4,7 @@ export interface Env {
   APP_ENV: 'local' | 'production';
   RATE_LIMIT_SECRET: string;
   CHALLENGE_ENABLED: 'false';
+  PUBLIC_OPERATOR_NAME?: string;
+  PUBLIC_CONTACT_EMAIL?: string;
+  PUBLIC_JURISDICTION?: string;
 }

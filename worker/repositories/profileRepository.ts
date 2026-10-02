@@ -58,7 +58,7 @@ export class D1ProfileRepository implements ProfileRepository {
     const results = await this.db.batch([
       this.db
         .prepare(
-          'INSERT INTO profiles (id,slug,display_name,public_prompt,theme,owner_token_hash,current_key_id,retention_days,created_at,updated_at) SELECT ?,?,?,?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM profiles)<10000 ON CONFLICT DO NOTHING',
+          "INSERT INTO profiles (id,slug,display_name,public_prompt,theme,owner_token_hash,current_key_id,retention_days,created_at,updated_at) SELECT ?,?,?,?,?,?,?,?,?,? WHERE (SELECT value FROM storage_counters WHERE name='profiles')<10000 ON CONFLICT DO NOTHING RETURNING 1 AS changed",
         )
         .bind(
           id,
@@ -78,7 +78,7 @@ export class D1ProfileRepository implements ProfileRepository {
         )
         .bind(id, b.v, b.key_id, b.hkdf_salt, b.iv, b.ciphertext, now, id),
     ]);
-    if (results[0]?.meta.changes !== 1)
+    if (results[0]?.results.length !== 1)
       throw new HttpError(
         409,
         'CONFLICT',

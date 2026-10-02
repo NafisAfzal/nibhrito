@@ -1,3 +1,4 @@
+import { copy } from '../../app/copy';
 import { useState, type FormEvent } from 'react';
 import type { RecoveryEnvelope } from '../../../shared/protocol/envelope';
 import type { PublicProfile } from '../../../shared/schemas/profile';
@@ -29,24 +30,20 @@ export function Restore() {
       form.reset();
       window.location.assign('/inbox');
     } catch {
-      setError(
-        'Could not restore this profile. Check your link name and recovery code.',
-      );
+      setError(copy.restore.couldNotRestoreThisProfileCheckYour);
     } finally {
       setBusy(false);
     }
   }
   return (
     <div className="narrow">
-      <p className="eyebrow">Welcome back</p>
-      <h1>Restore your inbox</h1>
-      <p className="lede">
-        Your code unlocks your keys locally. We never receive it.
-      </p>
+      <p className="eyebrow">{copy.restore.welcomeBack}</p>
+      <h1>{copy.restore.restoreYourInbox}</h1>
+      <p className="lede">{copy.restore.yourCodeUnlocksYourKeysLocallyWe}</p>
       {error ? <Notice message={error} /> : null}
       <form className="card form" onSubmit={restore}>
         <label>
-          Link name
+          {copy.restore.linkName}
           <input
             name="slug"
             required
@@ -56,17 +53,18 @@ export function Restore() {
           />
         </label>
         <label>
-          Recovery code
+          {copy.restore.recoveryCode}
           <textarea
             name="code"
             required
             rows={3}
+            maxLength={128}
             autoComplete="off"
             spellCheck={false}
           />
         </label>
         <button disabled={busy}>
-          {busy ? 'Unlocking locally…' : 'Restore profile'}
+          {busy ? copy.restore.unlockingLocally : copy.restore.restoreProfile}
         </button>
       </form>
     </div>

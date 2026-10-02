@@ -1,4 +1,4 @@
-import { beforeAll, afterAll, describe, expect, it } from 'vitest';
+import { beforeAll, afterAll, describe, expect, it, vi } from 'vitest';
 import { harness } from './harness';
 import { fixture } from './fixture';
 import { D1RateRepository } from '../../worker/repositories/rateRepository';
@@ -23,30 +23,36 @@ describe('atomic privacy-preserving rate limits', () => {
     expect(await repo.consume('opaque', 'test', 120000, 60000, 5)).toBe(true);
   });
   it('rejects the eleventh profile submission without storing duplicate messages', async () => {
-    const owner = await fixture(app, 'burst-test'),
-      envelope = await owner.envelope();
-    const post = () =>
-      app.fetch('/api/v1/profiles/burst-test/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(envelope),
-      });
-    for (let i = 0; i < 10; i++)
-      expect((await post()).status).toBe(i ? 200 : 201);
-    const response = await post();
-    expect(response.status).toBe(429);
-    expect(response.headers.get('Retry-After')).toBe('3600');
-    const stored = await app.db
-      .prepare('SELECT * FROM rate_limit_buckets')
-      .all();
-    expect(JSON.stringify(stored.results).includes('127.0.0.1')).toBe(false);
-    expect(
-      (
-        await app.db
-          .prepare('SELECT COUNT(*) AS n FROM messages')
-          .first<{ n: number }>()
-      )?.n,
-    ).toBe(1);
+    const stable = Math.floor(Date.now() / 60000) * 60000 + 30000;
+    const time = vi.spyOn(Date, 'now').mockReturnValue(stable);
+    try {
+      const owner = await fixture(app, 'burst-test'),
+        envelope = await owner.envelope();
+      const post = () =>
+        app.fetch('/api/v1/profiles/burst-test/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(envelope),
+        });
+      for (let i = 0; i < 10; i++)
+        expect((await post()).status).toBe(i ? 200 : 201);
+      const response = await post();
+      expect(response.status).toBe(429);
+      expect(response.headers.get('Retry-After')).toBe('3600');
+      const stored = await app.db
+        .prepare('SELECT * FROM rate_limit_buckets')
+        .all();
+      expect(JSON.stringify(stored.results).includes('127.0.0.1')).toBe(false);
+      expect(
+        (
+          await app.db
+            .prepare('SELECT COUNT(*) AS n FROM messages')
+            .first<{ n: number }>()
+        )?.n,
+      ).toBe(1);
+    } finally {
+      time.mockRestore();
+    }
   });
   it('enforces production creation limits, profile isolation and window recovery', async () => {
     const env = { ...app.env, APP_ENV: 'production' as const },
@@ -83,7 +89,7 @@ describe('atomic privacy-preserving rate limits', () => {
       { ...app.env, CHALLENGE_ENABLED: 'true' },
     ]) {
       const response = await worker.fetch(
-        new Request('http://127.0.0.1/api/v1/health'),
+        new Request('https://127.0.0.1/api/v1/health'),
         env as typeof app.env,
       );
       expect(response.status).toBe(503);

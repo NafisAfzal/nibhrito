@@ -1,3 +1,4 @@
+import { copy } from '../app/copy';
 import { useMemo } from 'react';
 import qrcode from 'qrcode-generator';
 export function ShareQr({ link }: { link: string }) {
@@ -16,7 +17,7 @@ export function ShareQr({ link }: { link: string }) {
     <svg
       className="share-qr"
       role="img"
-      aria-label="QR code for full verified share link"
+      aria-label={copy.shareqr.qrCodeForFullVerifiedShareLink}
       viewBox={`0 0 ${matrix.size} ${matrix.size}`}
       shapeRendering="crispEdges"
     >

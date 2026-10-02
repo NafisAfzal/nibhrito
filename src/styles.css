@@ -381,6 +381,7 @@
 
 @layer base {
   :root {
+    --muted: #625f54;
     font-family: system-ui, sans-serif;
     color: #292524;
     background: #fafaf9;
@@ -389,8 +390,106 @@
 
   @media (prefers-color-scheme: dark) {
     :root {
+      --muted: #c2c6b9;
       color: #f5f5f4;
       background: #1c1917;
+    }
+  }
+}
+
+@layer components {
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+    scroll-margin-top: 24px;
+  }
+  .page-heading > div {
+    min-width: 0;
+  }
+  .legal section {
+    margin-block: 2.5rem;
+  }
+  .legal nav {
+    padding-block: 1rem;
+    border-block: 1px solid #d2dace;
+  }
+  .legal p {
+    line-height: 1.85;
+  }
+  .note {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 260px;
+  }
+  input,
+  textarea,
+  select {
+    color: inherit;
+  }
+  button,
+  .button,
+  summary {
+    touch-action: manipulation;
+  }
+  button:not(:disabled):hover,
+  .button:hover {
+    filter: brightness(0.9);
+  }
+  button.danger {
+    color: #9b2929;
+    background: #fff0eb;
+    border-color: currentColor;
+  }
+  button.danger:not(.secondary) {
+    background: #fff0eb;
+  }
+  .shell,
+  .site-header,
+  .site-footer {
+    padding-left: max(20px, env(safe-area-inset-left));
+    padding-right: max(20px, env(safe-area-inset-right));
+  }
+  .brand {
+    white-space: nowrap;
+  }
+  .actions .button span {
+    margin-left: 0.5rem;
+  }
+  .note-meta,
+  time {
+    font-variant-numeric: tabular-nums;
+  }
+  @media (max-width: 640px) {
+    .share-qr {
+      float: none;
+      display: block;
+      margin: 1rem auto;
+    }
+    .site-header {
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .site-header nav {
+      gap: 12px;
+      justify-content: flex-end;
+    }
+    .page-heading {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+  }
+  @media (prefers-color-scheme: dark) {
+    .privacy-label {
+      color: #a9c9af;
+    }
+    button.danger,
+    button.danger:not(.secondary) {
+      color: #ffc2b6;
+      background: #3c2825;
+    }
+    .legal nav {
+      border-color: #53594d;
     }
   }
 }

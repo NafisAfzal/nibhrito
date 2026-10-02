@@ -8,10 +8,16 @@ export class D1ReadinessRepository implements ReadinessRepository {
   async isReady(): Promise<boolean> {
     const result = await this.database
       .prepare(
-        "SELECT COUNT(*) AS count FROM sqlite_master WHERE type = 'table' AND name IN (?, ?, ?, ?)",
+        "SELECT COUNT(*) AS count FROM sqlite_master WHERE type = 'table' AND name IN (?, ?, ?, ?, ?)",
       )
-      .bind('profiles', 'messages', 'recovery_blobs', 'rate_limit_buckets')
+      .bind(
+        'profiles',
+        'messages',
+        'recovery_blobs',
+        'rate_limit_buckets',
+        'storage_counters',
+      )
       .first<{ count: number }>();
-    return result?.count === 4;
+    return result?.count === 5;
   }
 }

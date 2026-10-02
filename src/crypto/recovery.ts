@@ -33,7 +33,10 @@ export async function parseRecoveryCode(code: string) {
   if (!/^NBR1-[A-Za-z0-9_-]{43}-[A-Za-z0-9_-]{8}$/.test(code))
     throw new ValidationError();
   const secret = decode(code.slice(5, 48), 32);
-  if ((await checksum(secret)) !== code.slice(49)) throw new ValidationError();
+  if ((await checksum(secret)) !== code.slice(49)) {
+    secret.fill(0);
+    throw new ValidationError();
+  }
   return secret;
 }
 function payload(value: unknown): RecoveryPayload {
@@ -68,11 +71,12 @@ export async function encryptRecovery(
 ): Promise<RecoveryEnvelope> {
   const data = payload(value),
     bytes = utf8.encode(JSON.stringify(data));
-  if (bytes.length > 8192) throw new ValidationError();
-  const secret = await parseRecoveryCode(code),
-    salt = random(32),
-    iv = random(12);
+  let secret: Uint8Array<ArrayBuffer> | undefined;
   try {
+    if (bytes.length > 8192) throw new ValidationError();
+    secret = await parseRecoveryCode(code);
+    const salt = random(32),
+      iv = random(12);
     const key = await deriveAes(secret, salt, 'recovery');
     const encrypted = await crypto.subtle.encrypt(
       {
@@ -92,7 +96,7 @@ export async function encryptRecovery(
       ciphertext: encode(new Uint8Array(encrypted)),
     };
   } finally {
-    secret.fill(0);
+    secret?.fill(0);
     bytes.fill(0);
   }
 }
@@ -120,8 +124,12 @@ export async function decryptRecovery(
         key,
         decode(envelope.ciphertext, 16, 8208),
       );
-      const data = payload(JSON.parse(decodeUtf8(bytes)) as unknown);
-      new Uint8Array(bytes).fill(0);
+      let data: RecoveryPayload;
+      try {
+        data = payload(JSON.parse(decodeUtf8(bytes)) as unknown);
+      } finally {
+        new Uint8Array(bytes).fill(0);
+      }
       if (data.profile_slug !== profile || data.key_id !== envelope.key_id)
         throw new ValidationError();
       const restored = await restorePrivate(

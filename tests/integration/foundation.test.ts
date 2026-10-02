@@ -1,4 +1,4 @@
-import { readFile } from 'node:fs/promises';
+import { applyMigrations } from './migrations';
 import { Miniflare } from 'miniflare';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { D1ReadinessRepository } from '../../worker/repositories/readinessRepository';
@@ -35,17 +35,7 @@ describe('local D1 foundation', () => {
         )
       ).status,
     ).toBe(503);
-    const migration = await readFile(
-      new URL('../../migrations/0001_initial.sql', import.meta.url),
-      'utf8',
-    );
-    // Split this trusted migration at statement boundaries; it has no string semicolons.
-    const statements = migration
-      .replace(/^--.*$/gm, '')
-      .split(';')
-      .map((sql) => sql.trim())
-      .filter(Boolean);
-    await database.batch(statements.map((sql) => database.prepare(sql)));
+    await applyMigrations(database);
     expect(await repository.isReady()).toBe(true);
     const response = await handleApi(
       new Request('https://local.invalid/api/v1/health'),

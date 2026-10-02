@@ -1,13 +1,21 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './app/App';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import './styles.css';
 
 const root = document.getElementById('root');
 if (!root) throw new Error('Application root is unavailable.');
 
-createRoot(root).render(
+// Error details can contain sensitive state. Suppress React's diagnostic logging.
+createRoot(root, {
+  onCaughtError: () => {},
+  onUncaughtError: () => {},
+  onRecoverableError: () => {},
+}).render(
   <StrictMode>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </StrictMode>,
 );
