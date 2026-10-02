@@ -56,6 +56,39 @@ The exact formatter must have unit-test vectors.
 
 ## 4. Recipient profile key generation
 
+### v1 serialization clarification (2026-10-03, before crypto implementation)
+
+This resolves previously unspecified serialization without changing algorithms or
+envelope meanings. Slugs are lowercase ASCII 3–32 characters, alphanumeric at each
+end and alphanumeric/hyphen inside. UUIDs are lowercase RFC 4122 v4 strings. Binary
+fields must be canonical unpadded base64url (reject padding, non-zero unused bits,
+whitespace, other alphabets). P-256 public points are 65-byte uncompressed points,
+validated by native key import; salts/key IDs/secrets/tokens are 32 bytes; IVs 12 bytes.
+
+Message JSON field order is type, text, optional mood, client_created_at. Type is
+`message`; text must contain non-whitespace Unicode; mood, if present, is constructive,
+appreciation, or question. Timestamps are canonical ISO UTC milliseconds. JSON.stringify
+of this ordered object provides UTF-8 serialization; cap the entire object at 4096
+bytes, not just text. Reject unpaired UTF-16 surrogates and unknown fields. Decrypted
+JSON must pass the same schema. Ciphertext includes the 16-byte AES-GCM tag.
+
+Recovery JSON order is v, profile_slug, key_id, recipient_private_jwk, owner_token,
+created_at. Private JWK order is kty, crv, x, y, d, ext, key_ops, with EC/P-256,
+32-byte x/y/d, ext=true and key_ops=[deriveBits]. Recovery plaintext cap is 8192 bytes.
+Recovery envelope has exactly v, key_id, hkdf_salt, iv, ciphertext. Outer profile slug
+comes from the requested immutable profile; it remains bound through recovery AAD.
+After authentication, validate JWK fingerprint and compare native ECDH outputs using
+a fresh challenge keypair to verify that its private/public components agree.
+
+Recovery code is `NBR1-` + 43-character base64url secret + `-` + 8-character base64url
+checksum. The checksum is the first six bytes of SHA-256(secret bytes); it detects
+copy errors, provides no security beyond the random secret, and is never uploaded.
+Parse fixed positions rather than splitting hyphens. Working private keys import as
+non-extractable; temporary exported JWK/secret state is discarded after setup/restore.
+JavaScript cannot guarantee physical memory erasure. No recovery export contains
+plaintext key material; downloadable backups contain only the versioned recovery code
+or encrypted bundle with an explicit warning that the code grants full access.
+
 Browser:
 
 1. `crypto.subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, ["deriveBits"])`

@@ -5,9 +5,9 @@ no chat history is required to continue.
 
 ## Current phase
 
-Phase 0 complete. Final configuration, diff, and secret-exposure reviews passed;
-changes are recorded in logical Git commits. Phase 1 has not started. This is a local application
-foundation, not a production-ready messaging product.
+Phases 0–1 complete. Continuing immediately with Phase 2, profile creation/recovery.
+The following Phase 0 handoff is historical; subsequent completed-phase entries
+record current work and checks. No production deployment has occurred.
 
 ## Completed work
 
@@ -78,7 +78,7 @@ transitive dependency advisories, and duplicate E2E port argument. Automatic rev
 blocked manual generated-file deletion; npm reinstall/isolated lock generation
 completed safely instead. No test requirement or security invariant was waived.
 
-## Known limitations and remaining work
+## Phase 0 limitations (historical)
 
 - Messaging, browser crypto, key persistence, profile/recovery APIs, authorization,
   expiry handlers, quotas, and rate limiting are not implemented. Their feature
@@ -95,7 +95,7 @@ completed safely instead. No test requirement or security invariant was waived.
 - No Cloudflare account/login, remote resource, credentials, domain, challenge config,
   migrations, deployment, or Git remote was created or supplied.
 
-## Next phase
+## Phase 0 next-phase handoff (historical)
 
 Phase 1: crypto core. First create its ExecPlan and document exact v1 canonical JSON,
 optional fields, strict base64url, UUID/slug formats, recovery checksum, and full
@@ -109,3 +109,13 @@ tests. Require all phase checks before profile creation/recovery (Phase 2).
 None to implemented privacy/E2EE constraints. Conservative contract refinements and
 toolchain decisions are documented above and in the architecture audit. Nibhrito v1
 has not been independently audited or deployed.
+
+## Phase 1 completed — 2026-10-03
+
+Documented exact v1 canonical serialization/encoding/checksum limits. Added isolated
+Web Crypto key, message and recovery modules; strict shared envelope validation;
+non-extractable working keys and private/public consistency checks during recovery.
+`npm run check` passed: formatting, lint, all TS projects, builds, 41 Vitest tests
+(31 crypto cases), 4 Chromium E2E tests, Worker dry-run and 0-vulnerability audit.
+Diff review found no secret logging, remote calls, browser secret storage, or crypto
+algorithm changes. Next: Phase 2 authenticated profiles, IndexedDB and recovery UI.
