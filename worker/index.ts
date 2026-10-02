@@ -4,6 +4,8 @@ import { apiError, handleApi } from './routes/api';
 import type { Env } from './types';
 import { D1ProfileRepository } from './repositories/profileRepository';
 import { profileRoutes } from './routes/profiles';
+import { D1MessageRepository } from './repositories/messageRepository';
+import { messageRoutes } from './routes/messages';
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -11,7 +13,14 @@ export default {
     if (pathname === '/api' || pathname.startsWith('/api/')) {
       if (pathname === '/api/v1/health')
         return handleApi(request, new D1ReadinessRepository(env.DB));
-      return profileRoutes(request, new D1ProfileRepository(env.DB));
+      const profiles = new D1ProfileRepository(env.DB);
+      if (/^\/api\/v1\/profiles\/[^/]+\/messages$/.test(pathname))
+        return messageRoutes(
+          request,
+          profiles,
+          new D1MessageRepository(env.DB),
+        );
+      return profileRoutes(request, profiles);
     }
 
     try {

@@ -2,11 +2,14 @@ import { Layout } from '../components/Layout';
 import { Setup } from '../features/profile/Setup';
 import { Restore } from '../features/recovery/Restore';
 import { Dashboard } from '../features/profile/Dashboard';
+import { Send } from '../features/send/Send';
 export function App() {
   const path = window.location.pathname;
   return (
     <Layout>
-      {path === '/create' ? (
+      {path.startsWith('/u/') ? (
+        <Send />
+      ) : path === '/create' ? (
         <Setup />
       ) : path === '/restore' ? (
         <Restore />

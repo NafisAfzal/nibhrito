@@ -3,6 +3,7 @@ import { loadOwners, type LocalOwner } from '../../storage/indexedDb';
 import { api } from '../../lib/api';
 import type { PublicProfile } from '../../../shared/schemas/profile';
 import { Notice } from '../../components/Layout';
+import { ShareQr } from '../../components/ShareQr';
 export function Dashboard() {
   const [state, setState] = useState<{
       owner: LocalOwner;
@@ -68,6 +69,7 @@ export function Dashboard() {
       </div>
       <section className="card">
         <h2>Share your space</h2>
+        <ShareQr link={link} />
         <p>
           Your full link carries your encryption public key. Share the whole
           link.

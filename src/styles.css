@@ -1,6 +1,29 @@
 @import 'tailwindcss';
 
 @layer components {
+  .share-qr {
+    width: 180px;
+    height: 180px;
+    max-width: 100%;
+    border-radius: 12px;
+    float: right;
+    margin: 0 0 20px 24px;
+  }
+  .privacy-label {
+    color: #345c48;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .user-text {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .accent-rose button:not(.secondary) {
+    background: #884954;
+  }
+  .accent-ocean button:not(.secondary) {
+    background: #325b76;
+  }
   .site-header {
     max-width: 1120px;
     margin: auto;

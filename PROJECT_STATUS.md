@@ -5,7 +5,7 @@ no chat history is required to continue.
 
 ## Current phase
 
-Phases 0–2 complete. Continuing immediately with Phase 3, verified encrypted sending.
+Phases 0–3 complete. Continuing immediately with Phase 4, encrypted inbox.
 The following Phase 0 handoff is historical; subsequent completed-phase entries
 record current work and checks. No production deployment has occurred.
 
@@ -131,3 +131,13 @@ Responsive semantic screens and error states are in place. `npm run check` passe
 Network/storage assertions found no plaintext private JWK or recovery secret.
 Only explicit owner requests send the bearer token. Reviewed diff; no security waiver.
 Next: Phase 3 verified fragment handling, opaque encrypted submission and local QR.
+
+## Phase 3 completed — 2026-10-03
+
+Verified full fragment links, local QR, Unicode byte-limited sender, browser-only
+encryption, opaque storage, server expiry and atomic 500-message quota. Exact retries
+are acknowledged; conflicting UUIDs reject safely. Fragment changes reload and clear
+the composer before re-verification. Full check passed: 72 Vitest / 6 Chromium tests,
+lint/format/TS/build/Worker dry-run and zero-vulnerability audit. Network and real D1
+tests confirm ciphertext-only submission/storage. Diff reviewed: no sensitive logs,
+fallback keys or remote QR/scripts. Next: Phase 4 owner-scoped inbox and lifecycle.

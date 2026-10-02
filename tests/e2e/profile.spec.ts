@@ -27,7 +27,9 @@ test('setup and restore keep keys and recovery code out of requests', async ({
   expect(code.startsWith('NBR1-')).toBe(true);
   await page.getByLabel('I saved my recovery code somewhere safe').check();
   await page.getByRole('button', { name: 'Create my private profile' }).click();
-  await expect(page.getByLabel('Verified share link')).toBeVisible();
+  await expect(
+    page.getByLabel('Verified share link', { exact: true }),
+  ).toBeVisible();
   const protectedKey = await page.evaluate(
     () =>
       new Promise<boolean>((resolve, reject) => {
@@ -73,7 +75,9 @@ test('setup and restore keep keys and recovery code out of requests', async ({
     await restored
       .getByRole('button', { name: 'Restore profile', exact: true })
       .click();
-    await expect(restored.getByLabel('Verified share link')).toBeVisible();
+    await expect(
+      restored.getByLabel('Verified share link', { exact: true }),
+    ).toBeVisible();
   } finally {
     await context.close();
   }
