@@ -6,8 +6,8 @@ ExecPlans provide the handoff; no chat history is needed.
 ## Current state
 
 All locally executable MVP work is complete: Phases 0–7 and Phase 8 deployment
-preparation. Final clean-install verification passes; changes are being recorded
-in the Phase 8 and verification commits.
+preparation. Final clean-install verification passes. Phases 1–8 local work are
+committed; the final documentation commit records verification and the handoff.
 Package is 1.0.0-rc.1. No Cloudflare provisioning, production secret/configuration,
 deployment or v1.0.0 tag has occurred. External production acceptance remains pending.
 
@@ -122,17 +122,17 @@ external deployment procedure; do not bypass the guard or tag v1.0.0 before live
 
 ## Commit history and continuation
 
-| Phase | Commit                | Outcome                                                               |
-| ----- | --------------------- | --------------------------------------------------------------------- |
-| 0     | db74924               | Existing accepted foundation; earlier audit 0e1b44f, baseline 451488c |
-| 1     | 7e39a09               | Browser crypto/recovery protocol and tests                            |
-| 2     | d6b7450               | Profile creation/authentication/browser restore                       |
-| 3     | 538a138               | Verified encrypted sender and local QR                                |
-| 4     | 0873ea8               | Owner-scoped inbox/settings/deletion                                  |
-| 5     | 4cdbd11               | Bounded expiry cleanup and atomic quotas                              |
-| 6     | 93e64c9               | Bounded privacy-preserving abuse controls                             |
-| 7     | 3f1515e               | Legal UX, encrypted backups and adversarial hardening                 |
-| 8     | See final Git history | Guarded deployment/operations and clean local acceptance              |
+| Phase | Commit  | Outcome                                                               |
+| ----- | ------- | --------------------------------------------------------------------- |
+| 0     | db74924 | Existing accepted foundation; earlier audit 0e1b44f, baseline 451488c |
+| 1     | 7e39a09 | Browser crypto/recovery protocol and tests                            |
+| 2     | d6b7450 | Profile creation/authentication/browser restore                       |
+| 3     | 538a138 | Verified encrypted sender and local QR                                |
+| 4     | 0873ea8 | Owner-scoped inbox/settings/deletion                                  |
+| 5     | 4cdbd11 | Bounded expiry cleanup and atomic quotas                              |
+| 6     | 93e64c9 | Bounded privacy-preserving abuse controls                             |
+| 7     | 3f1515e | Legal UX, encrypted backups and adversarial hardening                 |
+| 8     | 1df1698 | Guarded deployment/operations and clean local acceptance              |
 
 Each phase has a self-contained plan in .agent/plans. Original planning snapshot
 NIBHRITO_MASTER_PLAN.md is preserved; split docs plus documented audit decisions
