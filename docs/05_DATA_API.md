@@ -2,6 +2,13 @@
 
 This is a logical contract. Migrations may refine SQL types, but security semantics must stay the same.
 
+Initial storage constraints reserve up to 4 KiB of serialized message plaintext plus
+the 16-byte GCM tag (5483 unpadded base64url characters) and up to 8 KiB of recovery
+bundle plaintext plus its tag (10944 characters). HTTP envelope cap remains 12 KiB.
+These are bounds on opaque encodings; full schema/encoding validation belongs at each
+API boundary. No write API is exposed in Phase 0. Phase 1 must clarify canonical
+serialization and limits before crypto implementation; see `13_ARCHITECTURE_REVIEW.md`.
+
 ## Database tables
 
 ### `profiles`
@@ -24,11 +31,16 @@ updated_at          INTEGER NOT NULL
 
 No private encryption key.
 
+MVP slugs are immutable. Validate/normalize the slug before generating recovery/AAD.
+All timestamps below use integer Unix epoch milliseconds. Foreign keys from messages
+and recovery blobs to profiles use `ON DELETE CASCADE`.
+
 ### `messages`
 
 ```text
 id                  TEXT PRIMARY KEY
 profile_id          TEXT NOT NULL
+profile_slug        TEXT NOT NULL
 envelope_version    INTEGER NOT NULL
 key_id              TEXT NOT NULL
 ephemeral_pub       TEXT NOT NULL
@@ -40,6 +52,9 @@ expires_at          INTEGER NOT NULL
 ```
 
 Indexes:
+
+`profile_slug` preserves the authenticated envelope field exactly for later AAD
+reconstruction; it must match the route and owning profile at insertion.
 
 ```text
 (profile_id, created_at DESC, id DESC)
@@ -118,7 +133,7 @@ Body is the v1 envelope. Server:
 2. checks profile enabled,
 3. checks key id compatibility policy,
 4. checks rate limit and quota,
-5. rejects duplicate message id,
+5. prevents duplicate message id insertion,
 6. computes `created_at` and `expires_at`,
 7. stores envelope exactly.
 
@@ -189,7 +204,12 @@ Authorization middleware must redact the header from logs.
 
 ## Idempotency and duplicates
 
-`message_id` is client-generated and primary-key unique. A retried successful send with the same id should receive a safe duplicate/accepted response rather than create another stored message.
+`message_id` is client-generated and primary-key unique. A retry never creates a
+second row. A collision receives a generic 409 duplicate response without exposing
+the existing envelope or its metadata. Only an implementation that checks the exact
+same envelope and profile may report an identical retry as accepted. A collision alone
+is not proof of delivery. Uniqueness lasts while the row exists; no retained replay
+tombstones are planned after deletion or expiry.
 
 ## Time
 

@@ -2,6 +2,11 @@
 
 ## Components
 
+Implementation decisions and pre-coding review are recorded in
+`13_ARCHITECTURE_REVIEW.md`. The split docs are authoritative; the root combined
+master plan is an original snapshot. Phase 0 uses native Worker routing (Hono is
+optional), static `_headers`, and Worker middleware for API security headers.
+
 ### Browser client
 
 Responsibilities:
