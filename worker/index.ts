@@ -7,8 +7,12 @@ import { profileRoutes } from './routes/profiles';
 import { D1MessageRepository } from './repositories/messageRepository';
 import { messageRoutes } from './routes/messages';
 import { inboxRoutes } from './routes/inbox';
+import { D1CleanupRepository } from './repositories/cleanupRepository';
 
 export default {
+  async scheduled(controller: ScheduledController, env: Env): Promise<void> {
+    await new D1CleanupRepository(env.DB).cleanup(controller.scheduledTime);
+  },
   async fetch(request: Request, env: Env): Promise<Response> {
     const { pathname } = new URL(request.url);
     if (pathname === '/api' || pathname.startsWith('/api/')) {

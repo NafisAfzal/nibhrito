@@ -95,7 +95,15 @@ export class D1MessageRepository implements MessageRepository {
         now,
       )
       .run();
-    if (inserted.meta.changes === 1) return true;
+    if (inserted.meta.changes === 1) {
+      await this.db
+        .prepare(
+          'DELETE FROM messages WHERE id IN (SELECT id FROM messages WHERE profile_id=(SELECT id FROM profiles WHERE slug=?) AND expires_at<=? ORDER BY expires_at LIMIT 10)',
+        )
+        .bind(e.profile_slug, now)
+        .run();
+      return true;
+    }
     const existing = await this.db
       .prepare(
         'SELECT id FROM messages WHERE id=? AND profile_slug=? AND envelope_version=? AND key_id=? AND ephemeral_pub=? AND hkdf_salt=? AND iv=? AND ciphertext=? AND expires_at>?',

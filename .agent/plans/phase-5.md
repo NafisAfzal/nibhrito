@@ -18,8 +18,8 @@ Expired rows may remain in provider backups. No unbounded invocation loops.
 ## Exact implementation steps
 
 Repository cleanup with indexed subqueries LIMIT 100; scheduled handler does one
-batch for messages and buckets. Opportunistic send cleanup at most 10 rows before
-insert, no extra privilege. Add Cron hourly and tests for backlog/retry/quota races.
+batch for messages and buckets. Opportunistic send cleanup at most 10 rows after
+successful insert, no extra privilege. Add Cron hourly and tests for backlog/retry/quota races.
 
 ## Data/schema changes
 
@@ -46,6 +46,10 @@ Batch sizes bounded; deletion idempotent; concurrent quota cannot overshoot.
 ## Progress log
 
 2026-10-03: Starting after Phase 4 acceptance.
+
+Completed: 85 Vitest / 6 Chromium and full check. Test fixture now batches 490 seed
+rows then races real writes at the boundary, avoiding harness timeout from 500 RPCs.
+Cleanup after insertion preserves expired UUID conflicts until physical deletion.
 
 ## Decisions and surprises
 

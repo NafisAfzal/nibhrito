@@ -5,7 +5,7 @@ no chat history is required to continue.
 
 ## Current phase
 
-Phases 0–4 complete. Continuing immediately with Phase 5, expiry and quotas.
+Phases 0–5 complete. Continuing immediately with Phase 6, abuse resistance.
 The following Phase 0 handoff is historical; subsequent completed-phase entries
 record current work and checks. No production deployment has occurred.
 
@@ -153,3 +153,14 @@ note; injected corruption displays no partial text; HTML stays inert; decrypted 
 is absent from persistent browser storage. Fixed empty Worker DELETE streams with a
 bounded body check; nonempty bodies still reject. Diff/privacy review passed.
 Next: Phase 5 indexed bounded cleanup and concurrent quota tests.
+
+## Phase 5 completed — 2026-10-03
+
+Indexed scheduled cleanup removes at most 100 messages/100 rate buckets per hourly
+invocation. Successful new sends opportunistically remove ten expired profile rows;
+cleanup runs after insertion to preserve conflicting-ID rejection while a row exists.
+Concurrent quota test seeds 490 rows and races twenty writes: exactly ten succeed;
+all further attempts reject. Backlog/retry/unexpired isolation tests pass. Full gate:
+85 Vitest / 6 Chromium, lint/format/TS/build/dry-run/audit. No ciphertext is read or
+logged by cleanup. Production Cron execution/CPU remain manual deployment gates.
+Next: Phase 6 daily HMAC network buckets, profile/global throttles and secure config.
