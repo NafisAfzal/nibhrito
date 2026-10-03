@@ -1,5 +1,6 @@
 import { copy } from '../app/copy';
 import { Component, type ReactNode } from 'react';
+import { PageIntro } from './PageIntro';
 export class ErrorBoundary extends Component<
   { children: ReactNode },
   { failed: boolean }
@@ -11,8 +12,12 @@ export class ErrorBoundary extends Component<
   override render() {
     if (this.state.failed)
       return (
-        <main className="shell narrow">
-          <h1>{copy.errorboundary.thisScreenCouldNotBeOpened}</h1>
+        <main className="shell narrow state-page">
+          <PageIntro
+            eyebrow={copy.ui.inbox}
+            title={copy.errorboundary.thisScreenCouldNotBeOpened}
+            icon="inbox"
+          />
           <p>{copy.errorboundary.refreshToClearTemporaryPageStateYour}</p>
           <a className="button" href="/">
             {copy.errorboundary.returnHome}

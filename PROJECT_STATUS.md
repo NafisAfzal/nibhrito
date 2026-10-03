@@ -6,8 +6,9 @@ ExecPlans provide the handoff; no chat history is needed.
 ## Current state
 
 All locally executable MVP work is complete: Phases 0–7 and Phase 8 deployment
-preparation. Final clean-install verification passes. Phases 1–8 local work are
-committed; the final documentation commit records verification and the handoff.
+preparation. The dedicated complete UI/UX redesign is also implemented and verified.
+Phases 1–8 local work and the redesign are recorded in reviewable commits; the
+redesign commit includes its ExecPlan, audit and final verification handoff.
 Package is 1.0.0-rc.1. No Cloudflare provisioning, production secret/configuration,
 deployment or v1.0.0 tag has occurred. External production acceptance remains pending.
 
@@ -34,6 +35,13 @@ deployment or v1.0.0 tag has occurred. External production acceptance remains pe
 - Responsive light/dark UI, centralized English copy, Bangla branding/Unicode content,
   semantic labelled forms, focus/skip link, unsupported browser and generic errors.
   Privacy, terms, acceptable-use, security and configurable actual operator contact.
+- Complete consumer redesign: indigo/neutral semantic tokens, system English/Bangla
+  typography and local SVGs; coherent public shell and landing narrative, two-step
+  onboarding, focused sender, readable inbox, My link/QR, profile, security/recovery,
+  restore/archive and legal/error states. Native destination navigation preserves
+  multi-profile selection using public view/space parameters without granting access.
+  Complete verified copying/fallback, mobile menu, contrast and associated hints/errors
+  have regression coverage. No new dependency, remote asset or telemetry.
 - No analytics/remote scripts/fonts; CSP/security headers on assets/API, no runtime
   logging, disabled Worker metrics/instrumentation/observability. Locked minimal
   dependencies, strict separate TS projects, tests and privacy/tracked-secret scan.
@@ -45,16 +53,21 @@ deployment or v1.0.0 tag has occurred. External production acceptance remains pe
 
 ## Verification
 
-Final clean verification from repository root: npm ci succeeds (228 installed
-packages, zero audit vulnerabilities); both migrations applied and repeat application
-is a no-op. Full npm run check exits 0:
+Final redesign verification from repository root: full npm run check exits 0.
+Both migrations remain applied with no pending migration. The prior release-candidate
+clean npm ci installed 228 packages; the dependency lockfile remains unchanged.
 
-- 111 Vitest tests in 17 files: native crypto/unit, D1/API/authorization/security,
+- 113 Vitest tests in 18 files: native crypto/unit, D1/API/authorization/security,
   configuration/generator/deployment guards and real encrypted export/import/decrypt.
-- 30 browser cases (10 journeys/checks × Chromium, Firefox, WebKit), no skips/retries,
+- 42 browser cases (14 journeys/checks × Chromium, Firefox, WebKit), no skips/retries,
   isolated database/root; plaintext/network/persistence, XSS, CSP, recovery, archive,
   settings, deletion/expiry, malformed/substituted link, unsupported crypto, clipboard
   absence and encoded contact-link tests pass.
+- New browser coverage: multi-profile selection/navigation, five-width public and
+  owner layouts, mobile-menu Escape/focus, complete clipboard contents, cancellation
+  of destructive deletion, oversized drafts and identical rate-limit envelope retry.
+  Light/dark WCAG token contrast tests pass. An intentional failed-assertion probe
+  confirms private DOM is absent from output and failure artifacts.
 - Strict TypeScript, lint, format, privacy/tracked-secret checks, production build,
   Worker dry run and npm audit --audit-level=low pass. Audit finds zero vulnerabilities.
 - Diff/secret/import review passes. Bundled Worker has no browser decryption or
@@ -62,7 +75,10 @@ is a no-op. Full npm run check exits 0:
   private-key/recovery-secret persistence. Operator SQL export preserves ciphertext
   and is decryptable after restore; all six counter triggers/cascades work.
 
-Desktop/mobile/light/dark public UI visually reviewed. Production config and secret
+235 post-redesign visual layout/state checks across five widths and light/dark found
+no horizontal overflow. Long English/Bangla, complete links, QR, recovery/archive,
+loading, empty, error and success inspected with masked private fields; fixtures
+deleted. Audit and design details: docs/17_UI_REDESIGN.md. Production config and secret
 files do not exist locally; no external credentials, provisioning or deployment used.
 
 ## Security decisions and review
@@ -72,6 +88,11 @@ findings identified. Resolved: stale fragment trust, Origin admission ordering,
 unbounded physical/rate storage, secret-bearing diagnostics, async plaintext lifetime,
 skip-link fragment overwrite, duplicate sibling React keys and production HTTP APIs.
 Regression tests exercise these cases. This is not an independent security audit.
+Redesign review also resolved the remaining Playwright failed-assertion DOM artifact
+gap (M8); the forced-failure probe runs before E2E. Cryptographic protocol, API contracts,
+database behavior, key lifecycle, authorization, expiry/deletion, CSP/security headers
+and legal policy bodies remain unchanged. Only presentation, microcopy/navigation and
+test tooling changed. Tests retain every original security assertion.
 
 Documentation decisions are in docs/13 and docs/15: immutable slugs and v1 AAD,
 strict encoding/JSON sizes, server timestamps, backend token verification independent
@@ -143,3 +164,7 @@ MVP requirements and need reviewed plans and evidence of need.
 
 Ignored local state/dependencies/build/test artifacts and .dev.vars are intentional.
 Production configuration and production secret file have not been created.
+The dedicated UI phase is documented in .agent/plans/ui-redesign.md and docs/17;
+FINAL_VERIFICATION.md records its passing gate. The next action remains manual
+device/assistive-technology review and operator-controlled production acceptance,
+not further MVP implementation. No deployment was performed during the redesign.

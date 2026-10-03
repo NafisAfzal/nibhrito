@@ -117,13 +117,18 @@ describe('atomic privacy-preserving rate limits', () => {
       )?.n,
     ).toBe(before?.n);
     await app.db.prepare('DELETE FROM rate_limit_buckets').run();
-    await app.db.batch(
-      Array.from({ length: 2000 }, (_, i) =>
-        app.db
-          .prepare('INSERT INTO rate_limit_buckets VALUES (?, ?, 0, 1, 1)')
-          .bind(`opaque-${i}`, 'fixture'),
-      ),
-    );
+    // Seed every row and fire every counter trigger in one SQL statement. Sending
+    // 2000 separate statements through the local D1 bridge makes this fixture
+    // exceed the timeout on slower hosts; the security assertions stay identical.
+    await app.db
+      .prepare(
+        `WITH RECURSIVE fixture(n) AS (
+      VALUES(0) UNION ALL SELECT n + 1 FROM fixture WHERE n < ?
+    ) INSERT INTO rate_limit_buckets
+      SELECT 'opaque-' || n, ?, 0, 1, 1 FROM fixture`,
+      )
+      .bind(1999, 'fixture')
+      .run();
     const repo = new D1RateRepository(app.db);
     expect(await repo.consume('new', 'fixture', 0, 60000, 2)).toBe(false);
     expect(await repo.consume('opaque-0', 'fixture', 0, 60000, 2)).toBe(true);

@@ -12,6 +12,8 @@ import { encryptRecovery, recoveryCode } from '../../crypto/recovery';
 import { saveOwner } from '../../storage/indexedDb';
 import { api } from '../../lib/api';
 import { Notice } from '../../components/Layout';
+import { PageIntro } from '../../components/PageIntro';
+import { Icon } from '../../components/Icon';
 interface Prepared {
   settings: ProfileSettings;
   key: Omit<Awaited<ReturnType<typeof generateRecipient>>, 'jwk'>;
@@ -83,7 +85,7 @@ export function Setup() {
         ownerToken: prepared.token,
       });
       setPrepared(null);
-      window.location.assign('/inbox');
+      window.location.assign('/inbox?view=share&space=' + profile.slug);
     } catch (error) {
       setError(
         error instanceof Error
@@ -95,24 +97,46 @@ export function Setup() {
     }
   }
   return (
-    <div className="narrow">
-      <p className="eyebrow">{copy.setup.yourPrivateSpace}</p>
-      <h1>{copy.setup.createYourProfile}</h1>
-      <p className="lede">{copy.setup.noEmailNoPasswordYourBrowserHolds}</p>
+    <div className="narrow onboarding">
+      <ol className="setup-progress" aria-label="Setup progress">
+        <li aria-current={!prepared ? 'step' : undefined}>{copy.ui.stepOne}</li>
+        <li aria-current={prepared ? 'step' : undefined}>{copy.ui.stepTwo}</li>
+      </ol>
+      <PageIntro
+        eyebrow={copy.setup.yourPrivateSpace}
+        title={
+          prepared
+            ? copy.setup.saveYourRecoveryCode
+            : copy.setup.createYourProfile
+        }
+      >
+        <p>
+          {prepared
+            ? copy.ui.recoveryIntro
+            : copy.setup.noEmailNoPasswordYourBrowserHolds}
+        </p>
+      </PageIntro>
       {error ? <Notice message={error} /> : null}
       {prepared ? (
-        <section className="card">
-          <h2>{copy.setup.saveYourRecoveryCode}</h2>
+        <section className="card recovery-panel">
+          <span className="icon-tile">
+            <Icon name="shield" />
+          </span>
+          <h2>{copy.ui.recoveryStep}</h2>
           <p>{copy.setup.anyoneWithThisCodeCanOpenYour}</p>
           <label htmlFor="recovery-code">{copy.setup.recoveryCode}</label>
           <textarea
             id="recovery-code"
+            className="recovery-code"
+            aria-describedby="recovery-warning"
+            autoComplete="off"
+            translate="no"
             readOnly
             rows={3}
             value={prepared.code}
             spellCheck={false}
           />
-          <p className="muted">
+          <p className="warning-notice" id="recovery-warning">
             {copy.setup.nibhritoCannotRecoverThisCodeForYou}
           </p>
           <form onSubmit={create}>
@@ -151,6 +175,7 @@ export function Setup() {
             {copy.setup.linkName}
             <input
               name="slug"
+              aria-describedby="slug-hint"
               required
               minLength={3}
               maxLength={32}
@@ -161,36 +186,45 @@ export function Setup() {
               placeholder={copy.setup.yourName}
             />
           </label>
-          <p className="hint">{copy.setup.yourLinkNameIsPublicAndCannot}</p>
+          <p className="hint" id="slug-hint">
+            {copy.ui.slugHint}
+          </p>
           <label>
             {copy.setup.publicPrompt}
             <textarea
               name="public_prompt"
+              aria-describedby="setup-public-hint"
+              autoComplete="off"
               maxLength={280}
               rows={3}
               defaultValue={copy.setup.whatShouldIKeepDoingWhatCould}
             />
           </label>
-          <div className="form-grid">
-            <label>
-              {copy.setup.keepMessagesFor}
-              <select name="retention_days" defaultValue="30">
-                <option value="1">{copy.setup.text1Day}</option>
-                <option value="7">{copy.setup.text7Days}</option>
-                <option value="30">{copy.setup.text30Days}</option>
-                <option value="90">{copy.setup.text90Days}</option>
-              </select>
-            </label>
-            <label>
-              {copy.setup.profileAccent}
-              <select name="theme" defaultValue="sage">
-                <option value="sage">{copy.setup.sage}</option>
-                <option value="rose">{copy.setup.rose}</option>
-                <option value="ocean">{copy.setup.ocean}</option>
-              </select>
-            </label>
-          </div>
-          <p className="hint">{copy.setup.displayNameAndPromptArePublicKeep}</p>
+          <details className="preferences">
+            <summary>{copy.ui.setupOptions}</summary>
+            <div className="form-grid">
+              <label>
+                {copy.setup.keepMessagesFor}
+                <select name="retention_days" defaultValue="30">
+                  <option value="1">{copy.setup.text1Day}</option>
+                  <option value="7">{copy.setup.text7Days}</option>
+                  <option value="30">{copy.setup.text30Days}</option>
+                  <option value="90">{copy.setup.text90Days}</option>
+                </select>
+              </label>
+              <label>
+                {copy.setup.profileAccent}
+                <select name="theme" defaultValue="sage">
+                  <option value="sage">{copy.setup.sage}</option>
+                  <option value="rose">{copy.setup.rose}</option>
+                  <option value="ocean">{copy.setup.ocean}</option>
+                </select>
+              </label>
+            </div>
+          </details>
+          <p className="hint" id="setup-public-hint">
+            {copy.ui.promptHint} {copy.setup.displayNameAndPromptArePublicKeep}
+          </p>
           <button disabled={busy}>
             {busy ? copy.setup.preparingKeys : copy.setup.prepareMyRecoveryCode}
           </button>

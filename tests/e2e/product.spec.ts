@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './test';
 test('legal navigation, mobile layout and keyboard focus are usable', async ({
   page,
   browserName,

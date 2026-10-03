@@ -1,6 +1,7 @@
 import { copy } from '../app/copy';
 import { useEffect, useState, type ReactNode } from 'react';
 import { supportsCrypto } from '../lib/browser';
+import { PageIntro, LoadingState } from './PageIntro';
 export function BrowserSupport({ children }: { children: ReactNode }) {
   const [supported, setSupported] = useState<boolean | null>(null);
   useEffect(() => {
@@ -14,12 +15,18 @@ export function BrowserSupport({ children }: { children: ReactNode }) {
   }, []);
   if (supported === null)
     return (
-      <p role="status">{copy.browsersupport.checkingSecureBrowserSupport}</p>
+      <LoadingState>
+        {copy.browsersupport.checkingSecureBrowserSupport}
+      </LoadingState>
     );
   if (!supported)
     return (
-      <div className="narrow card">
-        <h1>{copy.browsersupport.thisBrowserCannotSafelyOpenNibhrito}</h1>
+      <div className="narrow state-page">
+        <PageIntro
+          eyebrow={copy.ui.security}
+          title={copy.browsersupport.thisBrowserCannotSafelyOpenNibhrito}
+          icon="shield"
+        />
         <p>{copy.browsersupport.useAnUpToDateChromeEdge}</p>
         <a className="text-link" href="/security">
           {copy.browsersupport.readTheSecurityExplanation}

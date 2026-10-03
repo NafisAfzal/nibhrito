@@ -7,6 +7,7 @@ import { decryptRecovery } from '../../crypto/recovery';
 import { saveOwner } from '../../storage/indexedDb';
 import { api } from '../../lib/api';
 import { Notice } from '../../components/Layout';
+import { PageIntro } from '../../components/PageIntro';
 export function Restore() {
   const [busy, setBusy] = useState(false),
     [error, setError] = useState('');
@@ -28,7 +29,7 @@ export function Restore() {
         throw new Error();
       await saveOwner({ id: profile.id, ...restored });
       form.reset();
-      window.location.assign('/inbox');
+      window.location.assign('/inbox?space=' + name);
     } catch {
       setError(copy.restore.couldNotRestoreThisProfileCheckYour);
     } finally {
@@ -37,25 +38,43 @@ export function Restore() {
   }
   return (
     <div className="narrow">
-      <p className="eyebrow">{copy.restore.welcomeBack}</p>
-      <h1>{copy.restore.restoreYourInbox}</h1>
-      <p className="lede">{copy.restore.yourCodeUnlocksYourKeysLocallyWe}</p>
-      {error ? <Notice message={error} /> : null}
-      <form className="card form" onSubmit={restore}>
+      <PageIntro
+        eyebrow={copy.restore.welcomeBack}
+        title={copy.restore.restoreYourInbox}
+        icon="shield"
+      >
+        <p>{copy.restore.yourCodeUnlocksYourKeysLocallyWe}</p>
+      </PageIntro>
+      {error ? <Notice message={error} id="restore-error" /> : null}
+      <form
+        className="card form"
+        onSubmit={restore}
+        aria-describedby={error ? 'restore-error' : undefined}
+      >
         <label>
           {copy.restore.linkName}
           <input
             name="slug"
+            aria-describedby={
+              'restore-link-hint' + (error ? ' restore-error' : '')
+            }
             required
             autoComplete="off"
             autoCapitalize="none"
             spellCheck={false}
           />
         </label>
+        <p className="hint" id="restore-link-hint">
+          {copy.ui.restoreHint}
+        </p>
         <label>
           {copy.restore.recoveryCode}
           <textarea
             name="code"
+            className="recovery-code"
+            aria-describedby={
+              'restore-code-hint' + (error ? ' restore-error' : '')
+            }
             required
             rows={3}
             maxLength={128}
@@ -63,10 +82,17 @@ export function Restore() {
             spellCheck={false}
           />
         </label>
+        <p className="hint" id="restore-code-hint">
+          {copy.ui.recoveryHint}
+        </p>
         <button disabled={busy}>
           {busy ? copy.restore.unlockingLocally : copy.restore.restoreProfile}
         </button>
       </form>
+      <details className="advanced-details">
+        <summary>{copy.ui.lostCode}</summary>
+        <p>{copy.ui.lostCodeBody}</p>
+      </details>
     </div>
   );
 }

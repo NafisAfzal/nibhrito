@@ -4,9 +4,11 @@ import { loadOwners, type LocalOwner } from '../../storage/indexedDb';
 import { api } from '../../lib/api';
 import type { PublicProfile } from '../../../shared/schemas/profile';
 import { Notice } from '../../components/Layout';
-import { ShareQr } from '../../components/ShareQr';
 import { Inbox } from '../inbox/Inbox';
 import { Settings } from './Settings';
+import { Share } from './Share';
+import { Icon, type IconName } from '../../components/Icon';
+import { LoadingState, PageIntro } from '../../components/PageIntro';
 export function Dashboard() {
   const [owners, setOwners] = useState<LocalOwner[]>([]),
     [selected, setSelected] = useState(''),
@@ -15,15 +17,27 @@ export function Dashboard() {
       profile: PublicProfile;
     } | null>(null),
     [error, setError] = useState(''),
-    [loaded, setLoaded] = useState(false),
-    [copied, setCopied] = useState(false);
+    [loaded, setLoaded] = useState(false);
+  const query = new URLSearchParams(window.location.search).get('view');
+  const view =
+    query === 'share' || query === 'profile' || query === 'security'
+      ? query
+      : 'inbox';
   useEffect(() => {
     let active = true;
     void loadOwners()
       .then((values) => {
         if (active) {
           setOwners(values);
-          setSelected(values[0]?.profileSlug ?? '');
+          const requested = new URLSearchParams(window.location.search).get(
+            'space',
+          );
+          setSelected(
+            values.find((owner) => owner.profileSlug === requested)
+              ?.profileSlug ??
+              values[0]?.profileSlug ??
+              '',
+          );
           if (!values.length) setLoaded(true);
         }
       })
@@ -40,11 +54,10 @@ export function Dashboard() {
   useEffect(() => {
     if (!selected) return;
     let active = true;
-    // Discard the previous profile's decrypted child tree before fetching another.
+    // Discard decrypted children before fetching another profile.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setState(null);
     setError('');
-    setCopied(false);
     setLoaded(false);
     const local = owners.find((o) => o.profileSlug === selected);
     if (local)
@@ -72,7 +85,14 @@ export function Dashboard() {
     owners.length > 1 ? (
       <label className="profile-picker">
         {copy.dashboard.yourProfiles}
-        <select value={selected} onChange={(e) => setSelected(e.target.value)}>
+        <select
+          value={selected}
+          onChange={(e) =>
+            window.location.assign(
+              '/inbox?view=' + view + '&space=' + e.target.value,
+            )
+          }
+        >
           {owners.map((owner) => (
             <option key={owner.profileSlug} value={owner.profileSlug}>
               {owner.profileSlug}
@@ -85,80 +105,122 @@ export function Dashboard() {
     return (
       <>
         {picker}
-        <p role="status">{copy.dashboard.openingYourPrivateSpace}</p>
+        <LoadingState>{copy.dashboard.openingYourPrivateSpace}</LoadingState>
       </>
     );
   if (!state)
     return (
-      <>
+      <div className="narrow state-page">
         {picker}
         {error ? <Notice message={error} /> : null}
-        <div className="narrow card">
-          <h1>{copy.dashboard.yourInboxLivesHere}</h1>
+        <PageIntro
+          eyebrow={copy.dashboard.yourPrivateSpace}
+          title={copy.dashboard.yourInboxLivesHere}
+          icon="inbox"
+        >
           <p>{copy.dashboard.createAProfileToReceivePrivateFeedback}</p>
+        </PageIntro>
+        <div className="actions">
           <a className="button" href="/create">
-            {copy.dashboard.createAProfile}
+            {copy.landing.create}
+            <Icon name="arrow" />
           </a>
-          <a className="button secondary" href="/restore">
+          <a className="text-link" href="/restore">
             {copy.dashboard.restoreAProfile}
           </a>
         </div>
-      </>
+      </div>
     );
-  const link = `${window.location.origin}/u/${state.profile.slug}#v=1&pk=${state.owner.publicKey}`;
+  const link =
+    window.location.origin +
+    '/u/' +
+    state.profile.slug +
+    '#v=1&pk=' +
+    state.owner.publicKey;
+  const destinations: { id: string; label: string; icon: IconName }[] = [
+    { id: 'inbox', label: copy.ui.inbox, icon: 'inbox' },
+    { id: 'share', label: copy.ui.myLink, icon: 'link' },
+    { id: 'profile', label: copy.ui.profile, icon: 'profile' },
+    { id: 'security', label: copy.ui.security, icon: 'shield' },
+  ];
   return (
-    <div className={`accent-${state.profile.theme}`}>
+    <div className={'workspace accent-' + state.profile.theme}>
       {picker}
-      <div className="page-heading">
+      <div className="workspace-identity">
+        <div className="profile-avatar" aria-hidden="true">
+          {Array.from(state.profile.display_name)[0]}
+        </div>
         <div>
-          <p className="eyebrow">{copy.dashboard.yourPrivateSpace}</p>
-          <h1>{state.profile.display_name}</h1>
-          <p className="muted">
-            {copy.dashboard.text}
-            {state.profile.slug} {copy.dashboard.text2}{' '}
-            {state.profile.retention_days}
-            {copy.dashboard.dayRetention}
-            {state.profile.is_disabled
-              ? copy.dashboard.incomingMessagesPaused
-              : ''}
+          <p className="workspace-name user-text">
+            {state.profile.display_name}
+          </p>
+          <p className="hint" translate="no">
+            /{state.profile.slug}
           </p>
         </div>
-        <a className="button secondary" href="/">
+        <a className="text-link hide-inbox" href="/">
+          <Icon name="exit" />
           {copy.dashboard.lockThisScreen}
         </a>
       </div>
-      {error ? <Notice message={error} /> : null}
-      <details className="card share" open>
-        <summary>{copy.dashboard.shareYourSpace}</summary>
-        <ShareQr link={link} />
-        <p>{copy.dashboard.yourFullLinkCarriesYourEncryptionPublic}</p>
-        <label htmlFor="share-link">{copy.dashboard.verifiedShareLink}</label>
-        <input id="share-link" readOnly value={link} />
-        <button
-          onClick={() => {
-            if (!navigator.clipboard) {
-              setError(copy.dashboard.copyUnavailableSelectAndCopyTheFull);
-              return;
-            }
-            void navigator.clipboard
-              .writeText(link)
-              .then(() => setCopied(true))
-              .catch(() =>
-                setError(copy.dashboard.copyUnavailableSelectAndCopyTheFull),
-              );
-          }}
-        >
-          {copied ? copy.dashboard.linkCopied : copy.dashboard.copyFullLink}
-        </button>
-      </details>
-      <Inbox key={`inbox:${state.profile.id}`} owner={state.owner} />
-      <Settings
-        key={`settings:${state.profile.id}`}
-        owner={state.owner}
-        profile={state.profile}
-        onUpdate={(profile) => setState({ owner: state.owner, profile })}
-      />
-      <p className="hint">
+      <nav className="space-nav" aria-label={copy.ui.spaceNavigation}>
+        {destinations.map((d) => (
+          <a
+            key={d.id}
+            href={'/inbox?view=' + d.id + '&space=' + state.profile.slug}
+            aria-current={view === d.id ? 'page' : undefined}
+          >
+            <Icon name={d.icon} />
+            {d.label}
+          </a>
+        ))}
+      </nav>
+      {state.profile.is_disabled ? (
+        <p className="info-notice">
+          {copy.settings.pauseIncomingMessages} ·{' '}
+          <a href={'/inbox?view=profile&space=' + state.profile.slug}>
+            {copy.ui.profile}
+          </a>
+        </p>
+      ) : null}
+      <div className="workspace-content">
+        {view === 'share' ? (
+          <Share
+            key={'share:' + state.profile.id}
+            link={link}
+            slug={state.profile.slug}
+          />
+        ) : view === 'profile' || view === 'security' ? (
+          <Settings
+            key={'settings:' + view + ':' + state.profile.id}
+            owner={state.owner}
+            profile={state.profile}
+            mode={view}
+            onUpdate={(profile) => setState({ owner: state.owner, profile })}
+          />
+        ) : (
+          <>
+            <PageIntro
+              eyebrow={copy.inbox.decryptedOnThisDevice}
+              title={copy.inbox.yourInbox}
+            >
+              <p>
+                {state.profile.retention_days}
+                {copy.dashboard.dayRetention}.{' '}
+                <a
+                  className="text-link"
+                  href={'/inbox?view=share&space=' + state.profile.slug}
+                >
+                  {copy.ui.emptyShare}
+                </a>
+              </p>
+            </PageIntro>
+            <Inbox key={'inbox:' + state.profile.id} owner={state.owner} />
+          </>
+        )}
+      </div>
+      <p className="device-footnote">
+        <Icon name="lock" />
         {copy.dashboard.lockingClearsTheScreenButThisBrowser}
       </p>
     </div>

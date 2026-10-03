@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './test';
 test('setup and restore keep keys and recovery code out of requests', async ({
   page,
   browser,
@@ -30,6 +30,7 @@ test('setup and restore keep keys and recovery code out of requests', async ({
   expect(code.startsWith('NBR1-')).toBe(true);
   await page.getByLabel('I saved my recovery code somewhere safe').check();
   await page.getByRole('button', { name: 'Create my private profile' }).click();
+  await page.getByText('View complete link', { exact: true }).click();
   await expect(
     page.getByLabel('Verified share link', { exact: true }),
   ).toBeVisible();
@@ -62,6 +63,7 @@ test('setup and restore keep keys and recovery code out of requests', async ({
   const context = await browser.newContext();
   try {
     const restored = await context.newPage();
+    await restored.waitForLoadState('load');
     restored.on('request', (r) => {
       const data = JSON.stringify([r.url(), r.postData(), r.headers()]);
       if (
@@ -84,6 +86,11 @@ test('setup and restore keep keys and recovery code out of requests', async ({
     await restored
       .getByRole('button', { name: 'Restore profile', exact: true })
       .click();
+    await restored
+      .getByRole('navigation', { name: 'Your space navigation' })
+      .getByRole('link', { name: 'My link', exact: true })
+      .click();
+    await restored.getByText('View complete link', { exact: true }).click();
     await expect(
       restored.getByLabel('Verified share link', { exact: true }),
     ).toBeVisible();

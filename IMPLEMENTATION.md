@@ -15,7 +15,7 @@ provisioning/deployment and live release acceptance remain operator actions.
   token; there is no email/password account or operator reset.
 - Encrypted JSON backup download and local-only archive reading. No private key or
   plaintext export; the separate recovery code unlocks the existing encrypted bundle.
-- Responsive light/dark UI, semantic forms, focus/skip link, loading/empty/error
+- Redesigned responsive light/dark UI, semantic forms, focus/skip link, loading/empty/error
   states, unsupported-browser notice, Bangla brand and Unicode message support.
 - Privacy, terms, acceptable use, encryption explanation and real configurable
   operator contact; empty local configuration is explicitly labelled evaluation.
@@ -65,6 +65,17 @@ The full check covers unit/native crypto, D1 integration, authorization, rate li
 database export/import/decryption, three-engine browser journeys, CSP, privacy scans,
 type/lint/format, build, dry run and audit. E2E uses separate disposable database state,
 never your development profiles; secret-bearing browser artifacts are disabled.
+The intentional-failure `npm run test:artifacts` probe checks assertion output and
+artifacts for private DOM before each browser suite. Contrast, five-width responsive,
+mobile keyboard navigation, multi-profile destination and full-link copying checks
+supplement the original security journeys.
+
+The consumer UI uses local SVGs and system English/Bangla fonts, semantic design
+tokens and clear Inbox/My link/Profile/Security destinations. Onboarding explains
+profile creation and recovery in two steps. Full verified links are copied intact;
+technical details are progressively disclosed. Public `view`/`space` URL parameters
+carry no secrets and do not confer authorization. See
+[docs/17_UI_REDESIGN.md](docs/17_UI_REDESIGN.md) for the audit, design and visual QA.
 
 ## Production and operations
 

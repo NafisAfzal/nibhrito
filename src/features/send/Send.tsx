@@ -5,8 +5,10 @@ import { canonicalMessage, encryptMessage } from '../../crypto/protocol';
 import { utf8 } from '../../../shared/protocol/encoding';
 import type { MessageEnvelope } from '../../../shared/protocol/envelope';
 import type { PublicProfile } from '../../../shared/schemas/profile';
-import { api } from '../../lib/api';
+import { api, ApiError } from '../../lib/api';
 import { Notice } from '../../components/Layout';
+import { PageIntro, LoadingState } from '../../components/PageIntro';
+import { Icon } from '../../components/Icon';
 export function Send() {
   const [state, setState] = useState<{
       link: Awaited<ReturnType<typeof parseShareLink>>;
@@ -97,18 +99,26 @@ export function Send() {
       setBody('');
       setMood('');
       setSent(true);
-    } catch {
-      setError(copy.send.deliveryCouldNotBeConfirmedRetrySends);
+    } catch (error) {
+      setError(
+        error instanceof ApiError && error.code === 'RATE_LIMITED'
+          ? copy.ui.sendRateLimited
+          : copy.send.deliveryCouldNotBeConfirmedRetrySends,
+      );
     } finally {
       setBusy(false);
     }
   }
   if (!loaded)
-    return <p role="status">{copy.send.verifyingTheFullShareLink}</p>;
+    return <LoadingState>{copy.send.verifyingTheFullShareLink}</LoadingState>;
   if (!state)
     return (
-      <div className="narrow">
-        <h1>{copy.send.checkThisLink}</h1>
+      <div className="narrow state-page">
+        <PageIntro
+          eyebrow={copy.ui.myLink}
+          title={copy.send.checkThisLink}
+          icon="link"
+        />
         <Notice message={error} />
         <a className="text-link" href="/security">
           {copy.send.howVerifiedLinksWork}
@@ -117,7 +127,10 @@ export function Send() {
     );
   if (sent)
     return (
-      <div className="narrow card">
+      <div className="narrow sender-success" role="status">
+        <span className="icon-tile">
+          <Icon name="check" />
+        </span>
         <p className="eyebrow">{copy.send.deliveredAsCiphertext}</p>
         <h1>{copy.send.yourWordsAreOnTheirWay}</h1>
         <p>{copy.send.onlyTheRecipientSBrowserHoldsThe}</p>
@@ -131,17 +144,28 @@ export function Send() {
     );
   return (
     <div className={`narrow accent-${state.profile.theme}`}>
-      <p className="eyebrow">{copy.send.aPrivateNoteFor}</p>
-      <h1>{state.profile.display_name}</h1>
-      <p className="lede user-text">{state.profile.public_prompt}</p>
-      {error ? <Notice message={error} /> : null}
-      <form className="card form" onSubmit={submit}>
-        <label>
-          {copy.send.yourMessage}
+      <header className="sender-intro">
+        <div className="profile-avatar" aria-hidden="true">
+          {Array.from(state.profile.display_name)[0]}
+        </div>
+        <p className="eyebrow">{copy.send.aPrivateNoteFor}</p>
+        <h1 className="user-text">{state.profile.display_name}</h1>
+        <p className="lede user-text">{state.profile.public_prompt}</p>
+        <p className="hint">{copy.ui.privateCompose}</p>
+      </header>
+      {error ? <Notice message={error} id="send-error" /> : null}
+      <form className="card form composer" onSubmit={submit}>
+        <div className="field">
+          <label htmlFor="message-text">{copy.send.yourMessage}</label>
           <textarea
+            id="message-text"
             rows={7}
             maxLength={4096}
             name="message"
+            aria-describedby={
+              'message-size message-size-help' + (error ? ' send-error' : '')
+            }
+            aria-invalid={bytes > 4096}
             autoComplete="off"
             spellCheck={false}
             required
@@ -150,12 +174,27 @@ export function Send() {
               setBody(e.target.value);
               pending.current = null;
             }}
-            placeholder={copy.send.text}
+            placeholder={copy.ui.messagePlaceholder}
             disabled={busy}
           />
-        </label>
-        <p className={bytes > 4096 ? 'notice' : 'hint'} aria-live="polite">
-          {bytes} {copy.send.text4096EncryptedPayloadBytesBanglaAndEmoji}
+        </div>
+        <p
+          id="message-size"
+          className={
+            bytes > 4096 ? 'composer-counter invalid' : 'composer-counter'
+          }
+        >
+          <span>
+            {bytes.toLocaleString()}{' '}
+            {copy.send.text4096EncryptedPayloadBytesBanglaAndEmoji}
+          </span>
+        </p>
+        <p
+          id="message-size-help"
+          className="hint sender-limit"
+          role={bytes > 4096 ? 'alert' : undefined}
+        >
+          {bytes > 4096 ? copy.ui.sizeLimit : copy.ui.sizeHelp}
         </p>
         <label>
           {copy.send.typeOfFeedbackOptional}
@@ -177,6 +216,7 @@ export function Send() {
           </select>
         </label>
         <p className="privacy-label">
+          <Icon name="lock" />
           {copy.send.encryptedInYourBrowserBeforeSending}
         </p>
         <button disabled={!valid || busy}>
@@ -189,7 +229,7 @@ export function Send() {
           <a href="/acceptable-use">{copy.send.acceptableUse}</a>
         </p>
       </form>
-      <p className="muted">
+      <p className="sender-footer">
         {copy.send.yourIdentityIsNotShownToThe}{' '}
         <a className="text-link" href="/security">
           {copy.send.understandTheLimits}

@@ -11,6 +11,7 @@ import type { RecoveryEnvelope } from '../../../shared/protocol/envelope';
 import type { LocalOwner } from '../../storage/indexedDb';
 import { api } from '../../lib/api';
 import { Notice } from '../../components/Layout';
+import { PageIntro } from '../../components/PageIntro';
 export function BackupExport({ owner }: { owner: LocalOwner }) {
   const [busy, setBusy] = useState(false),
     [error, setError] = useState(''),
@@ -58,7 +59,7 @@ export function BackupExport({ owner }: { owner: LocalOwner }) {
   }
   return (
     <section>
-      <h3>{copy.backup.encryptedBackup}</h3>
+      <h2>{copy.backup.encryptedBackup}</h2>
       <p className="hint">
         {copy.backup.downloadsEncryptedMessagesAndTheEncryptedRecovery}
       </p>
@@ -143,9 +144,13 @@ export function BackupReader() {
   }
   return (
     <div className="narrow">
-      <p className="eyebrow">{copy.backup.localEncryptedArchive}</p>
-      <h1>{copy.backup.openYourBackup}</h1>
-      <p className="lede">{copy.backup.yourFileAndCodeStayInThis}</p>
+      <PageIntro
+        eyebrow={copy.backup.localEncryptedArchive}
+        title={copy.backup.openYourBackup}
+        icon="note"
+      >
+        <p>{copy.backup.yourFileAndCodeStayInThis}</p>
+      </PageIntro>
       <p className="hint">{copy.backup.thisIsAnExistingCopyServerExpiry}</p>
       {error ? <Notice message={error} /> : null}
       <form ref={formRef} className="card form" onSubmit={open}>
@@ -154,15 +159,21 @@ export function BackupReader() {
           <input
             type="file"
             name="backup"
+            aria-describedby="archive-file-hint"
             accept="application/json,.json"
             required
             disabled={busy}
           />
         </label>
+        <p className="hint" id="archive-file-hint">
+          {copy.ui.archiveHint}
+        </p>
         <label>
           {copy.backup.recoveryCode}
           <textarea
             name="code"
+            className="recovery-code"
+            aria-describedby="archive-code-hint"
             rows={3}
             required
             autoComplete="off"
@@ -171,6 +182,9 @@ export function BackupReader() {
             disabled={busy}
           />
         </label>
+        <p className="hint" id="archive-code-hint">
+          {copy.ui.recoveryHint}
+        </p>
         <button disabled={busy}>
           {busy
             ? copy.backup.unlockingArchiveLocally
@@ -178,7 +192,7 @@ export function BackupReader() {
         </button>
       </form>
       {state ? (
-        <section aria-labelledby="archive-heading">
+        <section aria-labelledby="archive-heading" className="archive-content">
           <h2 id="archive-heading">
             {copy.backup.archiveFor}
             {state.profile}
@@ -194,9 +208,9 @@ export function BackupReader() {
                     {note.plain.text}
                   </p>
                 ) : (
-                  <p role="alert">
-                    {copy.backup.thisMessageCouldNotBeAuthenticatedOr}
-                  </p>
+                  <Notice
+                    message={copy.backup.thisMessageCouldNotBeAuthenticatedOr}
+                  />
                 )}
               </article>
             ))

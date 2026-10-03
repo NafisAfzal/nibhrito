@@ -5,6 +5,8 @@ import { decryptMessage, type PlainMessage } from '../../crypto/protocol';
 import type { LocalOwner } from '../../storage/indexedDb';
 import { api } from '../../lib/api';
 import { Notice } from '../../components/Layout';
+import { Icon } from '../../components/Icon';
+import { LoadingState } from '../../components/PageIntro';
 interface Note extends StoredMessage {
   plain: PlainMessage | null;
 }
@@ -127,12 +129,16 @@ export function Inbox({ owner }: { owner: LocalOwner }) {
         n.plain?.text.toLocaleLowerCase().includes(search.toLocaleLowerCase())),
   );
   return (
-    <section aria-labelledby="inbox-heading">
+    <section aria-label={copy.inbox.yourInbox}>
       <div className="page-heading">
-        <div>
-          <p className="eyebrow">{copy.inbox.decryptedOnThisDevice}</p>
-          <h2 id="inbox-heading">{copy.inbox.yourInbox}</h2>
-        </div>
+        <p className="hint">
+          {current.length
+            ? current.length +
+              ' ' +
+              (current.length === 1 ? 'message' : 'messages') +
+              ' on this page'
+            : copy.ui.emptyIcon}
+        </p>
         <button
           className="secondary"
           disabled={busy}
@@ -140,56 +146,89 @@ export function Inbox({ owner }: { owner: LocalOwner }) {
             void load();
           }}
         >
+          <Icon name="refresh" />
           {copy.inbox.refreshInbox}
         </button>
       </div>
-      <div className="form-grid">
-        <label>
-          {copy.inbox.searchLoadedMessages}
-          <input
-            type="search"
-            value={search}
-            autoComplete="off"
-            spellCheck={false}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </label>
-        <label>
-          {copy.inbox.filterFeedback}
-          <select value={mood} onChange={(e) => setMood(e.target.value)}>
-            <option value="">{copy.inbox.allFeedback}</option>
-            <option value="appreciation">{copy.inbox.appreciation}</option>
-            <option value="constructive">
-              {copy.inbox.constructiveFeedback}
-            </option>
-            <option value="question">{copy.inbox.questions}</option>
-          </select>
-        </label>
+      <div className="inbox-toolbar">
+        <div className="form-grid">
+          <label>
+            {copy.inbox.searchLoadedMessages}
+            <input
+              type="search"
+              name="search"
+              aria-describedby="inbox-search-hint"
+              value={search}
+              autoComplete="off"
+              spellCheck={false}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </label>
+          <label>
+            {copy.inbox.filterFeedback}
+            <select
+              name="filter"
+              value={mood}
+              onChange={(e) => setMood(e.target.value)}
+            >
+              <option value="">{copy.inbox.allFeedback}</option>
+              <option value="appreciation">{copy.inbox.appreciation}</option>
+              <option value="constructive">
+                {copy.inbox.constructiveFeedback}
+              </option>
+              <option value="question">{copy.inbox.questions}</option>
+            </select>
+          </label>
+        </div>
+        <p className="hint" id="inbox-search-hint">
+          {copy.inbox.searchRunsOnlyOnLoadedMessagesIn}
+        </p>
       </div>
-      <p className="hint">{copy.inbox.searchRunsOnlyOnLoadedMessagesIn}</p>
       {error ? <Notice message={error} /> : null}
       {!loaded && busy ? (
-        <p role="status">{copy.inbox.fetchingCiphertextAndDecryptingLocally}</p>
+        <LoadingState>
+          {copy.inbox.fetchingCiphertextAndDecryptingLocally}
+        </LoadingState>
       ) : null}
       {loaded && !visible.length ? (
-        <div className="card empty">
-          <h3>
+        <div className="empty">
+          <span className="icon-tile">
+            <Icon name="inbox" />
+          </span>
+          <h2>
             {current.length
               ? copy.inbox.noMatchingNotes
               : copy.inbox.aLittleQuietForNow}
-          </h3>
+          </h2>
           <p>
             {current.length
               ? copy.inbox.tryADifferentSearchOrLoadMore
               : copy.inbox.shareYourFullLinkToInviteThoughtful}
           </p>
+          {!current.length ? (
+            <a
+              className="button"
+              href={'/inbox?view=share&space=' + owner.profileSlug}
+            >
+              {copy.ui.emptyShare}
+              <Icon name="arrow" />
+            </a>
+          ) : null}
         </div>
       ) : null}
       <div className="note-list">
         {visible.map((note) => (
           <article className="card note" key={note.envelope.message_id}>
             <div className="note-meta">
-              <span>{note.plain?.mood ?? 'Private note'}</span>
+              <span>
+                {note.plain?.mood === 'appreciation'
+                  ? copy.inbox.appreciation
+                  : note.plain?.mood === 'constructive'
+                    ? copy.inbox.constructiveFeedback
+                    : note.plain?.mood === 'question'
+                      ? copy.inbox.questions
+                      : copy.ui.privateNote}
+              </span>
               <time dateTime={new Date(note.created_at).toISOString()}>
                 {new Date(note.created_at).toLocaleString()}
               </time>
@@ -199,35 +238,37 @@ export function Inbox({ owner }: { owner: LocalOwner }) {
                 {note.plain.text}
               </p>
             ) : (
-              <p role="alert">
-                {copy.inbox.thisMessageCouldNotBeAuthenticatedOr}
-              </p>
+              <Notice
+                message={copy.inbox.thisMessageCouldNotBeAuthenticatedOr}
+              />
             )}
-            <details>
-              <summary>{copy.inbox.messageDetails}</summary>
-              <p className="hint">
-                {copy.inbox.expires}{' '}
-                <time dateTime={new Date(note.expires_at).toISOString()}>
-                  {new Date(note.expires_at).toLocaleString()}
-                </time>
-                {copy.inbox.serverTimeControlsExpiryTheSenderS}
-              </p>
-              {note.plain ? (
+            <div className="note-actions">
+              <details>
+                <summary>{copy.inbox.messageDetails}</summary>
                 <p className="hint">
-                  {copy.inbox.senderDeviceTime}{' '}
-                  {new Date(note.plain.client_created_at).toLocaleString()}
+                  {copy.inbox.expires}{' '}
+                  <time dateTime={new Date(note.expires_at).toISOString()}>
+                    {new Date(note.expires_at).toLocaleString()}
+                  </time>
+                  {copy.inbox.serverTimeControlsExpiryTheSenderS}
                 </p>
-              ) : null}
-            </details>
-            <button
-              className="secondary danger"
-              disabled={busy}
-              onClick={() => {
-                void remove(note.envelope.message_id);
-              }}
-            >
-              {copy.inbox.deleteMessage}
-            </button>
+                {note.plain ? (
+                  <p className="hint">
+                    {copy.inbox.senderDeviceTime}{' '}
+                    {new Date(note.plain.client_created_at).toLocaleString()}
+                  </p>
+                ) : null}
+              </details>
+              <button
+                className="secondary danger"
+                disabled={busy}
+                onClick={() => {
+                  void remove(note.envelope.message_id);
+                }}
+              >
+                {copy.inbox.deleteMessage}
+              </button>
+            </div>
           </article>
         ))}
       </div>

@@ -1,5 +1,118 @@
 // English catalog. Keep UI copy here; add locale catalogs with this structure.
 export const copy = {
+  landing: {
+    eyebrow: 'A little space for honesty',
+    title: 'Receive honest messages.',
+    titleQuiet: 'Privately.',
+    intro:
+      'Give people a quiet way to tell you what’s on their mind. One personal link. Messages only you can read with your key.',
+    create: 'Create your private link',
+    how: 'See how it works',
+    trust: 'End-to-end encrypted · No account needed to send',
+    note: 'A message, just for you',
+    bangla: 'কথা থাকুক ব্যক্তিগত।',
+    howEyebrow: 'Simple by design',
+    howTitle: 'Your space. Three small steps.',
+    steps: [
+      {
+        title: 'Create your private link',
+        body: 'Choose a name and a prompt. Save your recovery code to keep access to your space.',
+      },
+      {
+        title: 'Share it your way',
+        body: 'Send your link to friends, add it to your bio, or share its QR code in person.',
+      },
+      {
+        title: 'Read in your own time',
+        body: 'People send encrypted messages without signing up. Open them privately in your inbox.',
+      },
+    ],
+    privacyEyebrow: 'Privacy with a purpose',
+    privacyTitle: 'Honest words deserve a private space.',
+    privacyBody:
+      'Messages are encrypted in the sender’s browser before they leave the device. Nibhrito’s server stores encrypted data, not readable message content. Your browser uses your private key to open it.',
+    privacyLink: 'How privacy works',
+    facts: [
+      {
+        title: 'Your key stays with you',
+        body: 'Keep access on your device, with a recovery code you control.',
+      },
+      {
+        title: 'No sender account',
+        body: 'The recipient is not shown who sent a message. Network providers still process connection metadata.',
+      },
+      {
+        title: 'Messages don’t stay forever',
+        body: 'Choose when new messages expire, or delete them sooner. Existing copies may remain.',
+      },
+    ],
+    finalTitle: 'Make room for what matters.',
+    finalBody:
+      'A thoughtful note. A little encouragement. An honest perspective.',
+    restore: 'Already have a link? Restore your inbox',
+  },
+  ui: {
+    inbox: 'Inbox',
+    myLink: 'My link',
+    profile: 'Profile',
+    security: 'Security & recovery',
+    spaceNavigation: 'Your space navigation',
+    yourLink: 'Your Nibhrito link',
+    shareBody:
+      'Share this link anywhere. People can use it to send you an encrypted message, without creating an account.',
+    completeLinkHint:
+      'The Copy button includes everything needed to send securely.',
+    viewFullLink: 'View complete link',
+    copiedReady: 'Ready to share. The complete secure link has been copied.',
+    qrHint: 'Scan to open your complete private link.',
+    linkTrust:
+      'This link includes your public encryption key. Your private key stays on your device.',
+    backToInbox: 'Back to inbox',
+    stepOne: '1. Your space',
+    stepTwo: '2. Recovery',
+    recoveryStep: 'One last step: protect your access.',
+    recoveryIntro:
+      'Save this code before creating your space. It lets you return if you lose this device or clear your browser.',
+    setupOptions: 'Message preferences',
+    slugHint:
+      '3–32 lowercase letters, numbers or hyphens. Start and end with a letter or number. This public link name cannot be changed.',
+    promptHint:
+      'A short invitation people see before writing. Your name and prompt are public.',
+    restoreHint: 'Use the link name from your personal Nibhrito URL.',
+    recoveryHint:
+      'Paste the complete code you saved during setup. Keep it private.',
+    lostCode: 'Lost your code?',
+    lostCodeBody:
+      'If this browser still opens your inbox, keep using it and save an encrypted backup. A backup also needs your original recovery code. Nibhrito cannot reset or reveal that code. If you lose both the code and device access, messages may be permanently unreadable.',
+    emptyShare: 'Share your link',
+    emptyIcon: 'A quiet space, ready for a note',
+    profileIntro:
+      'Make the invitation your own. These details appear on your public message page.',
+    securityIntro: 'Keep control of your access and your messages.',
+    recoveryHeading: 'Your recovery code is your way back',
+    recoveryBody:
+      'Keep the code you saved during setup in a password manager or another safe place. Anyone with it can open your inbox. Nibhrito cannot recover it or show it again.',
+    deviceHeading: 'Access on this device',
+    deviceBody:
+      'This browser remembers your access. Only use it on a device you trust. Forgetting this profile removes access here; it does not delete your messages or revoke other devices.',
+    advancedKey: 'Technical key details',
+    archiveHint:
+      'Choose an encrypted Nibhrito JSON backup, up to 4 MiB. Opening it does not restore messages to the server.',
+    privateCompose:
+      'No sign-up needed. Your identity is not shown to the recipient.',
+    sizeLimit:
+      'Your message is too long. Shorten it before sending. Bangla and emoji can use more space.',
+    sizeHelp:
+      'Message size includes text and encrypted details. Limit: 4,096 bytes.',
+    messagePlaceholder:
+      'Share something thoughtful… বাংলা বা English, আপনার মতো করে।',
+    sendRateLimited:
+      'Too many messages right now. Wait a little, then try again. Your draft stays here. Retrying sends the same encrypted message.',
+    privateNote: 'Private note',
+    publicPrivacy: 'How privacy works',
+    menu: 'Menu',
+    closeMenu: 'Close menu',
+  },
   app: {
     aQuieterSpaceForFeedback: 'A quieter space for feedback',
     privateWords: 'Private words.',
@@ -47,7 +160,7 @@ export const copy = {
     thisBrowserCannotSafelyOpenNibhrito:
       'This browser cannot safely open Nibhrito',
     useAnUpToDateChromeEdge:
-      'Use an up-to-date Chrome, Edge, Firefox or Safari browser over HTTPS (or loopback for local testing). Web Crypto P-256, HKDF, AES-GCM and IndexedDB are required. No insecure fallback is available.',
+      'Try an up-to-date Chrome, Edge, Firefox or Safari browser with secure browsing and browser storage enabled. Nibhrito needs these features to protect your messages. Open the secure HTTPS version of the site (or loopback for local testing).',
     readTheSecurityExplanation: 'Read the security explanation',
   },
   errorboundary: {
@@ -65,7 +178,7 @@ export const copy = {
     yourPrivateSpace: 'Your private space',
     createYourProfile: 'Create your profile',
     noEmailNoPasswordYourBrowserHolds:
-      'No email. No password. Your browser holds the key.',
+      'Create a personal link for private feedback. No email or password needed. You’ll save a recovery code in the next step.',
     saveYourRecoveryCode: 'Save your recovery code',
     anyoneWithThisCodeCanOpenYour:
       'Anyone with this code can open your inbox. Save it in a password manager or somewhere safe.',
@@ -96,8 +209,8 @@ export const copy = {
     rose: 'Rose',
     ocean: 'Ocean',
     displayNameAndPromptArePublicKeep:
-      'Display name and prompt are public. Keep identifying or sensitive details out of them.',
-    preparingKeys: 'Preparing keys…',
+      'Avoid identifying or sensitive details in your public profile.',
+    preparingKeys: 'Preparing your space…',
     prepareMyRecoveryCode: 'Prepare my recovery code',
   },
   dashboard: {
@@ -115,9 +228,9 @@ export const copy = {
     yourPrivateSpace: 'Your private space',
     text: '/',
     text2: '·',
-    dayRetention: '-day retention',
+    dayRetention: '-day message expiry',
     incomingMessagesPaused: ' · Incoming messages paused',
-    lockThisScreen: 'Lock this screen',
+    lockThisScreen: 'Hide inbox',
     shareYourSpace: 'Share your space',
     yourFullLinkCarriesYourEncryptionPublic:
       'Your full link carries your encryption public key. Share the whole link.',
@@ -127,13 +240,13 @@ export const copy = {
     linkCopied: 'Link copied',
     copyFullLink: 'Copy full link',
     lockingClearsTheScreenButThisBrowser:
-      'Locking clears the screen, but this browser retains access. To remove access, use “Forget this profile on this device” in settings.',
+      'Hiding the inbox clears this screen. This browser still remembers your access. Remove device access in Security & recovery.',
   },
   settings: {
     settingsCouldNotBeSavedCheckThe:
       'Settings could not be saved. Check the field lengths and try again.',
     removeThisBrowserSKeyAndOwner:
-      'Remove this browser’s key and owner token? Make sure your recovery code is saved first. Messages on the server are unchanged.',
+      'Remove access to this profile from this browser? Make sure your recovery code is saved first. Messages on the server are unchanged.',
     browserStorageCouldNotBeCleared: 'Browser storage could not be cleared.',
     permanentlyDeleteThisProfileAllMessagesAnd:
       'Permanently delete this profile, all messages and its encrypted recovery bundle?',
@@ -173,10 +286,10 @@ export const copy = {
     verifyingTheFullShareLink: 'Verifying the full share link…',
     checkThisLink: 'Check this link',
     howVerifiedLinksWork: 'How verified links work',
-    deliveredAsCiphertext: 'Delivered as ciphertext',
+    deliveredAsCiphertext: 'Sent privately',
     yourWordsAreOnTheirWay: 'Your words are on their way.',
     onlyTheRecipientSBrowserHoldsThe:
-      'Only the recipient’s browser holds the key to read this message.',
+      'Your encrypted message is now in their inbox. It can be read only with their private key.',
     sendAnotherMessage: 'Send another message',
     anonymousToTheRecipientHostingProvidersStill:
       'Anonymous to the recipient. Hosting providers still process network metadata.',
@@ -184,7 +297,7 @@ export const copy = {
     yourMessage: 'Your message',
     text: 'একটি ভালো দিক, একটি উন্নতির জায়গা…',
     text4096EncryptedPayloadBytesBanglaAndEmoji:
-      '/ 4096 encrypted-payload bytes · Bangla and emoji welcome',
+      '/ 4,096 bytes · Bangla and English welcome',
     typeOfFeedbackOptional: 'Type of feedback (optional)',
     justANote: 'Just a note',
     appreciation: 'Appreciation',
@@ -208,7 +321,7 @@ export const copy = {
       'Delete this message? This cannot be undone.',
     messageCouldNotBeDeletedPleaseTry:
       'Message could not be deleted. Please try again.',
-    decryptedOnThisDevice: 'Decrypted on this device',
+    decryptedOnThisDevice: 'Opened privately on this device',
     yourInbox: 'Your inbox',
     refreshInbox: 'Refresh inbox',
     searchLoadedMessages: 'Search loaded messages',
@@ -219,10 +332,9 @@ export const copy = {
     questions: 'Questions',
     searchRunsOnlyOnLoadedMessagesIn:
       'Search runs only on loaded messages, in this browser. Nothing is sent to the server.',
-    fetchingCiphertextAndDecryptingLocally:
-      'Fetching ciphertext and decrypting locally…',
+    fetchingCiphertextAndDecryptingLocally: 'Opening your messages privately…',
     noMatchingNotes: 'No matching notes',
-    aLittleQuietForNow: 'A little quiet, for now',
+    aLittleQuietForNow: 'No messages yet',
     tryADifferentSearchOrLoadMore:
       'Try a different search or load more messages.',
     shareYourFullLinkToInviteThoughtful:

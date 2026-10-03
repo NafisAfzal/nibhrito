@@ -6,12 +6,16 @@ import { forgetOwner } from '../../storage/indexedDb';
 import { api } from '../../lib/api';
 import { Notice } from '../../components/Layout';
 import { BackupExport } from '../recovery/Backup';
+import { PageIntro } from '../../components/PageIntro';
+import { Icon } from '../../components/Icon';
 export function Settings({
   owner,
   profile,
   onUpdate,
+  mode,
 }: {
   owner: LocalOwner;
+  mode: 'profile' | 'security';
   profile: PublicProfile;
   onUpdate: (profile: PublicProfile) => void;
 }) {
@@ -78,103 +82,161 @@ export function Settings({
       setBusy(false);
     }
   }
+
   return (
-    <details className="card settings">
-      <summary>{copy.settings.profileSettingsSecurity}</summary>
-      <h2>{copy.settings.makeThisSpaceYours}</h2>
-      {error ? <Notice message={error} /> : null}
-      {saved ? <p role="status">{copy.settings.settingsSaved}</p> : null}
-      <form className="form" onSubmit={update}>
-        <label>
-          {copy.settings.displayName}
-          <input
-            name="display_name"
-            defaultValue={profile.display_name}
-            required
-            maxLength={64}
-          />
-        </label>
-        <label>
-          {copy.settings.publicPrompt}
-          <textarea
-            name="public_prompt"
-            defaultValue={profile.public_prompt}
-            maxLength={280}
-            rows={3}
-          />
-        </label>
-        <div className="form-grid">
-          <label>
-            {copy.settings.keepNewMessagesFor}
-            <select name="retention_days" defaultValue={profile.retention_days}>
-              {[1, 7, 30, 90].map((d) => (
-                <option key={d} value={d}>
-                  {d} {d === 1 ? 'day' : 'days'}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            {copy.settings.profileAccent}
-            <select name="theme" defaultValue={profile.theme}>
-              <option value="sage">{copy.settings.sage}</option>
-              <option value="rose">{copy.settings.rose}</option>
-              <option value="ocean">{copy.settings.ocean}</option>
-            </select>
-          </label>
-        </div>
-        <p className="hint">
-          {copy.settings.retentionChangesApplyToNewMessagesExisting}
+    <section className="settings">
+      <PageIntro
+        eyebrow={mode === 'profile' ? copy.ui.profile : copy.ui.security}
+        title={
+          mode === 'profile'
+            ? copy.settings.makeThisSpaceYours
+            : copy.ui.security
+        }
+        icon={mode === 'profile' ? 'profile' : 'shield'}
+      >
+        <p>
+          {mode === 'profile' ? copy.ui.profileIntro : copy.ui.securityIntro}
         </p>
-        <label className="check">
-          <input
-            type="checkbox"
-            name="is_disabled"
-            defaultChecked={profile.is_disabled}
-          />
-          {copy.settings.pauseIncomingMessages}
-        </label>
-        <button disabled={busy}>
-          {busy ? copy.settings.saving : copy.settings.saveSettings}
-        </button>
-      </form>
-      <h3>{copy.settings.yourBrowserKey}</h3>
-      <p className="hint">
-        {copy.settings.nonExtractableKeyStoredInIndexeddbAnyone}
-      </p>
-      <p className="fingerprint">
-        {copy.settings.keyFingerprint} {owner.keyId}
-      </p>
-      <button
-        type="button"
-        className="secondary"
-        onClick={() => {
-          void forget();
-        }}
-        disabled={busy}
-      >
-        {copy.settings.forgetThisProfileOnThisDevice}
-      </button>
-      <BackupExport owner={owner} />
-      <h3>{copy.settings.deleteYourProfile}</h3>
-      <p>{copy.settings.thisRemovesTheProfileMessagesAndEncrypted}</p>
-      <label>
-        {copy.settings.typeYourLinkNameToDelete}
-        <input
-          value={confirmation}
-          onChange={(e) => setConfirmation(e.target.value)}
-          autoComplete="off"
-        />
-      </label>
-      <button
-        className="danger"
-        disabled={busy || confirmation !== profile.slug}
-        onClick={() => {
-          void remove();
-        }}
-      >
-        {copy.settings.permanentlyDeleteProfile}
-      </button>
-    </details>
+      </PageIntro>
+      {error ? <Notice message={error} /> : null}
+      {saved ? (
+        <p role="status" className="success-notice">
+          <Icon name="check" />
+          {copy.settings.settingsSaved}
+        </p>
+      ) : null}
+      {mode === 'profile' ? (
+        <form className="card form" onSubmit={update}>
+          <label>
+            {copy.settings.displayName}
+            <input
+              name="display_name"
+              defaultValue={profile.display_name}
+              required
+              maxLength={64}
+              autoComplete="off"
+            />
+          </label>
+          <label>
+            {copy.settings.publicPrompt}
+            <textarea
+              name="public_prompt"
+              defaultValue={profile.public_prompt}
+              maxLength={280}
+              rows={3}
+              autoComplete="off"
+              aria-describedby="profile-public-hint"
+            />
+          </label>
+          <p className="hint" id="profile-public-hint">
+            {copy.ui.promptHint}
+          </p>
+          <div className="form-grid">
+            <label>
+              {copy.settings.keepNewMessagesFor}
+              <select
+                name="retention_days"
+                defaultValue={profile.retention_days}
+              >
+                {[1, 7, 30, 90].map((d) => (
+                  <option key={d} value={d}>
+                    {d} {d === 1 ? 'day' : 'days'}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              {copy.settings.profileAccent}
+              <select name="theme" defaultValue={profile.theme}>
+                <option value="sage">{copy.settings.sage}</option>
+                <option value="rose">{copy.settings.rose}</option>
+                <option value="ocean">{copy.settings.ocean}</option>
+              </select>
+            </label>
+          </div>
+          <p className="hint">
+            {copy.settings.retentionChangesApplyToNewMessagesExisting}
+          </p>
+          <label className="check">
+            <input
+              type="checkbox"
+              name="is_disabled"
+              defaultChecked={profile.is_disabled}
+            />
+            {copy.settings.pauseIncomingMessages}
+          </label>
+          <div className="form-actions">
+            <button disabled={busy}>
+              {busy ? copy.settings.saving : copy.settings.saveSettings}
+            </button>
+          </div>
+        </form>
+      ) : (
+        <div className="security-sections">
+          <section className="security-section">
+            <span className="icon-tile">
+              <Icon name="shield" />
+            </span>
+            <h2>{copy.ui.recoveryHeading}</h2>
+            <p>{copy.ui.recoveryBody}</p>
+            <a href="/restore" className="text-link">
+              {copy.dashboard.restoreAProfile}
+              <Icon name="arrow" />
+            </a>
+          </section>
+          <section className="security-section">
+            <h2>{copy.ui.deviceHeading}</h2>
+            <p>{copy.ui.deviceBody}</p>
+            <details className="advanced-details">
+              <summary>{copy.ui.advancedKey}</summary>
+              <p>{copy.settings.nonExtractableKeyStoredInIndexeddbAnyone}</p>
+              <p className="fingerprint" translate="no">
+                {copy.settings.keyFingerprint} {owner.keyId}
+              </p>
+            </details>
+            <button
+              type="button"
+              className="secondary"
+              onClick={() => {
+                void forget();
+              }}
+              disabled={busy}
+            >
+              {copy.settings.forgetThisProfileOnThisDevice}
+            </button>
+          </section>
+          <div className="security-section">
+            <BackupExport owner={owner} />
+          </div>
+          <section className="security-section danger-zone">
+            <h2>{copy.settings.deleteYourProfile}</h2>
+            <p>{copy.settings.thisRemovesTheProfileMessagesAndEncrypted}</p>
+            <label>
+              {copy.settings.typeYourLinkNameToDelete}
+              <input
+                value={confirmation}
+                onChange={(e) => setConfirmation(e.target.value)}
+                autoComplete="off"
+                spellCheck={false}
+                autoCapitalize="none"
+                aria-describedby="delete-slug-hint"
+              />
+            </label>
+            <p id="delete-slug-hint" className="hint" translate="no">
+              /{profile.slug}
+            </p>
+            <button
+              className="danger"
+              disabled={busy || confirmation !== profile.slug}
+              onClick={() => {
+                void remove();
+              }}
+            >
+              {copy.settings.permanentlyDeleteProfile}
+            </button>
+          </section>
+        </div>
+      )}
+    </section>
   );
 }

@@ -44,7 +44,7 @@ export function Legal({ path }: { path: keyof typeof policies }) {
           <p>{section.body}</p>
         </section>
       ))}
-      <section className="card">
+      <section className="operator-section">
         <h2>{copy.legal.serviceOperator}</h2>
         {site ? (
           site.local && !site.operator_name ? (

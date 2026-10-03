@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './test';
 import { securityHeaders } from '../../worker/middleware/securityHeaders';
 
 test('Worker serves the built SPA and deep links with same-origin assets', async ({

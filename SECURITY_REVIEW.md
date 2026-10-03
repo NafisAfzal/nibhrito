@@ -57,6 +57,14 @@ Fixed findings:
 - M7: Production HTTP could carry bearer authorization. Reject non-HTTPS production
   APIs before auth/rate processing; integration verifies no side effects. Hosting
   redirects/HTTPS and delivered security headers remain external smoke-test gates.
+- M8: Redesign review found M3's Playwright flag covers teardown snapshots but not
+  failed locator assertions' DOM context. An automatic test fixture now removes only
+  errorContext before artifact writing, retaining assertions, messages and stacks.
+  A deliberate failing assertion with a disposable secret marker verifies both
+  output and artifact contents contain no marker or DOM snapshot. The check runs
+  before every E2E suite. Traces, screenshots and videos remain disabled. This
+  resolves the gap in the earlier artifact claim; no application secrets or
+  production data were involved. Regression: npm run test:artifacts.
 
 Accepted architectural limitations, disclosed in UI and documentation:
 
@@ -85,6 +93,18 @@ English copy is centralized; Bangla/Unicode content and brand render correctly.
 Headless Windows WebKit does not expose normal Tab navigation consistently: the
 test explicitly focuses the skip link before Enter, while Chromium/Firefox use Tab.
 Real Safari/iOS, assistive technology and OS keyboard preferences need manual review.
+
+Dedicated UI redesign review: native public destination/profile-slug navigation
+cannot grant ownership; server authentication remains independent. Copy/QR retain
+the complete verified fragment, including fallback selection. Skip link and hash
+revalidation are unchanged. Drafts, decrypted messages and recovery codes remain
+ephemeral; no private search/state is added to URLs. Message text remains inert.
+The sender's explicit textarea label fixes a changing accessible name; oversized
+and rate-limit recovery tests check editable drafts and identical envelope retries.
+No new Critical/High finding was identified. Crypto/storage/shared schemas/API/
+Worker/migrations/security headers and legal policy bodies have no redesign changes.
+No dependency, remote asset, logging or telemetry was added. WCAG token and browser
+checks supplement visual review; this does not claim independent accessibility audit.
 
 L1 fixed during deployment review: RFC-valid mailbox characters could be interpreted
 as mailto headers. Encode the mailbox as a URI component in Legal.tsx; browser

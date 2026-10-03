@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './test';
 
 test('settings, substituted keys, expiry and permanent profile deletion fail safely', async ({
   page,
@@ -13,12 +13,15 @@ test('settings, substituted keys, expiry and permanent profile deletion fail saf
   await page.getByRole('button', { name: 'Prepare my recovery code' }).click();
   await page.getByLabel('I saved my recovery code somewhere safe').check();
   await page.getByRole('button', { name: 'Create my private profile' }).click();
+  await page.getByText('View complete link', { exact: true }).click();
   const link = await page
     .getByLabel('Verified share link', { exact: true })
     .inputValue();
   const context = await browser.newContext();
   try {
     const sender = await context.newPage();
+    // Finish the new window's initial about:blank load before navigating.
+    await sender.waitForLoadState('load');
     await sender.goto('/');
     await sender.goto(link);
     await expect(
@@ -48,7 +51,8 @@ test('settings, substituted keys, expiry and permanent profile deletion fail saf
       sender.getByLabel('Your message', { exact: true }),
     ).toHaveCount(0);
     await page
-      .getByText('Profile settings & security', { exact: true })
+      .getByRole('navigation', { name: 'Your space navigation' })
+      .getByRole('link', { name: 'Profile', exact: true })
       .click();
     await page
       .getByLabel('Display name', { exact: true })
@@ -84,6 +88,10 @@ test('settings, substituted keys, expiry and permanent profile deletion fail saf
     await expect(
       sender.getByRole('heading', { name: 'Your words are on their way.' }),
     ).toBeVisible();
+    await page
+      .getByRole('navigation', { name: 'Your space navigation' })
+      .getByRole('link', { name: 'Inbox', exact: true })
+      .click();
     await page.route('**/api/v1/inbox?*', async (route) => {
       const response = await route.fetch();
       const body = (await response.json()) as {
@@ -107,6 +115,10 @@ test('settings, substituted keys, expiry and permanent profile deletion fail saf
       timeout: 6000,
     });
     await page.unroute('**/api/v1/inbox?*');
+    await page
+      .getByRole('navigation', { name: 'Your space navigation' })
+      .getByRole('link', { name: 'Security & recovery', exact: true })
+      .click();
     await page.getByLabel('Type your link name to delete').fill(slug);
     page.once('dialog', (dialog) => {
       void dialog.accept();

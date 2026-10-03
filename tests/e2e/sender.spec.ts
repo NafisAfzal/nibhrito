@@ -1,5 +1,5 @@
 import { readFile } from 'node:fs/promises';
-import { test, expect } from '@playwright/test';
+import { test, expect } from './test';
 test('full verified link encrypts Unicode before upload; incomplete link fails closed', async ({
   page,
   browser,
@@ -18,6 +18,7 @@ test('full verified link encrypts Unicode before upload; incomplete link fails c
     .inputValue();
   await page.getByLabel('I saved my recovery code somewhere safe').check();
   await page.getByRole('button', { name: 'Create my private profile' }).click();
+  await page.getByText('View complete link', { exact: true }).click();
   const link = await page
     .getByLabel('Verified share link', { exact: true })
     .inputValue();
@@ -27,6 +28,7 @@ test('full verified link encrypts Unicode before upload; incomplete link fails c
   const context = await browser.newContext();
   try {
     const sender = await context.newPage();
+    await sender.waitForLoadState('load');
     const note = 'শুভেচ্ছা 🌿 <script>alert(1)</script> unique-private-text';
     let leaked = false,
       uploaded = false;
@@ -59,17 +61,57 @@ test('full verified link encrypts Unicode before upload; incomplete link fails c
       sender.getByRole('heading', { name: publicName, exact: true }),
     ).toBeVisible();
     await expect(sender.locator('img')).toHaveCount(0);
+    await sender
+      .getByLabel('Your message', { exact: true })
+      .fill('ক'.repeat(1500));
+    await expect(
+      sender.getByLabel('Your message', { exact: true }),
+    ).toHaveAttribute('aria-invalid', 'true');
+    await expect(
+      sender.getByRole('button', { name: 'Send private message' }),
+    ).toBeDisabled();
+    expect(uploaded).toBe(false);
     await sender.getByLabel('Your message', { exact: true }).fill(note);
+    let firstEnvelope: string | null = null;
+    await sender.route('**/messages', (route) => {
+      firstEnvelope = route.request().postData();
+      return route.fulfill({
+        status: 429,
+        json: {
+          ok: false,
+          error: { code: 'RATE_LIMITED', message: 'Too many requests.' },
+        },
+      });
+    });
     await sender.getByRole('button', { name: 'Send private message' }).click();
+    await expect(sender.getByRole('alert')).toContainText(
+      'Wait a little, then try again.',
+    );
+    await expect(
+      sender.getByLabel('Your message', { exact: true }),
+    ).toHaveValue(note);
+    await sender.unroute('**/messages');
+    const retry = sender.waitForRequest(
+      (request) =>
+        request.method() === 'POST' && request.url().endsWith('/messages'),
+    );
+    await sender.getByRole('button', { name: 'Send private message' }).click();
+    expect(
+      firstEnvelope !== null && (await retry).postData() === firstEnvelope,
+    ).toBe(true);
     await expect(
       sender.getByRole('heading', { name: 'Your words are on their way.' }),
     ).toBeVisible();
     expect(uploaded).toBe(true);
     expect(leaked).toBe(false);
-    await page.getByRole('button', { name: 'Refresh inbox' }).click();
+    await page
+      .getByRole('navigation', { name: 'Your space navigation' })
+      .getByRole('link', { name: 'Inbox', exact: true })
+      .click();
     await expect(page.locator('.message-text')).toHaveText(note);
     await page
-      .getByText('Profile settings & security', { exact: true })
+      .getByRole('navigation', { name: 'Your space navigation' })
+      .getByRole('link', { name: 'Security & recovery', exact: true })
       .click();
     const downloaded = page.waitForEvent('download');
     await page
@@ -94,6 +136,11 @@ test('full verified link encrypts Unicode before upload; incomplete link fails c
     await sender.getByRole('button', { name: 'Open backup locally' }).click();
     await expect(sender.locator('.message-text')).toHaveText(note);
     expect(leaked).toBe(false);
+    await page
+      .getByRole('navigation', { name: 'Your space navigation' })
+      .getByRole('link', { name: 'Inbox', exact: true })
+      .click();
+    await expect(page.locator('.message-text')).toHaveText(note);
     await expect(page.locator('.message-text script')).toHaveCount(0);
     await sender.goto('/restore');
     await sender.getByLabel('Link name', { exact: true }).fill(name);
@@ -155,7 +202,7 @@ test('full verified link encrypts Unicode before upload; incomplete link fails c
       .getByRole('button', { name: 'Delete message', exact: true })
       .click();
     await expect(
-      page.getByRole('heading', { name: 'A little quiet, for now' }),
+      page.getByRole('heading', { name: 'No messages yet' }),
     ).toBeVisible();
   } finally {
     await context.close();
