@@ -71,3 +71,20 @@ This link is incomplete or cannot be verified. Ask the profile owner for the ful
 ```
 
 Do not silently degrade security for convenience.
+
+## Implemented visual communication
+
+The accepted consumer redesign (ab5dc7d), product-intent upgrade (8526c06) and final
+mobile polish retain one brand and working lifecycle. Local person/conversation
+symbols, qualified social-pressure scenarios, short use-case examples and captioned
+sharing/privacy/recovery flows explain the positive honest-feedback purpose without
+depending on paragraphs. Indigo supports feedback, teal trust, sky information,
+emerald completion, amber recovery consequences and red actual danger/errors.
+Warm light and slate dark surfaces use system preference and local fonts.
+
+Public diagrams become vertical on phones; brief setup/recovery overviews keep three
+legible symbols/captions horizontally. Phone gutters, full-width primary actions,
+associated labels and native destructive confirmations remain intentional. No unread
+state, extra metadata or server recovery is implied. See docs/19_FINAL_MOBILE_POLISH.md
+for the audit, exact responsive matrix, accessibility and verification evidence;
+docs/17 and docs/18 preserve the preceding passes.

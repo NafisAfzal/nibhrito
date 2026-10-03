@@ -30,6 +30,7 @@ export function About() {
         </div>
         <FeedbackExample />
       </header>
+      <OpenFeedback />
       <section className="story-section" aria-labelledby="about-uses-title">
         <div className="section-heading">
           <p className="eyebrow">{story.uses.eyebrow}</p>
@@ -41,7 +42,6 @@ export function About() {
         <h2 id="about-how-title">From a question to a fresh perspective.</h2>
         <ProductFlow label="How Nibhrito works" steps={story.steps} />
       </section>
-      <OpenFeedback />
       <section
         className="story-section privacy-story"
         aria-labelledby="about-privacy-title"

@@ -38,6 +38,7 @@ export function Landing() {
         </div>
         <FeedbackExample />
       </section>
+      <OpenFeedback />
 
       <section className="story-section" aria-labelledby="uses-title">
         <div className="section-heading">
@@ -58,8 +59,6 @@ export function Landing() {
         </div>
         <ProductFlow label="How Nibhrito works" steps={story.steps} />
       </section>
-
-      <OpenFeedback />
 
       <section
         className="story-section privacy-story"

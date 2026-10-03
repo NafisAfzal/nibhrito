@@ -43,11 +43,12 @@ export function Share({ link, slug }: { link: string; slug: string }) {
           </span>
           <p className="hint">{copy.ui.completeLinkHint}</p>
           <button
+            className={copied ? 'copy-button is-copied' : 'copy-button'}
             onClick={() => {
               void copyLink();
             }}
           >
-            <Icon name={copied ? 'check' : 'link'} />
+            <Icon name={copied ? 'check' : 'copy'} />
             {copied ? copy.dashboard.linkCopied : copy.dashboard.copyFullLink}
           </button>
           <p className="copy-status" role="status">

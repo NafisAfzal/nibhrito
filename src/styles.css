@@ -17,6 +17,8 @@
     --primary-soft: #eeebfa;
     --accent: #247769;
     --accent-soft: #e7f3ef;
+    --info: #2d6284;
+    --info-soft: #edf4fa;
     --profile-rose: #935b6d;
     --profile-rose-soft: #f7edf1;
     --profile-ocean: #4e6584;
@@ -64,30 +66,32 @@
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --background: #16161e;
-      --surface: #20202b;
-      --surface-subtle: #292938;
-      --surface-elevated: #272734;
-      --foreground: #f1f0f7;
-      --muted: #b5b3c5;
-      --border: #454455;
-      --input-border: #767387;
-      --primary: #c6b9ff;
-      --primary-hover: #ded5ff;
-      --on-primary: #211842;
-      --primary-soft: #332a4b;
-      --accent: #91d7c5;
-      --accent-soft: #213b35;
+      --background: #20242c;
+      --surface: #272c35;
+      --surface-subtle: #303742;
+      --surface-elevated: #2d3440;
+      --foreground: #f3f2ef;
+      --muted: #c0c6cf;
+      --border: #505963;
+      --input-border: #8b94a3;
+      --primary: #cdc0ff;
+      --primary-hover: #dfd6ff;
+      --on-primary: #292140;
+      --primary-soft: #373248;
+      --accent: #9bd6cb;
+      --accent-soft: #2a403e;
+      --info: #b0d4ed;
+      --info-soft: #293d4a;
       --profile-rose: #e5bbc8;
       --profile-rose-soft: #382a32;
       --profile-ocean: #b5c9e4;
       --profile-ocean-soft: #273342;
       --success: #a2deba;
-      --success-soft: #23372c;
+      --success-soft: #2b4032;
       --warning: #efd197;
-      --warning-soft: #3b3120;
+      --warning-soft: #433727;
       --danger: #ffadbb;
-      --danger-soft: #42232e;
+      --danger-soft: #4d3038;
       --focus-ring: #c6b9ff;
       --shadow: 0 8px 32px rgb(0 0 0 / 12%);
       --shadow-brand: 0 24px 64px rgb(0 0 0 / 18%);
@@ -475,8 +479,8 @@
     border-left: 3px solid var(--warning);
   }
   .info-notice {
-    background: var(--primary-soft);
-    color: var(--primary);
+    background: var(--info-soft);
+    color: var(--info);
   }
   .success-notice {
     display: flex;
@@ -931,7 +935,7 @@
     font-size: var(--font-small);
   }
   .loading-mark {
-    color: var(--primary);
+    color: var(--accent);
     padding-bottom: var(--space-4);
   }
   .loading-mark .icon {
@@ -1203,6 +1207,22 @@
     .state-page,
     .sender-success {
       padding-block: var(--space-6);
+    }
+  }
+  @media (max-width: 360px) {
+    .header-inner,
+    .shell,
+    .site-footer {
+      padding-inline: max(16px, env(safe-area-inset-left));
+    }
+    .card {
+      padding: var(--space-4);
+    }
+    .space-nav {
+      gap: var(--space-1);
+    }
+    .actions > .button {
+      width: 100%;
     }
   }
 }

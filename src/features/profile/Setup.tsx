@@ -131,7 +131,7 @@ export function Setup() {
             <Icon name="key" />
           </span>
           <h2>{copy.ui.recoveryStep}</h2>
-          <RecoveryFlow />
+          <RecoveryFlow brief />
           <p>{copy.setup.anyoneWithThisCodeCanOpenYour}</p>
           <label htmlFor="recovery-code">{copy.setup.recoveryCode}</label>
           <textarea
@@ -175,6 +175,7 @@ export function Setup() {
             label={story.setup.label}
             steps={story.setup.steps}
             compact
+            brief
           />
           <form className="card form" onSubmit={prepare}>
             <label>

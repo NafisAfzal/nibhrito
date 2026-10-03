@@ -10,6 +10,7 @@ import { Notice } from '../../components/Layout';
 import { PageIntro, LoadingState } from '../../components/PageIntro';
 import { Icon } from '../../components/Icon';
 import { story } from '../../app/story';
+import { ProductFlow } from '../../components/ProductStory';
 export function Send() {
   const [state, setState] = useState<{
       link: Awaited<ReturnType<typeof parseShareLink>>;
@@ -129,12 +130,17 @@ export function Send() {
   if (sent)
     return (
       <div className="narrow sender-success" role="status">
-        <span className="icon-tile">
+        <span className="icon-tile symbol-check">
           <Icon name="check" />
         </span>
         <p className="eyebrow">{copy.send.deliveredAsCiphertext}</p>
         <h1>{copy.send.yourWordsAreOnTheirWay}</h1>
-        <p>{copy.send.onlyTheRecipientSBrowserHoldsThe}</p>
+        <ProductFlow
+          label={story.delivery.label}
+          steps={story.delivery.steps}
+          compact
+          privacy
+        />
         <p className="delivery-thanks">
           <Icon name="message" />
           {story.compose.sent}
@@ -160,13 +166,10 @@ export function Send() {
       </header>
       {error ? <Notice message={error} id="send-error" /> : null}
       <form className="card form composer" onSubmit={submit}>
-        <div className="compose-guidance">
+        <p className="compose-guidance">
           <Icon name="message" />
-          <div>
-            <strong>{story.compose.title}</strong>
-            <p>{story.compose.body}</p>
-          </div>
-        </div>
+          <span>{story.compose.guidance}</span>
+        </p>
         <div className="field">
           <label htmlFor="message-text">{copy.send.yourMessage}</label>
           <textarea

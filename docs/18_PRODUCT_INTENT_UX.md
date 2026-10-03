@@ -1,5 +1,9 @@
 # Product-intent UX upgrade
 
+Recorded in 8526c06, preserving ab5dc7d. The following results describe that pass;
+docs/19_FINAL_MOBILE_POLISH.md records the subsequent focused refinement and latest
+ten-width touch/visual verification.
+
 ## Audit and direction
 
 Nibhrito exists to make thoughtful, honest feedback easier to give and safer to receive. Privacy supports that purpose. The established redesign was calm and usable, but made privacy visible more readily than the everyday reason to use it.

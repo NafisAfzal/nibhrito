@@ -69,7 +69,7 @@ database export/import/decryption, three-engine browser journeys, CSP, privacy s
 type/lint/format, build, dry run and audit. E2E uses separate disposable database state,
 never your development profiles; secret-bearing browser artifacts are disabled.
 The intentional-failure `npm run test:artifacts` probe checks assertion output and
-artifacts for private DOM before each browser suite. Contrast, five-width responsive,
+artifacts for private DOM before each browser suite. Contrast, ten-width responsive,
 mobile keyboard navigation, multi-profile destination and full-link copying checks
 supplement the original security journeys.
 
@@ -86,7 +86,15 @@ captioned SVG step diagrams and warm neutral/teal surfaces. `/about` works witho
 crypto/storage/API prerequisites; secured operational routes retain browser checks.
 Existing policies and cryptographic/API/database semantics are unchanged. See
 [docs/18_PRODUCT_INTENT_UX.md](docs/18_PRODUCT_INTENT_UX.md) for scope and verification.
-The latest full gate passes 113 Vitest tests and 48 browser cases, 16 per engine.
+The final mobile/visual pass adds qualified feedback scenarios, conversation/person
+symbols, shorter invitations, compact onboarding, visible expiry and intentional
+copy/delete/status symbols. Semantic sky guidance and calm slate dark surfaces
+extend the established brand. The 320px touch journey checks full-link copying/QR,
+long Bangla/English/mixed drafts, shortened keyboard-space viewport, network retry,
+browser encryption/decryption and cancellation/confirmation of deletion. No protocol,
+API, database, key handling, dependency, security-header or policy changes. See
+[docs/19_FINAL_MOBILE_POLISH.md](docs/19_FINAL_MOBILE_POLISH.md) for details.
+The latest full gate passes 113 Vitest tests and 51 browser cases, 17 per engine.
 
 ## Production and operations
 

@@ -6,8 +6,8 @@ ExecPlans provide the handoff; no chat history is needed.
 ## Current state
 
 All locally executable MVP work is complete: Phases 0–7 and Phase 8 deployment
-preparation. The complete UI/UX redesign and focused product-intent UX upgrade are
-implemented and verified. Phases 1–8, the redesign and intent upgrade are recorded
+preparation. The complete UI/UX redesign, product-intent upgrade and final mobile/
+visual polish are implemented and verified. Phases 1–8 and all three UX passes are recorded
 in reviewable commits, each with its plan, audit and verification handoff.
 Package is 1.0.0-rc.1. No Cloudflare provisioning, production secret/configuration,
 deployment or v1.0.0 tag has occurred. External production acceptance remains pending.
@@ -43,12 +43,18 @@ deployment or v1.0.0 tag has occurred. External production acceptance remains pe
   Complete verified copying/fallback, mobile menu, contrast and associated hints/errors
   have regression coverage. No new dependency, remote asset or telemetry.
 - Product-intent upgrade: welcoming constructive-feedback hero with labelled
-  question/response illustration, three real use cases, connected sharing/encryption
+  question/response illustration, practical use cases, connected sharing/encryption
   diagrams, openness and considerate-use sections, and public /about “Why Nibhrito”.
   Visual setup/share/empty-inbox/recovery/archive guides explain what to do next;
   sender guidance, distinct notice symbols and warmer neutral/teal surfaces clarify
   intent. Captions and semantic lists preserve accessible reading order across widths.
   No new metadata, secret display, API/storage behavior or legal policy changes.
+- Final visual/mobile polish preserves ab5dc7d and 8526c06: human conversation
+  shapes and participant symbols, qualified identified/private feedback scenarios,
+  four short invitations, compact setup/recovery overviews and shorter sender copy.
+  Information sky and calm slate dark surfaces distinguish trust, help, completion,
+  warning and danger. Full-copy feedback, visible server expiry and delete symbols
+  improve scanning; ten-width and 320px touch/short-height coverage verify the flows.
 - No analytics/remote scripts/fonts; CSP/security headers on assets/API, no runtime
   logging, disabled Worker metrics/instrumentation/observability. Locked minimal
   dependencies, strict separate TS projects, tests and privacy/tracked-secret scan.
@@ -60,25 +66,30 @@ deployment or v1.0.0 tag has occurred. External production acceptance remains pe
 
 ## Verification
 
-Final product-intent verification from repository root: full npm run check exits 0.
+Final mobile/visual polish verification from repository root: full npm run check exits 0.
 Both migrations remain applied with no pending migration. The prior release-candidate
 clean npm ci installed 228 packages; the dependency lockfile remains unchanged.
 
 - 113 Vitest tests in 18 files: native crypto/unit, D1/API/authorization/security,
   configuration/generator/deployment guards and real encrypted export/import/decrypt.
-- 48 browser cases (16 journeys/checks × Chromium, Firefox, WebKit), no skips/retries,
+- 51 browser cases (17 journeys/checks × Chromium, Firefox, WebKit), no skips/retries,
   isolated database/root; plaintext/network/persistence, XSS, CSP, recovery, archive,
   settings, deletion/expiry, malformed/substituted link, unsupported crypto, clipboard
   absence and encoded contact-link tests pass.
-- New browser coverage: multi-profile selection/navigation, five-width public and
+- Browser coverage: multi-profile selection/navigation, ten-width public and
   owner layouts, mobile-menu Escape/focus, complete clipboard contents, cancellation
   of destructive deletion, oversized drafts and identical rate-limit envelope retry.
   Light/dark WCAG token contrast tests pass. An intentional failed-assertion probe
   confirms private DOM is absent from output and failure artifacts.
 - Intent coverage verifies positive examples, navigation to /about, public explanation
-  without crypto/storage/API access or third-party requests, five-width captioned
+  without crypto/storage/API access or third-party requests, ten-width captioned
   diagram orientation/order, and setup/share/recovery/empty guides. All original
   browser security assertions remain. Actual Worker and native critical journeys pass.
+- Final mobile coverage verifies the first setup field in a 320×568 viewport,
+  horizontal compact overview order, 44px primary targets, maximum-length slug,
+  complete copying/QR and long Bangla/English/mixed drafts in a focused 320×360
+  composer. Network failure preserves the draft; native encryption/decryption,
+  visible expiry and cancelled/confirmed message deletion work in all three engines.
 - Strict TypeScript, lint, format, privacy/tracked-secret checks, production build,
   Worker dry run and npm audit --audit-level=low pass. Audit finds zero vulnerabilities.
 - Diff/secret/import review passes. Bundled Worker has no browser decryption or
@@ -86,11 +97,14 @@ clean npm ci installed 228 packages; the dependency lockfile remains unchanged.
   private-key/recovery-secret persistence. Operator SQL export preserves ciphertext
   and is decryptable after restore; all six counter triggers/cascades work.
 
-264 product-intent visual layout/state checks across five widths and light/dark found
-no horizontal overflow. Long English/Bangla, complete links, QR, recovery/archive,
-loading, empty, error and success inspected with masked private fields; fixtures
-deleted. Audits and design details: docs/17_UI_REDESIGN.md and docs/18_PRODUCT_INTENT_UX.md.
-Fixed mobile refresh wrapping and a redundant guidelines self-link. Production config and secret
+577 final masked visual checks (477 main + 100 state checks) cover 320, 360, 375,
+390, 412, 430, 768, 1024, 1280 and 1440px in light/dark, with zero horizontal overflow.
+Long English/Bangla, complete links, QR/manual-copy fallback, recovery/archive,
+loading, empty, network/rate/authentication error and success were inspected;
+disposable profiles deleted. A focused 320×360 frame covers keyboard space.
+The 268-check baseline and final review use ignored, masked private artifacts.
+Audits: docs/17_UI_REDESIGN.md, docs/18_PRODUCT_INTENT_UX.md and docs/19_FINAL_MOBILE_POLISH.md.
+Fixed compact-overview arrow placement found at 320px. Production config and secret
 files do not exist locally; no external credentials, provisioning or deployment used.
 
 ## Security decisions and review
@@ -105,7 +119,10 @@ gap (M8); the forced-failure probe runs before E2E. Cryptographic protocol, API 
 database behavior, key lifecycle, authorization, expiry/deletion, CSP/security headers
 and legal policy bodies remain unchanged. Only presentation, microcopy/navigation and
 test tooling changed. Tests retain every original security assertion.
-The product-intent review also found no new Critical/High or actionable Medium finding.
+The product-intent and final polish reviews found no new Critical/High or actionable
+Medium finding. Final security-sensitive paths and dependency/configuration files
+have no diff; the new browser test retains request-secrecy checks and private artifact
+protection. The qualified comparison promises no elimination of risk/social pressure.
 The original master-plan definition now follows the user's explicit feedback and
 honest-expression purpose; historical snapshot and legal eligibility remain intact.
 
@@ -136,8 +153,9 @@ availability/CPU/storage must be measured at staging; caps are conservative head
   Local archive imports read copied content; they do not restore server rows.
 - UI is English with Bangla branding and tested Bangla messages. Full localization
   and independent accessibility review remain optional. Headless Windows WebKit
-  skip-link test uses focus+Enter; Chromium/Firefox use actual Tab. Real Safari/iOS,
-  Edge and assistive technologies need manual review.
+  skip-link test uses focus+Enter; Chromium/Firefox use actual Tab. Touch and shortened
+  viewport checks emulate keyboard space, not physical OS keyboards. Real Safari/iOS,
+  Edge, phone keyboards and assistive technologies need manual review.
 - Actual Cloudflare login, returned D1 UUID, production operator/contact/jurisdiction,
   protected server root, legal review and live HTTPS/headers/no injected scripts,
   quotas/CPU, Cron/log review and second-device recovery require the operator.
@@ -170,7 +188,8 @@ external deployment procedure; do not bypass the guard or tag v1.0.0 before live
 | 7         | 3f1515e     | Legal UX, encrypted backups and adversarial hardening                 |
 | 8         | 1df1698     | Guarded deployment/operations and clean local acceptance              |
 | UI        | ab5dc7d     | Complete consumer UI/UX redesign                                      |
-| Intent UX | This commit | Positive product story and visual explanations across key flows       |
+| Intent UX | 8526c06     | Positive product story and visual explanations across key flows       |
+| Polish UX | This commit | Visual meaning, semantic color and final phone/touch refinement       |
 
 Each phase has a self-contained plan in .agent/plans. Original planning snapshot
 NIBHRITO_MASTER_PLAN.md is preserved; split docs plus documented audit decisions
@@ -182,7 +201,8 @@ MVP requirements and need reviewed plans and evidence of need.
 Ignored local state/dependencies/build/test artifacts and .dev.vars are intentional.
 Production configuration and production secret file have not been created.
 The UI phase is documented in .agent/plans/ui-redesign.md and docs/17. The completed
-intent upgrade is in .agent/plans/product-intent-ux.md and docs/18;
+intent upgrade is in .agent/plans/product-intent-ux.md and docs/18. Final polish is in
+.agent/plans/final-mobile-polish.md and docs/19_FINAL_MOBILE_POLISH.md;
 FINAL_VERIFICATION.md records the latest passing gate. The next action remains manual
 device/assistive-technology review and operator-controlled production acceptance,
-not further MVP implementation. No deployment was performed during either UX phase.
+not further MVP implementation. No deployment was performed during any UX phase.

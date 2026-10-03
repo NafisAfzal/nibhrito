@@ -242,6 +242,7 @@ export function Settings({
                 void remove();
               }}
             >
+              <Icon name="trash" />
               {copy.settings.permanentlyDeleteProfile}
             </button>
           </section>

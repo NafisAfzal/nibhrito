@@ -10,6 +10,7 @@ export const story = {
     response:
       'Your ideas were clear. A few more examples would help people follow along.',
     read: 'You read it in your inbox',
+    protected: 'Encrypted before sending',
   },
   uses: {
     eyebrow: 'Everyday reasons to ask',
@@ -32,6 +33,11 @@ export const story = {
         title: 'A thoughtful check-in',
         body: 'Invite encouragement, reflections or a different point of view.',
         example: '“What should I keep doing? What could I improve?”',
+      },
+      {
+        icon: 'people',
+        title: 'Your team or class',
+        example: '“What could we do differently next time?”',
       },
     ],
   },
@@ -56,7 +62,28 @@ export const story = {
     eyebrow: 'A little less social pressure',
     title: 'Make honesty easier to share.',
     intro:
-      'Sometimes a useful thought goes unsaid because saying it feels awkward. A private invitation can make room for it.',
+      'Sometimes the useful thought is the one we hesitate to say. Give it a little room.',
+    comparisonLabel: 'Why a private response can help',
+    identified: {
+      title: 'With your name attached',
+      quote: '“Will this make things awkward?”',
+      steps: [
+        { icon: 'profile', title: 'Identity visible' },
+        { icon: 'thought', title: 'Second thoughts' },
+        { icon: 'pause', title: 'Feedback held back' },
+      ],
+    },
+    private: {
+      title: 'With a Nibhrito link',
+      quote: '“Here’s something that might help.”',
+      steps: [
+        { icon: 'profile', title: 'Name not shown' },
+        { icon: 'message', title: 'Room to speak' },
+        { icon: 'idea', title: 'A useful perspective' },
+      ],
+    },
+    qualifier:
+      'An illustration of how feedback can feel. Privacy cannot remove every risk or social pressure.',
     items: [
       {
         icon: 'profile',
@@ -139,16 +166,19 @@ export const story = {
       {
         icon: 'message',
         title: 'Your invitation',
+        shortTitle: 'Invite',
         body: 'A name and question people can see.',
       },
       {
         icon: 'link',
         title: 'Your personal link',
+        shortTitle: 'Share',
         body: 'One link to share with others.',
       },
       {
         icon: 'inbox',
         title: 'Your private inbox',
+        shortTitle: 'Receive',
         body: 'Feedback you open on your device.',
       },
     ],
@@ -179,6 +209,22 @@ export const story = {
     title: 'A helpful thought goes a long way.',
     body: 'Say what you noticed, what you appreciated, or what could improve. Keep it honest and considerate.',
     sent: 'Thank you for sharing a thoughtful perspective.',
+    guidance: 'Be honest. Be considerate. Be specific.',
+  },
+  delivery: {
+    label: 'Private delivery',
+    steps: [
+      {
+        icon: 'lock',
+        title: 'Encrypted here',
+        body: 'Before it left this browser.',
+      },
+      {
+        icon: 'inbox',
+        title: 'In their inbox',
+        body: 'Opened only with their private key.',
+      },
+    ],
   },
   empty: {
     invitation: 'Your link is the invitation.',
@@ -207,16 +253,19 @@ export const story = {
       {
         icon: 'key',
         title: 'Keep your code safe',
+        shortTitle: 'Save code',
         body: 'Save it separately in a place only you can access.',
       },
       {
         icon: 'device',
         title: 'Use a trusted browser',
+        shortTitle: 'New device',
         body: 'Enter your link name and saved code on Restore.',
       },
       {
         icon: 'inbox',
         title: 'Return to your inbox',
+        shortTitle: 'Restore',
         body: 'Your code opens your keys in that browser.',
       },
     ],

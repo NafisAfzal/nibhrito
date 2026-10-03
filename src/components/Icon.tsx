@@ -19,7 +19,14 @@ export type IconName =
   | 'device'
   | 'storage'
   | 'warning'
-  | 'error';
+  | 'error'
+  | 'clock'
+  | 'trash'
+  | 'copy'
+  | 'info'
+  | 'pause'
+  | 'people'
+  | 'thought';
 const paths: Record<IconName, string> = {
   quiet: 'M5 19V8a7 7 0 0 1 14 0v11M9 19V9a3 3 0 0 1 6 0v10M3 19h18',
   arrow: 'M5 12h14m-6-6 6 6-6 6',
@@ -43,6 +50,14 @@ const paths: Record<IconName, string> = {
   storage: 'M3 4h18v6H3V4zm0 10h18v6H3v-6zm4-7h1m-1 10h1m7-10h3m-3 10h3',
   warning: 'M12 3 1 21h22L12 3zm0 6v5m0 3v1',
   error: 'M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0zm-10-5v6m0 3v1',
+  clock: 'M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0zm-10-6v6l4 2',
+  trash: 'M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7',
+  copy: 'M8 8h13v13H8V8zM16 4V2H2v14h2',
+  info: 'M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0zm-10-1v6m0-10v1',
+  pause: 'M8 5v14m8-14v14',
+  people:
+    'M10 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM1 21v-3a6 6 0 0 1 12 0v3M17 4a3 3 0 0 1 0 6m0 3a6 6 0 0 1 6 6v2',
+  thought: 'M4 3h16v12H9l-3 3v-3H4V3zm4 5h1m2 0h1m2 0h1M3 21h1',
 };
 export function Icon({
   name,

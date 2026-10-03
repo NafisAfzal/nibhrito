@@ -59,7 +59,7 @@ test('all public destinations fit mobile, tablet and desktop in light and dark',
   page,
 }) => {
   test.setTimeout(90000);
-  for (const width of [360, 390, 768, 1280, 1440]) {
+  for (const width of [320, 360, 375, 390, 412, 430, 768, 1024, 1280, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     for (const path of [
       '/',
@@ -188,7 +188,7 @@ test('owner destinations, complete copy, empty action and deletion cancellation 
       await expect(
         page.getByRole('list', { name: 'How recovery brings you back' }),
       ).toBeVisible();
-    for (const width of [360, 390, 768, 1280, 1440]) {
+    for (const width of [320, 360, 375, 390, 412, 430, 768, 1024, 1280, 1440]) {
       await page.setViewportSize({ width, height: 900 });
       expect(
         await page.evaluate(

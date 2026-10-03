@@ -18,7 +18,7 @@ test('public storytelling explains constructive feedback without crypto, storage
   await expect(page.getByRole('heading', { level: 1 })).toContainText(
     'Invite honest feedback.',
   );
-  await expect(page.locator('figure')).toHaveText(
+  await expect(page.locator('.feedback-example')).toHaveText(
     /An example of your space.*What could I improve.*Someone responds privately/s,
   );
   await expect(
@@ -27,6 +27,18 @@ test('public storytelling explains constructive feedback without crypto, storage
   await expect(
     page.getByRole('heading', { name: 'Your ideas', exact: true }),
   ).toBeVisible();
+  const comparison = page.getByRole('group', {
+    name: 'Why a private response can help',
+  });
+  await expect(
+    comparison.getByRole('list', {
+      name: 'With your name attached',
+      exact: true,
+    }),
+  ).toContainText('Feedback held back');
+  await expect(
+    comparison.getByRole('list', { name: 'With a Nibhrito link', exact: true }),
+  ).toContainText('A useful perspective');
   await expect(
     page.getByRole('heading', { name: 'Honest can still be kind.' }),
   ).toBeVisible();
@@ -70,7 +82,7 @@ test('public storytelling explains constructive feedback without crypto, storage
 test('captioned privacy flows retain reading order and adapt to mobile, tablet and desktop', async ({
   page,
 }) => {
-  for (const width of [360, 390, 768, 1280, 1440]) {
+  for (const width of [320, 360, 375, 390, 412, 430, 768, 1024, 1280, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/about');
     const flow = page.getByRole('list', {

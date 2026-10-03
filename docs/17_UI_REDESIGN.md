@@ -2,6 +2,10 @@
 
 Dedicated local redesign of 1.0.0-rc.1, 2026-10-03. No deployment.
 
+This is the accepted ab5dc7d baseline, preserved by subsequent refinements. See
+docs/18_PRODUCT_INTENT_UX.md and docs/19_FINAL_MOBILE_POLISH.md for the positive
+product story and latest mobile/visual verification; the results below are historical.
+
 ## Baseline audit and redesign plan
 
 All 12 public routes checked at 360, 390, 768, 1280 and 1440 px; owner screens at

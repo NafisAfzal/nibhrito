@@ -14,7 +14,7 @@ export function PageIntro({
   return (
     <header className="page-intro">
       {icon ? (
-        <span className="icon-tile">
+        <span className={`icon-tile symbol-${icon}`}>
           <Icon name={icon} />
         </span>
       ) : null}

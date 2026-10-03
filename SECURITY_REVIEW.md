@@ -124,6 +124,22 @@ L1 fixed during deployment review: RFC-valid mailbox characters could be interpr
 as mailto headers. Encode the mailbox as a URI component in Legal.tsx; browser
 regression verifies a mailbox containing query delimiters cannot introduce headers.
 
+Final mobile/visual polish review: preserves ab5dc7d and 8526c06. Only frontend
+presentation, static copy, tests and documentation change. Cryptographic/key-storage/
+API-client/shared/Worker/migration/CSP/header/configuration/dependency files have no
+diff. Visible expiry reuses server metadata; copy retains the complete verified URL;
+no sender/unread metadata, key material, secret rendering or persistence is added.
+The social-pressure comparison is explicitly illustrative and qualified; anonymity
+limits, recovery loss warnings, saved-code acknowledgement and legal eligibility
+remain. No new Critical/High or actionable Medium finding identified. Full gate
+passes 113 Vitest and 51 browser cases, including original authorization, XSS/CSP,
+crypto/recovery, request/storage secrecy and private artifact assertions. A new
+320px touch/short-height journey exercises drafts after network failure and real
+encryption/decryption/deletion. Expanded semantic contrast and ten-width layout
+checks pass. 577 masked visual checks find no overflow; disposable fixtures deleted.
+Physical phone keyboards/Safari/assistive technology remain manual verification;
+headless touch/viewport checks do not establish real-device or WCAG certification.
+
 ## Evidence and remaining release gates
 
 Security tests cover modified ciphertext/tag/IV/salt/ephemeral key/AAD, wrong key,

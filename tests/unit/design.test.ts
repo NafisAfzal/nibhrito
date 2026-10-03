@@ -31,6 +31,8 @@ describe('semantic light/dark contrast', () => {
         'surface',
         'surface-subtle',
         'primary-soft',
+        'info-soft',
+        'accent-soft',
       ])
         for (const text of ['foreground', 'muted', 'primary'])
           expect(ratio(tokens[text]!, tokens[surface]!)).toBeGreaterThanOrEqual(
@@ -43,6 +45,7 @@ describe('semantic light/dark contrast', () => {
         ['warning', 'warning-soft'],
         ['success', 'success-soft'],
         ['accent', 'accent-soft'],
+        ['info', 'info-soft'],
         ['profile-rose', 'profile-rose-soft'],
         ['profile-ocean', 'profile-ocean-soft'],
       ])

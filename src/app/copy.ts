@@ -59,7 +59,7 @@ export const copy = {
     spaceNavigation: 'Your space navigation',
     yourLink: 'Your Nibhrito link',
     shareBody:
-      'Share this link anywhere. People can use it to send you an encrypted message, without creating an account.',
+      'Share your link. People can reply privately without signing up.',
     completeLinkHint:
       'The Copy button includes everything needed to send securely.',
     viewFullLink: 'View complete link',
@@ -178,7 +178,7 @@ export const copy = {
     yourPrivateSpace: 'Your private space',
     createYourProfile: 'Create your profile',
     noEmailNoPasswordYourBrowserHolds:
-      'Create a personal link for private feedback. No email or password needed. You’ll save a recovery code in the next step.',
+      'A name, a question, a personal link. Next, save your recovery code.',
     saveYourRecoveryCode: 'Save your recovery code',
     anyoneWithThisCodeCanOpenYour:
       'Anyone with this code can open your inbox. Save it in a password manager or somewhere safe.',
@@ -191,7 +191,7 @@ export const copy = {
     createMyPrivateProfile: 'Create my private profile',
     back: 'Back',
     displayName: 'Display name',
-    howShouldPeopleKnowYou: 'How should people know you?',
+    howShouldPeopleKnowYou: 'Name or nickname',
     linkName: 'Link name',
     yourName: 'your-name',
     yourLinkNameIsPublicAndCannot:

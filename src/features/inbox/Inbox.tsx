@@ -262,6 +262,13 @@ export function Inbox({ owner }: { owner: LocalOwner }) {
                 message={copy.inbox.thisMessageCouldNotBeAuthenticatedOr}
               />
             )}
+            <p className="expiry-label">
+              <Icon name="clock" />
+              {copy.inbox.expires}{' '}
+              <time dateTime={new Date(note.expires_at).toISOString()}>
+                {new Date(note.expires_at).toLocaleDateString()}
+              </time>
+            </p>
             <div className="note-actions">
               <details>
                 <summary>{copy.inbox.messageDetails}</summary>
@@ -286,6 +293,7 @@ export function Inbox({ owner }: { owner: LocalOwner }) {
                   void remove(note.envelope.message_id);
                 }}
               >
+                <Icon name="trash" />
                 {copy.inbox.deleteMessage}
               </button>
             </div>
