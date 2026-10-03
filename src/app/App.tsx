@@ -9,6 +9,7 @@ import { policies } from './policies';
 import { BackupReader } from '../features/recovery/Backup';
 import { BrowserSupport } from '../components/BrowserSupport';
 import { Landing } from '../features/landing/Landing';
+import { About } from '../features/landing/About';
 import { PageIntro } from '../components/PageIntro';
 export function App() {
   const path = window.location.pathname;
@@ -16,6 +17,8 @@ export function App() {
     <Layout>
       {Object.hasOwn(policies, path) ? (
         <Legal path={path as keyof typeof policies} />
+      ) : path === '/about' ? (
+        <About />
       ) : path === '/backup' ? (
         <BrowserSupport>
           <BackupReader />

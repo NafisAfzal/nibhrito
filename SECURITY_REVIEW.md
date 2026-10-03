@@ -106,6 +106,20 @@ Worker/migrations/security headers and legal policy bodies have no redesign chan
 No dependency, remote asset, logging or telemetry was added. WCAG token and browser
 checks supplement visual review; this does not claim independent accessibility audit.
 
+Product-intent UX upgrade review: public illustrations use labelled fictional copy,
+not live inbox data. New /about has no API, storage or crypto prerequisite and no
+third-party requests; this does not relax checks on operational routes. Step diagrams
+and sender guidance do not add plaintext persistence, secret exposure, copies or
+server moderation. Existing native recovery acknowledgement and key/link validation
+remain. Empty-state filtering remains clearable; only presentation visibility changes.
+Legal policy bodies, crypto/storage/API/shared/Worker/migration/header/configuration
+and dependency files are unchanged. No new Critical/High or actionable Medium finding
+was identified. Full 113-test and 48-case three-engine gate passes, including original
+network/storage secrecy, authorization, XSS/CSP, decryption/recovery and artifact
+assertions. New diagrams are captioned semantic lists with decorative symbols hidden
+from assistive technology. Masked visual QA passes 264 checks; no independent security
+or accessibility certification is claimed. See docs/18 and FINAL_VERIFICATION.md.
+
 L1 fixed during deployment review: RFC-valid mailbox characters could be interpreted
 as mailto headers. Encode the mailbox as a URI component in Legal.tsx; browser
 regression verifies a mailbox containing query delimiters cannot introduce headers.

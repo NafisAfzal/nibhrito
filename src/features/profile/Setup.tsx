@@ -14,6 +14,8 @@ import { api } from '../../lib/api';
 import { Notice } from '../../components/Layout';
 import { PageIntro } from '../../components/PageIntro';
 import { Icon } from '../../components/Icon';
+import { story } from '../../app/story';
+import { ProductFlow, RecoveryFlow } from '../../components/ProductStory';
 interface Prepared {
   settings: ProfileSettings;
   key: Omit<Awaited<ReturnType<typeof generateRecipient>>, 'jwk'>;
@@ -99,8 +101,14 @@ export function Setup() {
   return (
     <div className="narrow onboarding">
       <ol className="setup-progress" aria-label="Setup progress">
-        <li aria-current={!prepared ? 'step' : undefined}>{copy.ui.stepOne}</li>
-        <li aria-current={prepared ? 'step' : undefined}>{copy.ui.stepTwo}</li>
+        <li aria-current={!prepared ? 'step' : undefined}>
+          <Icon name="link" />
+          {copy.ui.stepOne}
+        </li>
+        <li aria-current={prepared ? 'step' : undefined}>
+          <Icon name="key" />
+          {copy.ui.stepTwo}
+        </li>
       </ol>
       <PageIntro
         eyebrow={copy.setup.yourPrivateSpace}
@@ -120,9 +128,10 @@ export function Setup() {
       {prepared ? (
         <section className="card recovery-panel">
           <span className="icon-tile">
-            <Icon name="shield" />
+            <Icon name="key" />
           </span>
           <h2>{copy.ui.recoveryStep}</h2>
+          <RecoveryFlow />
           <p>{copy.setup.anyoneWithThisCodeCanOpenYour}</p>
           <label htmlFor="recovery-code">{copy.setup.recoveryCode}</label>
           <textarea
@@ -136,8 +145,9 @@ export function Setup() {
             value={prepared.code}
             spellCheck={false}
           />
-          <p className="warning-notice" id="recovery-warning">
-            {copy.setup.nibhritoCannotRecoverThisCodeForYou}
+          <p className="warning-notice with-symbol" id="recovery-warning">
+            <Icon name="warning" />
+            <span>{copy.setup.nibhritoCannotRecoverThisCodeForYou}</span>
           </p>
           <form onSubmit={create}>
             <label className="check">
@@ -160,75 +170,85 @@ export function Setup() {
           </button>
         </section>
       ) : (
-        <form className="card form" onSubmit={prepare}>
-          <label>
-            {copy.setup.displayName}
-            <input
-              name="display_name"
-              required
-              maxLength={64}
-              autoComplete="off"
-              placeholder={copy.setup.howShouldPeopleKnowYou}
-            />
-          </label>
-          <label>
-            {copy.setup.linkName}
-            <input
-              name="slug"
-              aria-describedby="slug-hint"
-              required
-              minLength={3}
-              maxLength={32}
-              pattern="[a-z0-9][a-z0-9-]{1,30}[a-z0-9]"
-              autoCapitalize="none"
-              autoComplete="off"
-              spellCheck={false}
-              placeholder={copy.setup.yourName}
-            />
-          </label>
-          <p className="hint" id="slug-hint">
-            {copy.ui.slugHint}
-          </p>
-          <label>
-            {copy.setup.publicPrompt}
-            <textarea
-              name="public_prompt"
-              aria-describedby="setup-public-hint"
-              autoComplete="off"
-              maxLength={280}
-              rows={3}
-              defaultValue={copy.setup.whatShouldIKeepDoingWhatCould}
-            />
-          </label>
-          <details className="preferences">
-            <summary>{copy.ui.setupOptions}</summary>
-            <div className="form-grid">
-              <label>
-                {copy.setup.keepMessagesFor}
-                <select name="retention_days" defaultValue="30">
-                  <option value="1">{copy.setup.text1Day}</option>
-                  <option value="7">{copy.setup.text7Days}</option>
-                  <option value="30">{copy.setup.text30Days}</option>
-                  <option value="90">{copy.setup.text90Days}</option>
-                </select>
-              </label>
-              <label>
-                {copy.setup.profileAccent}
-                <select name="theme" defaultValue="sage">
-                  <option value="sage">{copy.setup.sage}</option>
-                  <option value="rose">{copy.setup.rose}</option>
-                  <option value="ocean">{copy.setup.ocean}</option>
-                </select>
-              </label>
-            </div>
-          </details>
-          <p className="hint" id="setup-public-hint">
-            {copy.ui.promptHint} {copy.setup.displayNameAndPromptArePublicKeep}
-          </p>
-          <button disabled={busy}>
-            {busy ? copy.setup.preparingKeys : copy.setup.prepareMyRecoveryCode}
-          </button>
-        </form>
+        <>
+          <ProductFlow
+            label={story.setup.label}
+            steps={story.setup.steps}
+            compact
+          />
+          <form className="card form" onSubmit={prepare}>
+            <label>
+              {copy.setup.displayName}
+              <input
+                name="display_name"
+                required
+                maxLength={64}
+                autoComplete="off"
+                placeholder={copy.setup.howShouldPeopleKnowYou}
+              />
+            </label>
+            <label>
+              {copy.setup.linkName}
+              <input
+                name="slug"
+                aria-describedby="slug-hint"
+                required
+                minLength={3}
+                maxLength={32}
+                pattern="[a-z0-9][a-z0-9-]{1,30}[a-z0-9]"
+                autoCapitalize="none"
+                autoComplete="off"
+                spellCheck={false}
+                placeholder={copy.setup.yourName}
+              />
+            </label>
+            <p className="hint" id="slug-hint">
+              {copy.ui.slugHint}
+            </p>
+            <label>
+              {copy.setup.publicPrompt}
+              <textarea
+                name="public_prompt"
+                aria-describedby="setup-public-hint"
+                autoComplete="off"
+                maxLength={280}
+                rows={3}
+                defaultValue={copy.setup.whatShouldIKeepDoingWhatCould}
+              />
+            </label>
+            <details className="preferences">
+              <summary>{copy.ui.setupOptions}</summary>
+              <div className="form-grid">
+                <label>
+                  {copy.setup.keepMessagesFor}
+                  <select name="retention_days" defaultValue="30">
+                    <option value="1">{copy.setup.text1Day}</option>
+                    <option value="7">{copy.setup.text7Days}</option>
+                    <option value="30">{copy.setup.text30Days}</option>
+                    <option value="90">{copy.setup.text90Days}</option>
+                  </select>
+                </label>
+                <label>
+                  {copy.setup.profileAccent}
+                  <select name="theme" defaultValue="sage">
+                    <option value="sage">{copy.setup.sage}</option>
+                    <option value="rose">{copy.setup.rose}</option>
+                    <option value="ocean">{copy.setup.ocean}</option>
+                  </select>
+                </label>
+              </div>
+            </details>
+            <p className="hint" id="setup-public-hint">
+              {copy.ui.promptHint}{' '}
+              {copy.setup.displayNameAndPromptArePublicKeep}
+            </p>
+            <button disabled={busy}>
+              {busy
+                ? copy.setup.preparingKeys
+                : copy.setup.prepareMyRecoveryCode}
+            </button>
+          </form>
+        </>
       )}
     </div>
   );

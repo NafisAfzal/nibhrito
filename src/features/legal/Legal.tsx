@@ -4,6 +4,9 @@ import { policies } from '../../app/policies';
 import { siteInfo, type SiteInfo } from '../../../shared/schemas/site';
 import { api } from '../../lib/api';
 import { Notice } from '../../components/Layout';
+import { PrivacyFlow, RespectfulUse } from '../../components/ProductStory';
+import { Icon } from '../../components/Icon';
+import { story } from '../../app/story';
 export function Legal({ path }: { path: keyof typeof policies }) {
   const policy = policies[path],
     [site, setSite] = useState<SiteInfo | null>(null),
@@ -26,6 +29,22 @@ export function Legal({ path }: { path: keyof typeof policies }) {
       <p className="eyebrow">{copy.legal.nibhritoUpdated3October2026}</p>
       <h1>{policy.title}</h1>
       <p className="lede">{policy.intro}</p>
+      {path === '/security' || path === '/privacy' ? (
+        <div className="visual-summary">
+          <PrivacyFlow compact />
+        </div>
+      ) : null}
+      {path === '/acceptable-use' ? (
+        <div className="visual-summary">
+          <RespectfulUse showLink={false} />
+        </div>
+      ) : null}
+      {path === '/contact' ? (
+        <p className="helpful-note">
+          <Icon name="shield" />
+          <span>{story.support}</span>
+        </p>
+      ) : null}
       <nav aria-label={copy.legal.policies}>
         {Object.entries(policies).map(([href, item]) => (
           <a

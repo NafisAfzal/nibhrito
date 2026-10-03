@@ -8,6 +8,8 @@ import { Notice } from '../../components/Layout';
 import { BackupExport } from '../recovery/Backup';
 import { PageIntro } from '../../components/PageIntro';
 import { Icon } from '../../components/Icon';
+import { story } from '../../app/story';
+import { RecoveryFlow } from '../../components/ProductStory';
 export function Settings({
   owner,
   profile,
@@ -128,6 +130,10 @@ export function Settings({
               aria-describedby="profile-public-hint"
             />
           </label>
+          <p className="helpful-note">
+            <Icon name="message" />
+            <span>{story.share.tip}</span>
+          </p>
           <p className="hint" id="profile-public-hint">
             {copy.ui.promptHint}
           </p>
@@ -175,9 +181,10 @@ export function Settings({
         <div className="security-sections">
           <section className="security-section">
             <span className="icon-tile">
-              <Icon name="shield" />
+              <Icon name="key" />
             </span>
             <h2>{copy.ui.recoveryHeading}</h2>
+            <RecoveryFlow />
             <p>{copy.ui.recoveryBody}</p>
             <a href="/restore" className="text-link">
               {copy.dashboard.restoreAProfile}
@@ -185,6 +192,9 @@ export function Settings({
             </a>
           </section>
           <section className="security-section">
+            <span className="icon-tile">
+              <Icon name="device" />
+            </span>
             <h2>{copy.ui.deviceHeading}</h2>
             <p>{copy.ui.deviceBody}</p>
             <details className="advanced-details">

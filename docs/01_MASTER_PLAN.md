@@ -2,7 +2,7 @@
 
 ## 1. Product definition
 
-Nibhrito is a privacy-first anonymous feedback and confession platform. A recipient creates a profile and shares a unique link. A sender opens that link, writes a message, and the browser encrypts the content before upload. The backend stores only an encrypted envelope and delivery metadata needed to operate the service.
+Nibhrito is a privacy-first anonymous feedback and honest-expression platform. It encourages thoughtful opinions, constructive suggestions and respectful communication without social pressure. A recipient creates a profile and shares a unique link. A sender opens that link, writes a message, and the browser encrypts the content before upload. The backend stores only an encrypted envelope and delivery metadata needed to operate the service.
 
 ### Primary users
 

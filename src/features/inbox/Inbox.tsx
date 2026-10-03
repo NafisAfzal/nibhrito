@@ -7,6 +7,8 @@ import { api } from '../../lib/api';
 import { Notice } from '../../components/Layout';
 import { Icon } from '../../components/Icon';
 import { LoadingState } from '../../components/PageIntro';
+import { story } from '../../app/story';
+import { ProductFlow } from '../../components/ProductStory';
 interface Note extends StoredMessage {
   plain: PlainMessage | null;
 }
@@ -150,40 +152,42 @@ export function Inbox({ owner }: { owner: LocalOwner }) {
           {copy.inbox.refreshInbox}
         </button>
       </div>
-      <div className="inbox-toolbar">
-        <div className="form-grid">
-          <label>
-            {copy.inbox.searchLoadedMessages}
-            <input
-              type="search"
-              name="search"
-              aria-describedby="inbox-search-hint"
-              value={search}
-              autoComplete="off"
-              spellCheck={false}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </label>
-          <label>
-            {copy.inbox.filterFeedback}
-            <select
-              name="filter"
-              value={mood}
-              onChange={(e) => setMood(e.target.value)}
-            >
-              <option value="">{copy.inbox.allFeedback}</option>
-              <option value="appreciation">{copy.inbox.appreciation}</option>
-              <option value="constructive">
-                {copy.inbox.constructiveFeedback}
-              </option>
-              <option value="question">{copy.inbox.questions}</option>
-            </select>
-          </label>
+      {current.length || search || mood || cursor ? (
+        <div className="inbox-toolbar">
+          <div className="form-grid">
+            <label>
+              {copy.inbox.searchLoadedMessages}
+              <input
+                type="search"
+                name="search"
+                aria-describedby="inbox-search-hint"
+                value={search}
+                autoComplete="off"
+                spellCheck={false}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </label>
+            <label>
+              {copy.inbox.filterFeedback}
+              <select
+                name="filter"
+                value={mood}
+                onChange={(e) => setMood(e.target.value)}
+              >
+                <option value="">{copy.inbox.allFeedback}</option>
+                <option value="appreciation">{copy.inbox.appreciation}</option>
+                <option value="constructive">
+                  {copy.inbox.constructiveFeedback}
+                </option>
+                <option value="question">{copy.inbox.questions}</option>
+              </select>
+            </label>
+          </div>
+          <p className="hint" id="inbox-search-hint">
+            {copy.inbox.searchRunsOnlyOnLoadedMessagesIn}
+          </p>
         </div>
-        <p className="hint" id="inbox-search-hint">
-          {copy.inbox.searchRunsOnlyOnLoadedMessagesIn}
-        </p>
-      </div>
+      ) : null}
       {error ? <Notice message={error} /> : null}
       {!loaded && busy ? (
         <LoadingState>
@@ -206,13 +210,20 @@ export function Inbox({ owner }: { owner: LocalOwner }) {
               : copy.inbox.shareYourFullLinkToInviteThoughtful}
           </p>
           {!current.length ? (
-            <a
-              className="button"
-              href={'/inbox?view=share&space=' + owner.profileSlug}
-            >
-              {copy.ui.emptyShare}
-              <Icon name="arrow" />
-            </a>
+            <>
+              <ProductFlow
+                label={story.empty.label}
+                steps={story.empty.steps}
+                compact
+              />
+              <a
+                className="button"
+                href={'/inbox?view=share&space=' + owner.profileSlug}
+              >
+                {copy.ui.emptyShare}
+                <Icon name="arrow" />
+              </a>
+            </>
           ) : null}
         </div>
       ) : null}
@@ -221,6 +232,15 @@ export function Inbox({ owner }: { owner: LocalOwner }) {
           <article className="card note" key={note.envelope.message_id}>
             <div className="note-meta">
               <span>
+                <Icon
+                  name={
+                    note.plain?.mood === 'appreciation'
+                      ? 'heart'
+                      : note.plain?.mood === 'constructive'
+                        ? 'idea'
+                        : 'message'
+                  }
+                />{' '}
                 {note.plain?.mood === 'appreciation'
                   ? copy.inbox.appreciation
                   : note.plain?.mood === 'constructive'

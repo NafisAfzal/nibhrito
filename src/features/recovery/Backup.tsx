@@ -12,6 +12,9 @@ import type { LocalOwner } from '../../storage/indexedDb';
 import { api } from '../../lib/api';
 import { Notice } from '../../components/Layout';
 import { PageIntro } from '../../components/PageIntro';
+import { Icon } from '../../components/Icon';
+import { ProductFlow } from '../../components/ProductStory';
+import { story } from '../../app/story';
 export function BackupExport({ owner }: { owner: LocalOwner }) {
   const [busy, setBusy] = useState(false),
     [error, setError] = useState(''),
@@ -59,7 +62,15 @@ export function BackupExport({ owner }: { owner: LocalOwner }) {
   }
   return (
     <section>
+      <span className="icon-tile">
+        <Icon name="note" />
+      </span>
       <h2>{copy.backup.encryptedBackup}</h2>
+      <ProductFlow
+        label={story.archive.label}
+        steps={story.archive.steps}
+        compact
+      />
       <p className="hint">
         {copy.backup.downloadsEncryptedMessagesAndTheEncryptedRecovery}
       </p>
@@ -151,6 +162,11 @@ export function BackupReader() {
       >
         <p>{copy.backup.yourFileAndCodeStayInThis}</p>
       </PageIntro>
+      <ProductFlow
+        label={story.archive.label}
+        steps={story.archive.steps}
+        compact
+      />
       <p className="hint">{copy.backup.thisIsAnExistingCopyServerExpiry}</p>
       {error ? <Notice message={error} /> : null}
       <form ref={formRef} className="card form" onSubmit={open}>

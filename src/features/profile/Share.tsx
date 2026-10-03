@@ -4,6 +4,8 @@ import { Icon } from '../../components/Icon';
 import { Notice } from '../../components/Layout';
 import { ShareQr } from '../../components/ShareQr';
 import { PageIntro } from '../../components/PageIntro';
+import { story } from '../../app/story';
+import { ProductFlow } from '../../components/ProductStory';
 export function Share({ link, slug }: { link: string; slug: string }) {
   const [copied, setCopied] = useState(false),
     [error, setError] = useState('');
@@ -78,6 +80,18 @@ export function Share({ link, slug }: { link: string; slug: string }) {
         <Icon name="lock" />
         {copy.ui.linkTrust}
       </p>
+      <section className="share-guide" aria-labelledby="share-guide-title">
+        <h2 id="share-guide-title">{story.share.title}</h2>
+        <ProductFlow
+          label={story.share.label}
+          steps={story.share.steps}
+          compact
+        />
+        <p className="helpful-note">
+          <Icon name="message" />
+          <span>{story.share.tip}</span>
+        </p>
+      </section>
       <a className="text-link" href={'/inbox?space=' + slug}>
         {copy.ui.backToInbox}
         <Icon name="arrow" />

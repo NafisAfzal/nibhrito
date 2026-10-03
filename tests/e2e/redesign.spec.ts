@@ -63,6 +63,7 @@ test('all public destinations fit mobile, tablet and desktop in light and dark',
     await page.setViewportSize({ width, height: 900 });
     for (const path of [
       '/',
+      '/about',
       '/create',
       '/restore',
       '/inbox',
@@ -134,11 +135,17 @@ test('owner destinations, complete copy, empty action and deletion cancellation 
   });
   const slug = 'ux-' + crypto.randomUUID().slice(0, 8);
   await page.goto('/create');
+  await expect(
+    page.getByRole('list', { name: 'What you are creating' }),
+  ).toBeVisible();
   await page
     .getByLabel('Display name', { exact: true })
     .fill('বাংলা সুন্দর একটি ব্যক্তিগত জায়গা');
   await page.getByLabel('Link name', { exact: true }).fill(slug);
   await page.getByRole('button', { name: 'Prepare my recovery code' }).click();
+  await expect(
+    page.getByRole('list', { name: 'How recovery brings you back' }),
+  ).toBeVisible();
   await expect(
     page.getByLabel('Recovery code', { exact: true }),
   ).toHaveAttribute('aria-describedby', 'recovery-warning');
@@ -167,6 +174,20 @@ test('owner destinations, complete copy, empty action and deletion cancellation 
     await expect(
       nav.getByRole('link', { name: destination, exact: true }),
     ).toHaveAttribute('aria-current', 'page');
+    if (destination === 'My link')
+      await expect(
+        page.getByRole('list', { name: 'From your link to your inbox' }),
+      ).toBeVisible();
+    if (destination === 'Inbox') {
+      await expect(
+        page.getByRole('list', { name: 'Invite your first response' }),
+      ).toBeVisible();
+      await expect(page.getByLabel('Search loaded messages')).toHaveCount(0);
+    }
+    if (destination === 'Security & recovery')
+      await expect(
+        page.getByRole('list', { name: 'How recovery brings you back' }),
+      ).toBeVisible();
     for (const width of [360, 390, 768, 1280, 1440]) {
       await page.setViewportSize({ width, height: 900 });
       expect(

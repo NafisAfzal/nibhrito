@@ -8,6 +8,7 @@ import { saveOwner } from '../../storage/indexedDb';
 import { api } from '../../lib/api';
 import { Notice } from '../../components/Layout';
 import { PageIntro } from '../../components/PageIntro';
+import { RecoveryFlow } from '../../components/ProductStory';
 export function Restore() {
   const [busy, setBusy] = useState(false),
     [error, setError] = useState('');
@@ -41,10 +42,11 @@ export function Restore() {
       <PageIntro
         eyebrow={copy.restore.welcomeBack}
         title={copy.restore.restoreYourInbox}
-        icon="shield"
+        icon="key"
       >
         <p>{copy.restore.yourCodeUnlocksYourKeysLocallyWe}</p>
       </PageIntro>
+      <RecoveryFlow />
       {error ? <Notice message={error} id="restore-error" /> : null}
       <form
         className="card form"

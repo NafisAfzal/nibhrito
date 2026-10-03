@@ -8,6 +8,9 @@ the recipient's device. There is no email/password account or operator recovery 
 
 Profile setup, verified sending, encrypted inbox, recovery, encrypted local backups,
 settings, deletion/expiry, abuse limits and legal pages are implemented.
+The interface explains constructive feedback through practical examples, connected
+privacy/sharing/recovery diagrams and a public “Why Nibhrito” page at `/about`.
+See [the product-intent UX upgrade](docs/18_PRODUCT_INTENT_UX.md) for design and QA.
 See `PROJECT_STATUS.md` for current acceptance
 evidence, `docs/13_ARCHITECTURE_REVIEW.md` for audit decisions, and
 `docs/14_LOCAL_DEVELOPMENT.md` for setup and checks.

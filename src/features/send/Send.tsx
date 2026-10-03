@@ -9,6 +9,7 @@ import { api, ApiError } from '../../lib/api';
 import { Notice } from '../../components/Layout';
 import { PageIntro, LoadingState } from '../../components/PageIntro';
 import { Icon } from '../../components/Icon';
+import { story } from '../../app/story';
 export function Send() {
   const [state, setState] = useState<{
       link: Awaited<ReturnType<typeof parseShareLink>>;
@@ -134,6 +135,10 @@ export function Send() {
         <p className="eyebrow">{copy.send.deliveredAsCiphertext}</p>
         <h1>{copy.send.yourWordsAreOnTheirWay}</h1>
         <p>{copy.send.onlyTheRecipientSBrowserHoldsThe}</p>
+        <p className="delivery-thanks">
+          <Icon name="message" />
+          {story.compose.sent}
+        </p>
         <button onClick={() => setSent(false)} className="secondary">
           {copy.send.sendAnotherMessage}
         </button>
@@ -155,6 +160,13 @@ export function Send() {
       </header>
       {error ? <Notice message={error} id="send-error" /> : null}
       <form className="card form composer" onSubmit={submit}>
+        <div className="compose-guidance">
+          <Icon name="message" />
+          <div>
+            <strong>{story.compose.title}</strong>
+            <p>{story.compose.body}</p>
+          </div>
+        </div>
         <div className="field">
           <label htmlFor="message-text">{copy.send.yourMessage}</label>
           <textarea

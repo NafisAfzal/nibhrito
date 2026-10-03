@@ -17,6 +17,9 @@ provisioning/deployment and live release acceptance remain operator actions.
   plaintext export; the separate recovery code unlocks the existing encrypted bundle.
 - Redesigned responsive light/dark UI, semantic forms, focus/skip link, loading/empty/error
   states, unsupported-browser notice, Bangla brand and Unicode message support.
+- Positive feedback-first product story, local illustrative question/response, practical
+  use cases and discoverable public Why Nibhrito page. Connected visual guides explain
+  link sharing, encrypted delivery, the empty inbox, recovery and local archive reading.
 - Privacy, terms, acceptable use, encryption explanation and real configurable
   operator contact; empty local configuration is explicitly labelled evaluation.
 
@@ -76,6 +79,14 @@ profile creation and recovery in two steps. Full verified links are copied intac
 technical details are progressively disclosed. Public `view`/`space` URL parameters
 carry no secrets and do not confer authorization. See
 [docs/17_UI_REDESIGN.md](docs/17_UI_REDESIGN.md) for the audit, design and visual QA.
+
+The focused product-intent upgrade keeps this foundation and makes constructive
+feedback, opinions and thoughtful expression visible through labelled examples,
+captioned SVG step diagrams and warm neutral/teal surfaces. `/about` works without
+crypto/storage/API prerequisites; secured operational routes retain browser checks.
+Existing policies and cryptographic/API/database semantics are unchanged. See
+[docs/18_PRODUCT_INTENT_UX.md](docs/18_PRODUCT_INTENT_UX.md) for scope and verification.
+The latest full gate passes 113 Vitest tests and 48 browser cases, 16 per engine.
 
 ## Production and operations
 

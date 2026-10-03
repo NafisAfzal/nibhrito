@@ -28,7 +28,7 @@ export function LoadingState({ children }: { children: ReactNode }) {
   return (
     <div className="loading-state" role="status">
       <span className="loading-mark" aria-hidden="true">
-        <Icon name="quiet" />
+        <Icon name="lock" />
       </span>
       <p>{children}</p>
     </div>

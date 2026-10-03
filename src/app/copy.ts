@@ -1,11 +1,11 @@
 // English catalog. Keep UI copy here; add locale catalogs with this structure.
 export const copy = {
   landing: {
-    eyebrow: 'A little space for honesty',
-    title: 'Receive honest messages.',
-    titleQuiet: 'Privately.',
+    eyebrow: 'Honest thoughts. Room to grow.',
+    title: 'Invite honest feedback.',
+    titleQuiet: 'Give it a private space.',
     intro:
-      'Give people a quiet way to tell you what’s on their mind. One personal link. Messages only you can read with your key.',
+      'Share your personal link. Let people offer opinions, encouragement and thoughtful suggestions, without their name attached.',
     create: 'Create your private link',
     how: 'See how it works',
     trust: 'End-to-end encrypted · No account needed to send',
@@ -108,7 +108,7 @@ export const copy = {
       'Share something thoughtful… বাংলা বা English, আপনার মতো করে।',
     sendRateLimited:
       'Too many messages right now. Wait a little, then try again. Your draft stays here. Retrying sends the same encrypted message.',
-    privateNote: 'Private note',
+    privateNote: 'Private feedback',
     publicPrivacy: 'How privacy works',
     menu: 'Menu',
     closeMenu: 'Close menu',
@@ -146,7 +146,7 @@ export const copy = {
     mainNavigation: 'Main navigation',
     myInbox: 'My inbox',
     restore: 'Restore',
-    quietByDesign: 'Quiet by design.',
+    quietByDesign: 'Thoughtful words. Shared with care.',
     text2: 'কথা থাকুক ব্যক্তিগত।',
     legal: 'Legal',
     privacy: 'Privacy',
@@ -293,7 +293,7 @@ export const copy = {
     sendAnotherMessage: 'Send another message',
     anonymousToTheRecipientHostingProvidersStill:
       'Anonymous to the recipient. Hosting providers still process network metadata.',
-    aPrivateNoteFor: 'A private note for',
+    aPrivateNoteFor: 'Share private feedback with',
     yourMessage: 'Your message',
     text: 'একটি ভালো দিক, একটি উন্নতির জায়গা…',
     text4096EncryptedPayloadBytesBanglaAndEmoji:

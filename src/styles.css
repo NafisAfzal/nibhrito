@@ -1,10 +1,11 @@
 @import 'tailwindcss';
+@import './product-story.css';
 
 @layer base {
   :root {
-    --background: #f8f8fc;
+    --background: #fafaf7;
     --surface: #ffffff;
-    --surface-subtle: #f0f0f7;
+    --surface-subtle: #f2f2ee;
     --surface-elevated: #ffffff;
     --foreground: #252438;
     --muted: #646477;
@@ -577,119 +578,12 @@
   .hero .actions {
     margin-bottom: var(--space-5);
   }
-  .hero-art {
-    min-height: 380px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-7);
-    background: var(--surface-subtle);
-    border-radius: 180px 180px var(--radius-lg) var(--radius-lg);
-  }
-  .quiet-arch {
-    color: var(--primary);
-    margin-bottom: -1.5rem;
-    opacity: 0.65;
-  }
-  .quiet-arch .icon {
-    width: 180px;
-    height: 180px;
-    stroke-width: 0.6;
-  }
-  .illustrated-note {
-    width: 100%;
-    max-width: 280px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    padding: 1.75rem;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-brand);
-    position: relative;
-  }
-  .note-rule {
-    display: block;
-    height: 5px;
-    border-radius: 3px;
-    background: var(--border);
-    margin-bottom: 0.75rem;
-    width: 100%;
-  }
-  .note-rule.short {
-    width: 62%;
-  }
-  .sealed-note {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-size: 0.75rem;
-    color: var(--accent);
-    margin-top: 1.25rem;
-  }
-  .sealed-note .icon {
-    width: 16px;
-    height: 16px;
-  }
-  .hero-art > p {
-    font-size: 1rem;
-    color: var(--muted);
-    margin: 1.5rem 0 0;
-  }
   .how-section {
     border-block: 1px solid var(--border);
     padding-block: var(--space-8);
   }
   .section-heading {
     margin-bottom: var(--space-7);
-  }
-  .steps {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-7);
-  }
-  .step-number {
-    color: var(--primary);
-    font-size: var(--font-caption);
-    font-variant-numeric: tabular-nums;
-    display: block;
-    margin-bottom: var(--space-5);
-  }
-  .steps p {
-    color: var(--muted);
-    font-size: var(--font-small);
-    max-width: 280px;
-    margin: 0;
-  }
-  .privacy-section {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-8);
-    padding-block: var(--space-8);
-  }
-  .privacy-section > div > p {
-    color: var(--muted);
-    max-width: 510px;
-  }
-  .privacy-facts {
-    display: grid;
-    gap: var(--space-6);
-    align-content: center;
-    border-left: 1px solid var(--border);
-    padding-left: var(--space-8);
-  }
-  .privacy-facts > div {
-    display: flex;
-    gap: var(--space-4);
-  }
-  .privacy-facts .icon {
-    color: var(--accent);
-    margin-top: 0.2rem;
-  }
-  .privacy-facts p {
-    color: var(--muted);
-    font-size: var(--font-small);
-    margin: 0;
   }
   .final-cta {
     text-align: center;
@@ -846,6 +740,9 @@
   }
   .page-heading > div {
     min-width: 0;
+  }
+  .page-heading > button {
+    flex-shrink: 0;
   }
   .inbox-toolbar .form-grid {
     grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
@@ -1157,13 +1054,6 @@
     .hero {
       gap: var(--space-6);
     }
-    .hero-art {
-      min-height: 340px;
-      padding: var(--space-5);
-    }
-    .privacy-facts {
-      padding-left: var(--space-6);
-    }
     .site-footer {
       align-items: flex-start;
       flex-direction: column;
@@ -1217,20 +1107,6 @@
       padding-block: var(--space-4) var(--space-7);
       gap: var(--space-7);
     }
-    .hero-art {
-      min-height: 240px;
-      width: min(100%, 340px);
-      margin-inline: auto;
-      border-radius: 120px 120px var(--radius-lg) var(--radius-lg);
-    }
-    .quiet-arch .icon {
-      width: 120px;
-      height: 120px;
-    }
-    .illustrated-note {
-      padding: var(--space-5);
-      max-width: 240px;
-    }
     .hero .actions {
       align-items: flex-start;
       gap: var(--space-3);
@@ -1241,31 +1117,6 @@
     }
     .hero .trust-line .icon {
       margin-top: 0.2rem;
-    }
-    .how-section,
-    .privacy-section {
-      padding-block: var(--space-7);
-    }
-    .steps,
-    .privacy-section {
-      grid-template-columns: minmax(0, 1fr);
-      gap: var(--space-6);
-    }
-    .step {
-      padding-left: 44px;
-      position: relative;
-    }
-    .step-number {
-      position: absolute;
-      left: 0;
-      top: 0.2rem;
-    }
-    .steps p {
-      max-width: none;
-    }
-    .privacy-facts {
-      border-left: none;
-      padding-left: 0;
     }
     .final-cta {
       padding: var(--space-7) var(--space-5);

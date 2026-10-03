@@ -1,11 +1,13 @@
 import { copy } from '../app/copy';
 import { useState, type ReactNode } from 'react';
 import { Icon } from './Icon';
+import { story } from '../app/story';
 export function Layout({ children }: { children: ReactNode }) {
   const [menu, setMenu] = useState(false);
   const path = window.location.pathname;
   const sender = path.startsWith('/u/');
   const links = [
+    ['/about', story.whyLink],
     ['/security', copy.ui.publicPrivacy],
     ['/inbox', copy.layout.myInbox],
     ['/restore', copy.layout.restore],
@@ -104,6 +106,7 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
         <nav aria-label={copy.layout.legal}>
           {[
+            ['/about', story.whyLink],
             ['/privacy', copy.layout.privacy],
             ['/terms', copy.layout.terms],
             ['/security', copy.layout.security],
@@ -126,7 +129,7 @@ export function Layout({ children }: { children: ReactNode }) {
 export function Notice({ message, id }: { message: string; id?: string }) {
   return (
     <p role="alert" className="notice" id={id}>
-      <Icon name="shield" />
+      <Icon name="error" />
       <span>{message}</span>
     </p>
   );

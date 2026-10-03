@@ -6,9 +6,9 @@ ExecPlans provide the handoff; no chat history is needed.
 ## Current state
 
 All locally executable MVP work is complete: Phases 0–7 and Phase 8 deployment
-preparation. The dedicated complete UI/UX redesign is also implemented and verified.
-Phases 1–8 local work and the redesign are recorded in reviewable commits; the
-redesign commit includes its ExecPlan, audit and final verification handoff.
+preparation. The complete UI/UX redesign and focused product-intent UX upgrade are
+implemented and verified. Phases 1–8, the redesign and intent upgrade are recorded
+in reviewable commits, each with its plan, audit and verification handoff.
 Package is 1.0.0-rc.1. No Cloudflare provisioning, production secret/configuration,
 deployment or v1.0.0 tag has occurred. External production acceptance remains pending.
 
@@ -42,6 +42,13 @@ deployment or v1.0.0 tag has occurred. External production acceptance remains pe
   multi-profile selection using public view/space parameters without granting access.
   Complete verified copying/fallback, mobile menu, contrast and associated hints/errors
   have regression coverage. No new dependency, remote asset or telemetry.
+- Product-intent upgrade: welcoming constructive-feedback hero with labelled
+  question/response illustration, three real use cases, connected sharing/encryption
+  diagrams, openness and considerate-use sections, and public /about “Why Nibhrito”.
+  Visual setup/share/empty-inbox/recovery/archive guides explain what to do next;
+  sender guidance, distinct notice symbols and warmer neutral/teal surfaces clarify
+  intent. Captions and semantic lists preserve accessible reading order across widths.
+  No new metadata, secret display, API/storage behavior or legal policy changes.
 - No analytics/remote scripts/fonts; CSP/security headers on assets/API, no runtime
   logging, disabled Worker metrics/instrumentation/observability. Locked minimal
   dependencies, strict separate TS projects, tests and privacy/tracked-secret scan.
@@ -53,13 +60,13 @@ deployment or v1.0.0 tag has occurred. External production acceptance remains pe
 
 ## Verification
 
-Final redesign verification from repository root: full npm run check exits 0.
+Final product-intent verification from repository root: full npm run check exits 0.
 Both migrations remain applied with no pending migration. The prior release-candidate
 clean npm ci installed 228 packages; the dependency lockfile remains unchanged.
 
 - 113 Vitest tests in 18 files: native crypto/unit, D1/API/authorization/security,
   configuration/generator/deployment guards and real encrypted export/import/decrypt.
-- 42 browser cases (14 journeys/checks × Chromium, Firefox, WebKit), no skips/retries,
+- 48 browser cases (16 journeys/checks × Chromium, Firefox, WebKit), no skips/retries,
   isolated database/root; plaintext/network/persistence, XSS, CSP, recovery, archive,
   settings, deletion/expiry, malformed/substituted link, unsupported crypto, clipboard
   absence and encoded contact-link tests pass.
@@ -68,6 +75,10 @@ clean npm ci installed 228 packages; the dependency lockfile remains unchanged.
   of destructive deletion, oversized drafts and identical rate-limit envelope retry.
   Light/dark WCAG token contrast tests pass. An intentional failed-assertion probe
   confirms private DOM is absent from output and failure artifacts.
+- Intent coverage verifies positive examples, navigation to /about, public explanation
+  without crypto/storage/API access or third-party requests, five-width captioned
+  diagram orientation/order, and setup/share/recovery/empty guides. All original
+  browser security assertions remain. Actual Worker and native critical journeys pass.
 - Strict TypeScript, lint, format, privacy/tracked-secret checks, production build,
   Worker dry run and npm audit --audit-level=low pass. Audit finds zero vulnerabilities.
 - Diff/secret/import review passes. Bundled Worker has no browser decryption or
@@ -75,10 +86,11 @@ clean npm ci installed 228 packages; the dependency lockfile remains unchanged.
   private-key/recovery-secret persistence. Operator SQL export preserves ciphertext
   and is decryptable after restore; all six counter triggers/cascades work.
 
-235 post-redesign visual layout/state checks across five widths and light/dark found
+264 product-intent visual layout/state checks across five widths and light/dark found
 no horizontal overflow. Long English/Bangla, complete links, QR, recovery/archive,
 loading, empty, error and success inspected with masked private fields; fixtures
-deleted. Audit and design details: docs/17_UI_REDESIGN.md. Production config and secret
+deleted. Audits and design details: docs/17_UI_REDESIGN.md and docs/18_PRODUCT_INTENT_UX.md.
+Fixed mobile refresh wrapping and a redundant guidelines self-link. Production config and secret
 files do not exist locally; no external credentials, provisioning or deployment used.
 
 ## Security decisions and review
@@ -93,6 +105,9 @@ gap (M8); the forced-failure probe runs before E2E. Cryptographic protocol, API 
 database behavior, key lifecycle, authorization, expiry/deletion, CSP/security headers
 and legal policy bodies remain unchanged. Only presentation, microcopy/navigation and
 test tooling changed. Tests retain every original security assertion.
+The product-intent review also found no new Critical/High or actionable Medium finding.
+The original master-plan definition now follows the user's explicit feedback and
+honest-expression purpose; historical snapshot and legal eligibility remain intact.
 
 Documentation decisions are in docs/13 and docs/15: immutable slugs and v1 AAD,
 strict encoding/JSON sizes, server timestamps, backend token verification independent
@@ -143,17 +158,19 @@ external deployment procedure; do not bypass the guard or tag v1.0.0 before live
 
 ## Commit history and continuation
 
-| Phase | Commit  | Outcome                                                               |
-| ----- | ------- | --------------------------------------------------------------------- |
-| 0     | db74924 | Existing accepted foundation; earlier audit 0e1b44f, baseline 451488c |
-| 1     | 7e39a09 | Browser crypto/recovery protocol and tests                            |
-| 2     | d6b7450 | Profile creation/authentication/browser restore                       |
-| 3     | 538a138 | Verified encrypted sender and local QR                                |
-| 4     | 0873ea8 | Owner-scoped inbox/settings/deletion                                  |
-| 5     | 4cdbd11 | Bounded expiry cleanup and atomic quotas                              |
-| 6     | 93e64c9 | Bounded privacy-preserving abuse controls                             |
-| 7     | 3f1515e | Legal UX, encrypted backups and adversarial hardening                 |
-| 8     | 1df1698 | Guarded deployment/operations and clean local acceptance              |
+| Phase     | Commit      | Outcome                                                               |
+| --------- | ----------- | --------------------------------------------------------------------- |
+| 0         | db74924     | Existing accepted foundation; earlier audit 0e1b44f, baseline 451488c |
+| 1         | 7e39a09     | Browser crypto/recovery protocol and tests                            |
+| 2         | d6b7450     | Profile creation/authentication/browser restore                       |
+| 3         | 538a138     | Verified encrypted sender and local QR                                |
+| 4         | 0873ea8     | Owner-scoped inbox/settings/deletion                                  |
+| 5         | 4cdbd11     | Bounded expiry cleanup and atomic quotas                              |
+| 6         | 93e64c9     | Bounded privacy-preserving abuse controls                             |
+| 7         | 3f1515e     | Legal UX, encrypted backups and adversarial hardening                 |
+| 8         | 1df1698     | Guarded deployment/operations and clean local acceptance              |
+| UI        | ab5dc7d     | Complete consumer UI/UX redesign                                      |
+| Intent UX | This commit | Positive product story and visual explanations across key flows       |
 
 Each phase has a self-contained plan in .agent/plans. Original planning snapshot
 NIBHRITO_MASTER_PLAN.md is preserved; split docs plus documented audit decisions
@@ -164,7 +181,8 @@ MVP requirements and need reviewed plans and evidence of need.
 
 Ignored local state/dependencies/build/test artifacts and .dev.vars are intentional.
 Production configuration and production secret file have not been created.
-The dedicated UI phase is documented in .agent/plans/ui-redesign.md and docs/17;
-FINAL_VERIFICATION.md records its passing gate. The next action remains manual
+The UI phase is documented in .agent/plans/ui-redesign.md and docs/17. The completed
+intent upgrade is in .agent/plans/product-intent-ux.md and docs/18;
+FINAL_VERIFICATION.md records the latest passing gate. The next action remains manual
 device/assistive-technology review and operator-controlled production acceptance,
-not further MVP implementation. No deployment was performed during the redesign.
+not further MVP implementation. No deployment was performed during either UX phase.
