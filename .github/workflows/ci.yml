@@ -21,7 +21,6 @@ jobs:
     env:
       CI: 'true'
       WRANGLER_SEND_METRICS: 'false'
-      WRANGLER_LOG: error
       PLAYWRIGHT_NO_COPY_PROMPT: '1'
     steps:
       - name: Check out complete history

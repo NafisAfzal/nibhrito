@@ -4,6 +4,13 @@
   "version": "1.0.0-rc.1",
   "private": true,
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NafisAfzal/nibhrito.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NafisAfzal/nibhrito/issues"
+  },
   "engines": {
     "node": ">=24.14.1 <25",
     "npm": ">=9"

@@ -78,6 +78,13 @@ pending production/license/manual checks recorded honestly.
 - Local gates pass: npm ci, 113 Vitest/57 portable/19 Edge cases, 272 accessibility
   states, audit regression, privacy/history, lint/format/TS/build/dry run and zero
   vulnerabilities. No orphaned baseline objects; accepted JS/CSS names preserved.
+- Created public NafisAfzal/nibhrito and pushed main normally at 95237cb. Verified
+  default branch, matching fetched HEAD, original ancestry and a clean worktree.
+  Free scanning/protection, private reports and dependency alerts/fixes enabled;
+  Actions defaults read-only. Initial alert counts zero; grouped bot PRs unmerged.
+- First CI 37226329438 exposed a CI configuration defect: global Wrangler error
+  verbosity suppresses D1 JSON in the portability test. Remove the global setting,
+  preserve the quiet E2E wrapper and all original assertions; confirm follow-up CI.
 
 ## Decisions and surprises
 

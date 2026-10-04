@@ -75,8 +75,27 @@ index-BswXlgnk.js and index-BS90chmJ.css. Tailwind initially detected a utility 
 in new test assertion copy; rewording the assertion restored the exact asset names
 without an application/style change. Existing tests/assertions remain intact.
 
-Remote settings/results will be recorded after publication. Intended repository:
-NafisAfzal/nibhrito, public, main. Authenticated inspection found no existing repo.
+Published at [NafisAfzal/nibhrito](https://github.com/NafisAfzal/nibhrito), public,
+default branch main, with the original sixteen commits and two preparation commits.
+The first pushed HEAD was 95237cb1a7a88f339159a3b785e99454558c43e3; fetched origin/main
+matched and e93fc70 remained its ancestor. Working tree was clean.
+
+Verified through GitHub API: description/eight relevant topics, Issues enabled,
+wiki disabled, secret scanning and push protection enabled, private vulnerability
+reporting enabled, dependency alerts enabled and automated security fixes enabled
+(not paused). Actions is enabled; default token permissions are read-only and PR
+approval is disabled. Both secret and Dependabot alert counts were zero when checked.
+No paid feature is enabled. Dependabot opened its initial grouped npm and Actions
+PRs; neither is merged automatically or applied to main.
+
+GitHub's rendered README contains the public image, headings and Mermaid block;
+local relative documentation paths resolve. The initial main CI run
+[37226329438](https://github.com/NafisAfzal/nibhrito/actions/runs/37226329438) failed:
+the workflow-wide WRANGLER_LOG=error suppressed the portability test's D1 JSON
+response. The test retained its redacted failure and all assertions. Remove that
+global setting; the E2E server retains its own quiet logging configuration. This
+changes CI only, with no application/database behavior change. Follow-up CI must
+pass before this publication phase is complete.
 
 No license is selected. The owner must make that decision separately.
 Next production step, after publication verification and operator approval:

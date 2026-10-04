@@ -19,7 +19,11 @@ The README, portable start guide and documentation index now provide the develop
 entry point; security/contribution guidance, templates, read-only CI and weekly
 dependency updates are prepared. The publication gate passes 113 Vitest tests,
 57 portable browser cases and 19 installed-Edge cases, plus the new native audit
-regression test. Remote publication and initial CI verification remain pending.
+regression test. The complete history is published at
+[NafisAfzal/nibhrito](https://github.com/NafisAfzal/nibhrito), public with main as the
+default branch. Free security protections/private reports and weekly dependency
+automation are verified. Initial CI failed because its global Wrangler log setting
+suppressed structured D1 test output; a CI-only correction is being verified.
 See [publication evidence](docs/21_GITHUB_PUBLICATION.md).
 No license is selected. Application code, protocol, API, database and locked
 dependency versions have no changes in this phase.
