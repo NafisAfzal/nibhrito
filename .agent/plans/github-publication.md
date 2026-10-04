@@ -15,7 +15,8 @@ No license or GitHub configuration exists.
 
 ## Security invariants that must remain true
 
-All AGENTS.md invariants remain. No application, crypto, API or migration changes.
+All AGENTS.md invariants remain. No crypto, API or migration changes. Application
+changes are limited to the discovered small-phone setup release blocker.
 Audit tree/history before publication. Do not expose credentials or private
 artifacts, rewrite history, force-push, invent licensing or provision Cloudflare.
 Ordinary CI has read-only permissions and no production credentials/deployment.
@@ -89,6 +90,9 @@ pending production/license/manual checks recorded honestly.
   below the initial 320x568 viewport in all Linux engines (54 other cases pass).
   Preserve ratio=1 and add only numeric empty-public-screen diagnostics to determine
   the actual geometry difference before applying a narrow correction.
+- Numeric diagnostics confirm Linux title/intro wrap adds 67.25px. Four <=360px
+  onboarding CSS declarations adjust typography/two gaps only. Original ratio=1,
+  touch targets, warnings and all security assertions remain; full gates required.
 
 ## Decisions and surprises
 

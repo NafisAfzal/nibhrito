@@ -1210,6 +1210,18 @@
     }
   }
   @media (max-width: 360px) {
+    .onboarding .setup-progress {
+      margin-bottom: var(--space-4);
+    }
+    .onboarding .page-intro {
+      margin-bottom: var(--space-5);
+    }
+    .onboarding .page-intro h1 {
+      font-size: 1.625rem;
+    }
+    .onboarding .page-intro .lede {
+      font-size: 1rem;
+    }
     .header-inner,
     .shell,
     .site-footer {

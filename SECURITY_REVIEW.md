@@ -190,3 +190,20 @@ triggers, and verifies cascades. It never exports the developer database. E2E no
 isolates D1 and the server rate root per run; interrupted test directories contain
 test-only ciphertext/configuration and remain ignored. Narrow privacy scanner and
 manual diff/import review find no plaintext/private-key backend persistence path.
+
+## GitHub publication review — 2026-10-05
+
+Repository/history audit, redacted-output regression, read-only CI and private
+reporting are added without changing cryptography, key storage, API contracts,
+Worker behavior, migrations, CSP or logging defaults. Private test artifacts remain
+disabled and are never uploaded. Examples and the single public screenshot contain
+no user data or operational secrets. No dependency version changes.
+
+Linux CI exposes a small-phone setup layout defect. Four CSS declarations scoped
+to <=360px onboarding change title/intro size and two gaps only. They preserve all
+controls, recovery warnings and content. Numeric failure diagnostics run on the
+empty setup form before any profile/key generation, returning no DOM/text/values.
+Original visibility, touch, confidentiality and lifecycle assertions remain intact.
+Built application JavaScript bytes are identical to e93fc70; stylesheet-dependent
+asset names change. Full local/CI acceptance is recorded in docs/21. This limited
+diff review adds no independent security or accessibility certification.

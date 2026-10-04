@@ -4,7 +4,8 @@
 
 Repository engineering starts from e93fc70, the verified local accessibility/Edge
 baseline. Sixteen meaningful development commits are preserved. This phase changes
-documentation, repository metadata/hygiene, CI and community guidance only.
+documentation, repository metadata/hygiene, CI and community guidance. Linux CI
+also requires a narrow small-phone setup typography/spacing correction.
 E2EE, crypto, API contracts, database behavior and privacy/security guarantees remain
 unchanged. No Cloudflare resources, production secrets, deployment or release tag.
 
@@ -70,7 +71,8 @@ resolve and package dependency metadata matches the lockfile.
 All 580 baseline Git objects were checked against refs/reflogs; none were orphaned.
 The added 69785-byte public PNG is the only deliberate binary. Source, Worker,
 shared contracts, migrations, runtime configuration and dependency versions have
-no diff from e93fc70. Final JS/CSS names match the accepted baseline:
+no diff from e93fc70 apart from the later scoped CSS fix. The preparation JS/CSS
+names matched the accepted baseline:
 index-BswXlgnk.js and index-BS90chmJ.css. Tailwind initially detected a utility word
 in new test assertion copy; rewording the assertion restored the exact asset names
 without an application/style change. Existing tests/assertions remain intact.
@@ -102,6 +104,16 @@ engines exposed the initial 320px setup field below the viewport. The full-visib
 assertion remains intact. Numeric public-screen geometry/font diagnostics are added
 before any profile/key generation to identify the platform difference; no private
 DOM, values, screenshots or recordings are collected.
+
+Diagnostics measured a 75px title and 89.25px introduction in Linux versus
+37.5px/59.5px on Windows, adding 67.25px above the first field. Four declarations
+scoped to onboarding at widths <=360px reduce heading size to 26px, introduction
+text to 16px and two existing vertical gaps. Controls, recovery warnings, copy,
+themes, routing and behavior remain unchanged. The ratio=1 viewport assertion,
+touch-target checks and all confidentiality/deletion/recovery assertions remain.
+No fonts/packages/runtime scripts are added. Linux CI must verify the correction.
+Built JavaScript bytes remain identical to e93fc70. The four CSS additions produce
+index-Dcwf44wJ.css and the dependency-derived filename index-Bd8V0yrB.js.
 
 No license is selected. The owner must make that decision separately.
 Next production step, after publication verification and operator approval:

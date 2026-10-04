@@ -23,10 +23,13 @@ regression test. The complete history is published at
 [NafisAfzal/nibhrito](https://github.com/NafisAfzal/nibhrito), public with main as the
 default branch. Free security protections/private reports and weekly dependency
 automation are verified. Initial CI failed because its global Wrangler log setting
-suppressed structured D1 test output; a CI-only correction is being verified.
+suppressed structured D1 test output; that correction passes. Linux CI then found
+the initial phone setup field below the viewport because of extra text wrapping.
+A <=360px onboarding typography/spacing correction is being verified with the
+original viewport and security assertions intact.
 See [publication evidence](docs/21_GITHUB_PUBLICATION.md).
-No license is selected. Application code, protocol, API, database and locked
-dependency versions have no changes in this phase.
+No license is selected. Protocol, API, database, key handling and locked dependency
+versions have no changes. The only application change is the scoped setup CSS fix.
 
 ## Implemented
 

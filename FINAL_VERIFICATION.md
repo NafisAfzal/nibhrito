@@ -103,10 +103,22 @@ The only new binary is a reviewed 69785-byte public landing screenshot, captured
 in a fresh context without API/external requests or private application state.
 README/index/policy relative links resolve; package dependencies match the lockfile.
 
-Application/security/runtime configuration and migrations have no diff. JS/CSS
+At preparation HEAD 95237cb, application/security/runtime configuration and
+migrations had no diff. JS/CSS
 names remain index-BswXlgnk.js and index-BS90chmJ.css after removing a Tailwind
 utility word from new test assertion copy. No existing test is weakened. Optional
 577-capture visual QA is not repeated because product visuals/source are unchanged.
 Publication/remote CI evidence is tracked in docs/21_GITHUB_PUBLICATION.md.
 License selection, real devices/assistive technology and live Cloudflare acceptance
 remain owner actions; no cloud deployment or release tag is made here.
+
+Linux CI subsequently revealed two release-environment issues, preserved in
+docs/21_GITHUB_PUBLICATION.md: a CI log-level setting suppressed structured D1 JSON
+(removed and reproduced/fixed locally), and wider system-font text wraps pushed
+the initial setup input below a 320x568 viewport. Numeric public-screen diagnostics
+identified the extra 67.25px. Four CSS declarations scoped to <=360px onboarding
+adjust heading/intro sizes and gaps; every original viewport, touch and security
+assertion stays enabled. This is the only application change during publication.
+Built application JavaScript bytes remain identical to e93fc70. The stylesheet
+change yields index-Dcwf44wJ.css / index-Bd8V0yrB.js. Final local/remote results for
+this correction are recorded in the publication doc.
