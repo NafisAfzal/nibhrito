@@ -64,7 +64,27 @@ test('small-phone touch journey preserves complete links, private drafts and del
     });
     await owner.goto('/create');
     const firstField = owner.getByLabel('Display name', { exact: true });
-    await expect(firstField).toBeInViewport({ ratio: 1 });
+    // This is the empty public setup screen, before keys or a profile exist.
+    // Failure diagnostics contain geometry/font names only, never DOM or values.
+    const publicLayout = await firstField.evaluate((input) => ({
+      viewport: [innerWidth, innerHeight],
+      font: getComputedStyle(document.body).fontFamily,
+      sizes: [
+        document.querySelector('.header-inner'),
+        document.querySelector('.page-intro'),
+        document.querySelector('.page-intro h1'),
+        document.querySelector('.page-intro .lede'),
+        document.querySelector('.product-flow'),
+        input,
+      ].map((element) => {
+        const rect = element?.getBoundingClientRect();
+        return rect ? [rect.y, rect.height] : null;
+      }),
+    }));
+    await expect(
+      firstField,
+      'Public setup geometry: ' + JSON.stringify(publicLayout),
+    ).toBeInViewport({ ratio: 1 });
     await touchTarget(firstField);
     const steps = owner
       .getByRole('list', { name: 'What you are creating' })

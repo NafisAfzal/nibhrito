@@ -97,6 +97,12 @@ global setting; the E2E server retains its own quiet logging configuration. This
 changes CI only, with no application/database behavior change. Follow-up CI must
 pass before this publication phase is complete.
 
+The follow-up passed all 113 Vitest tests and 54 browser cases. All three Linux
+engines exposed the initial 320px setup field below the viewport. The full-visibility
+assertion remains intact. Numeric public-screen geometry/font diagnostics are added
+before any profile/key generation to identify the platform difference; no private
+DOM, values, screenshots or recordings are collected.
+
 No license is selected. The owner must make that decision separately.
 Next production step, after publication verification and operator approval:
 follow docs/16 beginning with `npx wrangler login`, then verify the intended free

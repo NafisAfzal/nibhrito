@@ -85,6 +85,10 @@ pending production/license/manual checks recorded honestly.
 - First CI 37226329438 exposed a CI configuration defect: global Wrangler error
   verbosity suppresses D1 JSON in the portability test. Remove the global setting,
   preserve the quiet E2E wrapper and all original assertions; confirm follow-up CI.
+- Follow-up 37226946259 passes all unit/D1 tests, then exposes the first setup field
+  below the initial 320x568 viewport in all Linux engines (54 other cases pass).
+  Preserve ratio=1 and add only numeric empty-public-screen diagnostics to determine
+  the actual geometry difference before applying a narrow correction.
 
 ## Decisions and surprises
 
