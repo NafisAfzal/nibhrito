@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Release checks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      CI: 'true'
+      WRANGLER_SEND_METRICS: 'false'
+      WRANGLER_LOG: error
+      PLAYWRIGHT_NO_COPY_PROMPT: '1'
+    steps:
+      - name: Check out complete history
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set up pinned Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Install test browsers and system libraries
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Audit source and complete history
+        run: npm run test:repository && npm run repository:check
+      - name: Run full portable release gate
+        run: npm run check
+      # Private DOM/artifacts must not be uploaded, including on failure.
+      # No Cloudflare login, production secrets, migrations or deployment.
