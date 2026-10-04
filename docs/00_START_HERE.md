@@ -1,118 +1,51 @@
-# 00 - Start Here
+# Start here
 
-## কোথায় রাখবেন
+Nibhrito's MVP is implemented. Begin with the [root README](../README.md) for the
+product, privacy boundary and quick start, then use the [documentation index](README.md)
+to find the relevant technical reference.
 
-Windows laptop-এ project root হিসেবে এই path ব্যবহার করুন:
+## Run locally
 
-```text
-D:\Projects\Nibhrito\
+Clone the repository into a directory you control. From its root, with Node
+24.14.1 and npm >=9:
+
+```sh
+npm ci
+npx playwright install chromium firefox webkit
+npm run dev
 ```
 
-এই planning pack ZIP-টি `D:\Projects\`-এ extract করলে final folder হওয়া উচিত:
+Open <http://127.0.0.1:8787>. Local development requires no cloud login.
+Use synthetic messages and keep recovery codes private.
+See [local development](14_LOCAL_DEVELOPMENT.md) for migrations, iteration and tests.
 
-```text
-D:\Projects\Nibhrito\
-```
+## Before changing code
 
-`Nibhrito\Nibhrito\` double nesting করবেন না। `AGENTS.md`, `README.md`, `docs`, `.agent`, এবং `prompts` সরাসরি `D:\Projects\Nibhrito\`-এর ভেতরে থাকবে।
+Read [AGENTS.md](../AGENTS.md), the [master plan](01_MASTER_PLAN.md),
+[protocol](03_E2EE_PROTOCOL.md), [threat model](04_SECURITY_THREAT_MODEL.md),
+[data/API contract](05_DATA_API.md), [roadmap](06_IMPLEMENTATION_ROADMAP.md)
+and [testing requirements](09_TESTING_ACCEPTANCE.md). Consult
+[PROJECT_STATUS.md](../PROJECT_STATUS.md) before starting a phase: do not reimplement
+completed work or change the protocol without a documented security review.
 
-Google Drive-এ backup রাখতে চাইলে source-of-truth Git repository রাখুন laptop/GitHub-এ, এবং Drive-এ শুধু periodic ZIP/export রাখুন। Live Git repository সরাসরি Google Drive sync folder-এর মধ্যে রাখা recommended নয়, কারণ sync conflict `.git` metadata নষ্ট করতে পারে।
+The split documentation and recorded architecture decisions describe the current
+implementation. [NIBHRITO_MASTER_PLAN.md](../NIBHRITO_MASTER_PLAN.md) preserves the
+initial planning snapshot; proposed modules there are not a literal file inventory.
 
-## Recommended first commands - PowerShell
+## Maintainer infrastructure
 
-```powershell
-D:
-mkdir D:\Projects -Force
-cd D:\Projects\Nibhrito
+`.agent/` contains execution-plan requirements and completed engineering records.
+`prompts/` preserves initial implementation and security-review prompts. These are
+development aids, not installation requirements. The initial implementation prompts
+describe past work; follow current project status when resuming maintenance.
 
-git init
-git add .
-git commit -m "docs: add Nibhrito architecture and execution plan"
+Keep the working Git repository outside live file-sync folders that might conflict
+with `.git` metadata. Back up exports separately, and never commit databases,
+recovery material, environment secrets or private QA artifacts.
 
-node --version
-npm --version
-git --version
-```
+## Release boundary
 
-Install/update Codex:
-
-```powershell
-npm install -g @openai/codex@latest
-codex --version
-codex
-```
-
-Inside Codex, first ask it to read the plan, not to immediately improvise.
-
-Use the prompt in:
-
-```text
-prompts\CODEX_START.txt
-```
-
-For a deep security pass after implementation, use:
-
-```text
-prompts\SECURITY_REVIEW.txt
-```
-
-## Which model to use
-
-For repository-wide implementation, use the strongest coding/reasoning model that your Codex installation exposes. As of 2026-10-03, if **GPT-6 Astra** is available in Codex, use it for the initial architecture-to-code implementation and difficult security/refactor work. If it is not available, use **GPT-5.6 Sol** with high reasoning effort. Use faster models only for small mechanical edits after the architecture is stable.
-
-Do not let the model redesign the crypto protocol simply because another primitive looks newer. A protocol change requires an explicit architecture revision and interoperability tests.
-
-## Suggested workflow
-
-1. Install this planning pack.
-2. Commit it before generating application code.
-3. Start Codex from the repository root.
-4. Have it implement Phase 0 and Phase 1 first.
-5. Review crypto tests before proceeding to profile/message UI.
-6. Continue phase by phase.
-7. Deploy a staging environment before production.
-8. Run the final security prompt and fix all high-severity findings.
-
-## Expected final repository shape
-
-The coding agent may refine file names, but the target should remain simple:
-
-```text
-Nibhrito/
-├─ AGENTS.md
-├─ README.md
-├─ PROJECT_STATUS.md
-├─ package.json
-├─ package-lock.json
-├─ tsconfig.json
-├─ vite.config.ts
-├─ wrangler.jsonc
-├─ .dev.vars.example
-├─ .agent/
-│  └─ PLANS.md
-├─ docs/
-├─ prompts/
-├─ src/
-│  ├─ app/
-│  ├─ components/
-│  ├─ features/
-│  ├─ crypto/
-│  ├─ storage/
-│  ├─ lib/
-│  └─ main.tsx
-├─ worker/
-│  ├─ index.ts
-│  ├─ routes/
-│  ├─ middleware/
-│  ├─ repositories/
-│  └─ security/
-├─ shared/
-│  ├─ schemas/
-│  ├─ protocol/
-│  └─ types/
-├─ migrations/
-└─ tests/
-   ├─ unit/
-   ├─ integration/
-   └─ e2e/
-```
+Local release QA is complete. Cloudflare deployment and live acceptance remain
+pending; repository publication does not complete them. Follow
+[release acceptance](20_RELEASE_ACCEPTANCE.md) and
+[deployment operations](16_DEPLOYMENT_OPERATIONS.md) before launching a service.

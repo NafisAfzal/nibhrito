@@ -59,6 +59,12 @@ E2E, Worker dry run and low-threshold dependency audit. Individual commands:
 No remote deployment/provisioning occurs. Vitest uses two workers; Playwright uses
 one to bound local runtime/browser memory, with no retries or skipped security cases.
 
+Before publication or a contribution, also run `npm run test:repository` and
+`npm run repository:check`. These verify the audit tool and inspect the current
+tree plus complete Git history for common credentials, private/generated files
+and unreviewed binaries. They report no matched values. Manual review of content
+and images remains necessary; see [GitHub publication](21_GITHUB_PUBLICATION.md).
+
 The mandatory browser suite includes local automated accessibility checks with
 pinned, dev-only axe-core. Only generic rule IDs/counts leave the test browser;
 private DOM is never reported. The application does not load this test dependency.

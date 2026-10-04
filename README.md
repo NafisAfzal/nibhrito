@@ -1,74 +1,176 @@
 # Nibhrito (নিভৃত)
 
-**Privacy-first anonymous feedback with client-side end-to-end encryption.**
+Privacy-focused anonymous feedback with browser-side end-to-end encryption.
 
-Nibhrito is a small React/TypeScript application with a same-origin Cloudflare
-Worker API and D1 storage. Messages are encrypted before upload and decrypted on
-the recipient's device. There is no email/password account or operator recovery key.
+Nibhrito gives people a private place to receive honest opinions, appreciation and
+constructive suggestions. Create a profile, save your recovery code and share your
+link. Senders need no account. Their messages are encrypted before upload; you read
+them by decrypting in your browser.
 
-Profile setup, verified sending, encrypted inbox, recovery, encrypted local backups,
-settings, deletion/expiry, abuse limits and legal pages are implemented.
-The interface explains constructive feedback through practical examples, connected
-privacy/sharing/recovery diagrams and a public “Why Nibhrito” page at `/about`.
-See [the product-intent UX upgrade](docs/18_PRODUCT_INTENT_UX.md) for design and QA.
-See `PROJECT_STATUS.md` for current acceptance
-evidence, `docs/13_ARCHITECTURE_REVIEW.md` for audit decisions, and
-`docs/14_LOCAL_DEVELOPMENT.md` for setup and checks.
+**Status:** `1.0.0-rc.1`. The MVP and local release checks are complete. Cloudflare
+deployment and live release acceptance are pending. See [project status](PROJECT_STATUS.md).
 
-The local release candidate includes all locally executable MVP functionality.
-Read [IMPLEMENTATION.md](IMPLEMENTATION.md) for the flow and limitations and
-[deployment/operations](docs/16_DEPLOYMENT_OPERATIONS.md) for exact Cloudflare
-commands, external configuration and live acceptance gates. No production deployment
-or v1.0.0 release tag has been made.
+![Nibhrito's public landing page with a fictional feedback example](docs/assets/overview.png)
 
-[Release acceptance](docs/20_RELEASE_ACCEPTANCE.md) records the additional local
-accessibility/Edge checks and the remaining physical-device, assistive-technology
-and operator-controlled gates. If Microsoft Edge is installed, run `npm run test:edge`
-in addition to the mandatory three-engine `npm run check`.
+_Public interface only. The illustration is fictional; no user profile or private inbox is shown._
 
-```powershell
+## Capabilities
+
+- Text-only feedback, including Bangla, emoji and mixed-language messages.
+- Complete share links with a verified public key and locally generated QR codes.
+- Encrypted inbox with local search, filters, pagination and message deletion.
+- Recipient-controlled retention, incoming-message pause and profile deletion.
+- Recovery on another device using a saved code; encrypted local archive downloads.
+- Responsive light/dark interface, keyboard navigation and automated accessibility checks.
+
+There are no email/password accounts, attachments, analytics or third-party runtime scripts.
+
+## How it works
+
+1. The recipient's browser generates encryption keys and a separate owner token.
+   Setup requires confirmation that the recovery code has been saved.
+2. The recipient shares the **complete** `/u/<slug>#v=1&pk=...` link. Its fragment
+   carries the public key and is absent from the initial HTTP request.
+3. The sender's browser validates the link and encrypts the message with native
+   Web Crypto. Only the encrypted envelope is submitted.
+4. The authenticated inbox fetches ciphertext and decrypts locally. Expired
+   messages stop appearing immediately; bounded cleanup later removes their rows.
+
+```mermaid
+flowchart LR
+    R[Recipient browser] -->|Complete link with public key| S[Sender browser]
+    S -->|Encrypt locally, upload ciphertext| W[Same-origin Worker API]
+    W <-->|Encrypted envelopes and metadata| D[(Cloudflare D1)]
+    W -->|Authenticated ciphertext fetch| R
+    R -->|Decrypt locally| I[Readable inbox]
+```
+
+The same Worker deployment serves the static application and API. An hourly Cron
+Trigger performs bounded expiry cleanup. Storage sits behind repository interfaces
+and committed SQL migrations.
+
+## Privacy and encryption
+
+Messages are **anonymous to the recipient**, not guaranteed untraceable. Profile
+names, slugs and prompts are public. The backend retains ciphertext, encrypted
+recovery bundles, owner-token verifiers, delivery timestamps and short-lived abuse
+control counters. HMAC network buckets are pseudonymous; the application does not
+persist raw IP addresses, but the network provider processes connection metadata.
+
+The v1 protocol uses ephemeral P-256 ECDH, HKDF-SHA-256 and AES-256-GCM. The working
+recipient private key is a non-extractable `CryptoKey` in IndexedDB. Recovery
+material is encrypted before storage; the recovery secret never goes to the server.
+Owner authentication uses a separate bearer token, sent only to authenticated API
+routes. The server stores its SHA-256 verifier.
+
+Important limits:
+
+- You must trust the delivered frontend, browser and device. Malicious future
+  JavaScript or a compromised endpoint can read plaintext or use local keys.
+- v1 does not provide full forward secrecy after recipient-key compromise,
+  sender identity proof or individual-device revocation.
+- Losing local access and the recovery code means losing access to your messages.
+  Anyone who obtains the code can restore the profile.
+- Deletion cannot erase prior copies or temporary provider backups. Encrypted
+  archives retain copied messages after server expiry.
+- The server cannot moderate encrypted message contents. Quotas, rate limits and
+  recipient controls reduce abuse but do not guarantee availability.
+
+Read the [protocol](docs/03_E2EE_PROTOCOL.md), [threat model](docs/04_SECURITY_THREAT_MODEL.md)
+and [security self-review](SECURITY_REVIEW.md). These are not independent certifications.
+
+## Stack
+
+React · strict TypeScript · Vite · Tailwind CSS · native Web Crypto · IndexedDB ·
+Cloudflare Workers with Static Assets · D1/SQLite · Vitest · Playwright · axe-core.
+
+Runtime packages are React, React DOM and a local QR encoder. There is no
+third-party cryptography library. Direct versions and transitive integrity are locked.
+
+## Quick start
+
+Use Git, Node **24.14.1** (pinned in `.node-version`) and npm **9 or newer**.
+From the cloned repository root:
+
+```sh
 npm ci
-npm run db:migrate:local
+npx playwright install chromium firefox webkit
 npm run dev
 ```
 
-Open `http://127.0.0.1:8787`. No Cloudflare login is needed for local development.
+Open <http://127.0.0.1:8787>. No Cloudflare account or external credentials are
+needed. `dev` generates an ignored local server rate secret, applies both local
+migrations, builds the frontend and starts the Worker. Use synthetic feedback.
 
-## Start here
+To inspect or apply local migrations separately:
 
-Read in this order:
+```sh
+npm run db:list:local
+npm run db:migrate:local
+```
 
-1. `AGENTS.md`
-2. `docs/00_START_HERE.md`
-3. `docs/01_MASTER_PLAN.md`
-4. `docs/03_E2EE_PROTOCOL.md`
-5. `docs/04_SECURITY_THREAT_MODEL.md`
-6. `docs/06_IMPLEMENTATION_ROADMAP.md`
-7. `docs/09_TESTING_ACCEPTANCE.md`
-8. `docs/10_AGENT_RUNBOOK.md`
+Frontend edits require a rebuild; an optional Vite HMR workflow is described in
+[local development](docs/14_LOCAL_DEVELOPMENT.md). Never put secrets in `VITE_*`
+variables, committed config, issue reports or screenshots.
 
-The remaining files are references for data/API, UX, deployment, legal/privacy, and sources.
+## Repository map
 
-## Final architecture decision
+| Path                  | Purpose                                                            |
+| --------------------- | ------------------------------------------------------------------ |
+| `src/`                | Browser UI, crypto, recovery and local storage                     |
+| `worker/`             | API routes, authorization, abuse controls and storage repositories |
+| `shared/`             | Versioned envelopes, schemas, encoding and API types               |
+| `migrations/`         | D1/SQLite schema and counter triggers                              |
+| `tests/`              | Unit, local D1 integration and browser/security journeys           |
+| `scripts/`            | Local setup, privacy checks and guarded deployment tooling         |
+| `docs/`               | Architecture, development, operations and acceptance evidence      |
+| `.github/`            | CI, dependency updates and contribution templates                  |
+| `.agent/`, `prompts/` | Maintainer planning records and agent instructions                 |
 
-- Frontend: React + TypeScript + Vite, static SPA
-- Styling: Tailwind CSS; CSS-first motion; no remote runtime UI scripts
-- API: Cloudflare Worker, strict TypeScript, native Web APIs
-- Database: Cloudflare D1
-- Crypto: browser-native Web Crypto API
-- Message encryption: ephemeral P-256 ECDH -> HKDF-SHA-256 -> AES-256-GCM
-- Recipient public key: carried in the complete share URL fragment (`#v=1&pk=...`) so it is not sent to the server in the initial HTTP request
-- Private key: generated in the browser, persisted as a non-extractable `CryptoKey` in IndexedDB after an encrypted recovery bundle is prepared
-- Recovery: high-entropy recovery secret + server-stored encrypted recovery blob; server never receives the recovery secret
-- Owner authentication: random high-entropy owner token, server stores only a SHA-256 verifier; token is included in the encrypted recovery bundle
-- Abuse protection: byte caps, atomic storage/admission quotas, short-lived HMAC network buckets; challenge escalation is disabled pending a separately reviewed design
-- Message expiry: `expires_at`, indexed cleanup, scheduled deletion plus opportunistic cleanup
-- Hosting: Cloudflare free tier first, designed for migration rather than claiming guaranteed free hosting forever
+## Testing and verification
 
-## Product claim language
+```sh
+npm run check
+npm run repository:check
+# Additional local gate when Microsoft Edge is installed:
+npm run test:edge
+```
 
-Use: **“Anonymous to the recipient, end-to-end encrypted in the browser, and stored as ciphertext.”**
+`check` covers formatting, lint, strict TypeScript, unit/integration tests, a
+production build, three-engine browser tests (including accessibility), Worker
+dry run, privacy checks and dependency audit. `repository:check` inspects current
+files and Git history for common credentials and unwanted generated files; manual
+review is still required for content and images.
 
-Do not claim: **“completely untrackable,” “impossible for anyone to identify you,” “developer can never access anything,” or “free forever.”**
+Browser tests use disposable profiles/databases. Traces, screenshots, video and
+private DOM failure snapshots stay disabled. A deliberate failing-assertion probe
+verifies artifact privacy before each browser suite. CI runs the same portable
+gate without Cloudflare credentials or deployment.
 
-The server is designed not to possess message-decryption keys. However, network infrastructure processes technical metadata, endpoint devices can be compromised, and a web application operator could theoretically ship a malicious future JavaScript build. The product must communicate these limitations clearly.
+[Final verification](FINAL_VERIFICATION.md) records local evidence;
+[release acceptance](docs/20_RELEASE_ACCEPTANCE.md) lists remaining physical-device,
+assistive-technology and live operator checks.
+
+## Deployment
+
+The target is one Cloudflare Worker with Static Assets, D1 and scheduled cleanup,
+using the free tier first. No service is deployed yet, and CI does not deploy.
+Provider terms and capacity can change.
+
+Follow [deployment and operations](docs/16_DEPLOYMENT_OPERATIONS.md) for login,
+provisioning, migrations, guarded configuration/secrets, live acceptance and rollback.
+The production example contains placeholders and cannot be deployed. Keep API
+calls on the same origin. Do not tag `v1.0.0` until live acceptance passes.
+
+## Documentation and contributions
+
+Start with the [documentation index](docs/README.md) and
+[implementation overview](IMPLEMENTATION.md).
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before a pull request.
+Report vulnerabilities privately as described in [SECURITY.md](SECURITY.md);
+use public issues only for non-sensitive bugs and feature suggestions.
+
+## License
+
+No license has been selected. Publication does not grant a software license;
+the owner must make an explicit licensing decision.

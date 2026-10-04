@@ -1,6 +1,6 @@
 # Nibhrito Project Status
 
-Updated 2026-10-04. This file, IMPLEMENTATION.md, SECURITY_REVIEW.md and the phase
+Updated 2026-10-05. This file, IMPLEMENTATION.md, SECURITY_REVIEW.md and the phase
 ExecPlans provide the handoff; no chat history is needed.
 
 ## Current state
@@ -12,6 +12,17 @@ installed-Edge release checks are complete. Phases 1–8 and all three UX passes
 in reviewable commits, each with its plan, audit and verification handoff.
 Package is 1.0.0-rc.1. No Cloudflare provisioning, production secret/configuration,
 deployment or v1.0.0 tag has occurred. External production acceptance remains pending.
+
+GitHub publication preparation follows the verified e93fc70 baseline. Public-source
+and full-history review found no real secrets or unwanted private/generated files.
+The README, portable start guide and documentation index now provide the developer
+entry point; security/contribution guidance, templates, read-only CI and weekly
+dependency updates are prepared. The publication gate passes 113 Vitest tests,
+57 portable browser cases and 19 installed-Edge cases, plus the new native audit
+regression test. Remote publication and initial CI verification remain pending.
+See [publication evidence](docs/21_GITHUB_PUBLICATION.md).
+No license is selected. Application code, protocol, API, database and locked
+dependency versions have no changes in this phase.
 
 ## Implemented
 
@@ -200,21 +211,21 @@ See docs/20_RELEASE_ACCEPTANCE.md for exact remaining device/AT checks.
 
 ## Commit history and continuation
 
-| Phase      | Commit      | Outcome                                                               |
-| ---------- | ----------- | --------------------------------------------------------------------- |
-| 0          | db74924     | Existing accepted foundation; earlier audit 0e1b44f, baseline 451488c |
-| 1          | 7e39a09     | Browser crypto/recovery protocol and tests                            |
-| 2          | d6b7450     | Profile creation/authentication/browser restore                       |
-| 3          | 538a138     | Verified encrypted sender and local QR                                |
-| 4          | 0873ea8     | Owner-scoped inbox/settings/deletion                                  |
-| 5          | 4cdbd11     | Bounded expiry cleanup and atomic quotas                              |
-| 6          | 93e64c9     | Bounded privacy-preserving abuse controls                             |
-| 7          | 3f1515e     | Legal UX, encrypted backups and adversarial hardening                 |
-| 8          | 1df1698     | Guarded deployment/operations and clean local acceptance              |
-| UI         | ab5dc7d     | Complete consumer UI/UX redesign                                      |
-| Intent UX  | 8526c06     | Positive product story and visual explanations across key flows       |
-| Polish UX  | 8c891fa     | Visual meaning, semantic color and final phone/touch refinement       |
-| Release QA | This commit | Local accessibility/Edge acceptance and matched browser theme colors  |
+| Phase      | Commit  | Outcome                                                               |
+| ---------- | ------- | --------------------------------------------------------------------- |
+| 0          | db74924 | Existing accepted foundation; earlier audit 0e1b44f, baseline 451488c |
+| 1          | 7e39a09 | Browser crypto/recovery protocol and tests                            |
+| 2          | d6b7450 | Profile creation/authentication/browser restore                       |
+| 3          | 538a138 | Verified encrypted sender and local QR                                |
+| 4          | 0873ea8 | Owner-scoped inbox/settings/deletion                                  |
+| 5          | 4cdbd11 | Bounded expiry cleanup and atomic quotas                              |
+| 6          | 93e64c9 | Bounded privacy-preserving abuse controls                             |
+| 7          | 3f1515e | Legal UX, encrypted backups and adversarial hardening                 |
+| 8          | 1df1698 | Guarded deployment/operations and clean local acceptance              |
+| UI         | ab5dc7d | Complete consumer UI/UX redesign                                      |
+| Intent UX  | 8526c06 | Positive product story and visual explanations across key flows       |
+| Polish UX  | 8c891fa | Visual meaning, semantic color and final phone/touch refinement       |
+| Release QA | e93fc70 | Local accessibility/Edge acceptance and matched browser theme colors  |
 
 Each phase has a self-contained plan in .agent/plans. Original planning snapshot
 NIBHRITO_MASTER_PLAN.md is preserved; split docs plus documented audit decisions

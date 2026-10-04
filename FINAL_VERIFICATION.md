@@ -6,7 +6,7 @@ Local Phase 8 is 1df1698; earlier commits are in PROJECT_STATUS.md. This record
 accompanies the remaining local accessibility/Edge release QA commit,
 not a production release or independent audit.
 
-From D:\Projects\Nibhrito:
+From the repository root:
 
 | Check                                           | Result                                                                                                                                   |
 | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
@@ -85,3 +85,28 @@ logs, real production Edge/Safari/devices/assistive technology and second-device
 review the policy baseline. Local dry run and headless engines cannot establish those.
 Encrypted exports are implemented; the rest of conditional Phase 9 remains optional
 post-launch work. Local start: npm run dev, http://127.0.0.1:8787.
+
+## GitHub publication checks — 2026-10-05
+
+Repository-only preparation from e93fc70. Clean npm ci installs 229 packages with
+no dependency version changes. The full local check passes again: formatting,
+lint, strict TypeScript, 113 Vitest tests, 57 three-engine browser cases, artifact
+privacy probe, production build, Worker dry run, privacy scan and dependency audit
+with zero vulnerabilities. Installed Edge separately passes all 19 cases. The same
+272 accessibility state scans have no violations; manual limitations remain.
+
+New repository audit and its native regression pass, including removed historical
+credential detection and redacted output. All 580 baseline Git objects are reachable
+from audited refs/reflogs; no orphaned objects. Initial history has 354 blob versions,
+no real secrets or private/generated files, and a 167979-byte maximum (lockfile).
+The only new binary is a reviewed 69785-byte public landing screenshot, captured
+in a fresh context without API/external requests or private application state.
+README/index/policy relative links resolve; package dependencies match the lockfile.
+
+Application/security/runtime configuration and migrations have no diff. JS/CSS
+names remain index-BswXlgnk.js and index-BS90chmJ.css after removing a Tailwind
+utility word from new test assertion copy. No existing test is weakened. Optional
+577-capture visual QA is not repeated because product visuals/source are unchanged.
+Publication/remote CI evidence is tracked in docs/21_GITHUB_PUBLICATION.md.
+License selection, real devices/assistive technology and live Cloudflare acceptance
+remain owner actions; no cloud deployment or release tag is made here.

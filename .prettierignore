@@ -10,7 +10,6 @@ package-lock.json
 # Preserve the original planning pack's formatting.
 AGENTS.md
 NIBHRITO_MASTER_PLAN.md
-docs/00_START_HERE.md
 docs/01_MASTER_PLAN.md
 docs/03_E2EE_PROTOCOL.md
 docs/04_SECURITY_THREAT_MODEL.md
