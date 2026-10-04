@@ -140,6 +140,27 @@ checks pass. 577 masked visual checks find no overflow; disposable fixtures dele
 Physical phone keyboards/Safari/assistive technology remain manual verification;
 headless touch/viewport checks do not establish real-device or WCAG certification.
 
+## Remaining local release QA — 2026-10-04
+
+Diff review against 8c891fa: crypto, key storage, API client, shared schemas, Worker,
+migrations, authorization, expiry/deletion/rate limiting, security headers/CSP,
+production configuration and legal policy bodies have no changes. Shipped code only
+updates two theme-color HTML values to match existing surface tokens. Application
+JS/CSS asset hashes remain unchanged. All original test assertions are retained.
+
+One pinned dev-only axe-core package adds no runtime dependency or external request.
+Tests summarize violations/inconclusive checks in-browser, returning only rule IDs,
+impact and counts; no node HTML, selectors, failure summaries or private text enter
+reports. They use the existing private-artifact fixture and isolated D1/profiles.
+The separate installed-Edge config retains zero retries, disabled artifacts and all
+mandatory engines. Full check passes 113 Vitest/57 browser cases; Edge passes another 19. The initial Edge startup timeout occurred before tests, is recorded in docs/20,
+and was followed by a healthy diagnostic and passing sequential run.
+
+No new Critical/High or actionable Medium finding identified. All 272 automated
+accessibility scans report no rule violations; inconclusive rules and real assistive
+technology remain manual checks, not security/accessibility certification. Physical
+phone/iOS and operator production gates are unchanged; no deployment or tag occurred.
+
 ## Evidence and remaining release gates
 
 Security tests cover modified ciphertext/tag/IV/salt/ephemeral key/AAD, wrong key,

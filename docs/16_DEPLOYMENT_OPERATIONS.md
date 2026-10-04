@@ -23,6 +23,12 @@ checks, native crypto/unit/D1/API tests, three-engine E2E, build, local Worker d
 and dependency audit. D1 export/import/decryption and trigger verification are part
 of integration tests; rerun alone with `npm run db:portability`.
 
+Automated accessibility checks are included in the three-engine gate. On a machine
+with Edge installed, also run `npm run test:edge`. The additional evidence and exact
+physical-device/assistive-technology checklist are in
+[20_RELEASE_ACCEPTANCE.md](20_RELEASE_ACCEPTANCE.md). Automated engines do not
+replace those manual checks or authorize production deployment.
+
 ## External production actions
 
 Use a Cloudflare account on the intended Workers Free plan. No domain purchase or

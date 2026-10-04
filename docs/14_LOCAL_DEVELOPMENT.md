@@ -59,6 +59,13 @@ E2E, Worker dry run and low-threshold dependency audit. Individual commands:
 No remote deployment/provisioning occurs. Vitest uses two workers; Playwright uses
 one to bound local runtime/browser memory, with no retries or skipped security cases.
 
+The mandatory browser suite includes local automated accessibility checks with
+pinned, dev-only axe-core. Only generic rule IDs/counts leave the test browser;
+private DOM is never reported. The application does not load this test dependency.
+With Microsoft Edge installed, run `npm run test:edge` separately to exercise the
+same journeys in its actual channel, without replacing any mandatory engine.
+See [20_RELEASE_ACCEPTANCE.md](20_RELEASE_ACCEPTANCE.md) for scope and manual checks.
+
 Integration tests apply all committed migrations to disposable real D1 runtimes.
 The portability test uses native protocol ciphertext, exports and imports a fresh
 D1 fixture through pinned Wrangler, restores/decrypts, and checks migration records,

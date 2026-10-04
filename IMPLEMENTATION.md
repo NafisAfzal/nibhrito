@@ -1,6 +1,6 @@
 # Nibhrito implementation
 
-Local release candidate `1.0.0-rc.1`, 2026-10-03. Phases 1–7 are implemented; Phase 8
+Local release candidate `1.0.0-rc.1`, 2026-10-04. Phases 1–7 are implemented; Phase 8
 local deployment tooling and verification are implemented. Actual Cloudflare
 provisioning/deployment and live release acceptance remain operator actions.
 
@@ -94,7 +94,15 @@ long Bangla/English/mixed drafts, shortened keyboard-space viewport, network ret
 browser encryption/decryption and cancellation/confirmation of deletion. No protocol,
 API, database, key handling, dependency, security-header or policy changes. See
 [docs/19_FINAL_MOBILE_POLISH.md](docs/19_FINAL_MOBILE_POLISH.md) for details.
-The latest full gate passes 113 Vitest tests and 51 browser cases, 17 per engine.
+Remaining local release QA adds a pinned dev-only accessibility engine and explicit
+`npm run test:edge` for machines with Edge installed. Diagnostics return only generic
+rule IDs/counts, not DOM or secrets. Only shipped HTML theme-color metadata changes
+to match the accepted palette; application JS/CSS, security and data behavior stay
+unchanged. The latest full gate passes 113 Vitest tests and 57 browser cases, 19 per
+mandatory engine, plus all 19 cases in installed Edge. Automated accessibility scans
+cover 272 states across four browsers, without claiming full WCAG conformance.
+See [docs/20_RELEASE_ACCEPTANCE.md](docs/20_RELEASE_ACCEPTANCE.md) for scope,
+the recorded initial Edge startup timeout and exact remaining device/AT checks.
 
 ## Production and operations
 

@@ -21,6 +21,11 @@ Read [IMPLEMENTATION.md](IMPLEMENTATION.md) for the flow and limitations and
 commands, external configuration and live acceptance gates. No production deployment
 or v1.0.0 release tag has been made.
 
+[Release acceptance](docs/20_RELEASE_ACCEPTANCE.md) records the additional local
+accessibility/Edge checks and the remaining physical-device, assistive-technology
+and operator-controlled gates. If Microsoft Edge is installed, run `npm run test:edge`
+in addition to the mandatory three-engine `npm run check`.
+
 ```powershell
 npm ci
 npm run db:migrate:local
