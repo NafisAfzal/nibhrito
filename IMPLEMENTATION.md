@@ -117,6 +117,14 @@ See [design guide](DESIGN.md) and
 [design engineering evidence](docs/22_DESIGN_ENGINEERING.md) for measurements,
 security diff, CI and owner inspection.
 
+The most recent independent review corrects a link-name `pattern` that browsers
+rejected as an invalid regular expression, which had silently disabled native
+slug validation, and replaces the duplicated `/about` walkthrough with an honest
+account of what Nibhrito does and cannot do. It changes no protocol, API,
+database, key handling, dependency, header or policy behavior. The current gate
+passes 113 unit/integration tests and 63 browser cases, 21 per mandatory engine,
+plus all 21 cases in installed Edge and the same 272 accessibility states.
+
 ## Production and operations
 
 Follow [docs/16_DEPLOYMENT_OPERATIONS.md](docs/16_DEPLOYMENT_OPERATIONS.md) for exact
