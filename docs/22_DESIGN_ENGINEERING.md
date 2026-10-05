@@ -143,6 +143,14 @@ Publication uses the existing read-only [release-check workflow](https://github.
 Its run for the published commit must be checked after the push; local/remote
 hashes, clean state and the exact run URL are verified in the owner handoff.
 
+The first published browser inspection confirmed both theme sources load on
+desktop and phone, then found explicit HTML image heights preventing natural
+scaling inside GitHub's narrow column. A documentation-only follow-up removes
+those heights in all four diagrams and the homepage preview. The SVGs keep their
+intrinsic dimensions; GitHub now controls the displayed width and proportional
+height. No application code, image pixels or security behavior changes in that
+correction.
+
 ## Motion and interface review
 
 Verdict: approve for local owner review. The story makes a single short entrance;

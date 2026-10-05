@@ -47,7 +47,7 @@ Stores public metadata and opaque encrypted envelopes. It must not contain messa
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/message-flow-dark.svg" />
   <source media="(prefers-color-scheme: light)" srcset="assets/message-flow-light.svg" />
-  <img src="assets/message-flow-light.svg" alt="Separate sender and recipient browsers surround the Worker/D1 server boundary; messages cross that boundary as ciphertext" width="480" height="824" />
+  <img src="assets/message-flow-light.svg" alt="Separate sender and recipient browsers surround the Worker/D1 server boundary; messages cross that boundary as ciphertext" width="480" />
 </picture>
 
 The diagram separates the two browser roles. The public key arrives through the

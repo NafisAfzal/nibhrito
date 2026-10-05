@@ -90,7 +90,7 @@ Free-tier limits must be treated as capacity constraints, not promises of perman
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/message-flow-dark.svg" />
   <source media="(prefers-color-scheme: light)" srcset="docs/assets/message-flow-light.svg" />
-  <img src="docs/assets/message-flow-light.svg" alt="The sender encrypts locally, the Worker stores ciphertext in D1, and the authenticated recipient decrypts locally" width="480" height="824" />
+  <img src="docs/assets/message-flow-light.svg" alt="The sender encrypts locally, the Worker stores ciphertext in D1, and the authenticated recipient decrypts locally" width="480" />
 </picture>
 
 The diagram presentation has been refreshed to show the implemented v1 flow.

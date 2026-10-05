@@ -90,7 +90,7 @@ Free-tier limits must be treated as capacity constraints, not promises of perman
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/message-flow-dark.svg" />
   <source media="(prefers-color-scheme: light)" srcset="assets/message-flow-light.svg" />
-  <img src="assets/message-flow-light.svg" alt="The sender encrypts locally, the Worker stores ciphertext in D1, and the authenticated recipient decrypts locally" width="480" height="824" />
+  <img src="assets/message-flow-light.svg" alt="The sender encrypts locally, the Worker stores ciphertext in D1, and the authenticated recipient decrypts locally" width="480" />
 </picture>
 
 The `#pk` URL fragment is not part of the HTTP request sent to the server. The sender client uses that fragment as the recipient public encryption key.

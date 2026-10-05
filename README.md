@@ -13,7 +13,7 @@ deployment and live release acceptance are pending. See [project status](PROJECT
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/overview-dark.png" />
   <source media="(prefers-color-scheme: light)" srcset="docs/assets/overview.png" />
-  <img src="docs/assets/overview.png" alt="Nibhrito's public landing page with a fictional question and constructive reply" width="1440" height="800" />
+  <img src="docs/assets/overview.png" alt="Nibhrito's public landing page with a fictional question and constructive reply" width="1440" />
 </picture>
 
 Both themes are designed deliberately and follow your browser/system preference.
@@ -45,7 +45,7 @@ There are no email/password accounts, attachments, analytics or third-party runt
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/message-flow-dark.svg" />
   <source media="(prefers-color-scheme: light)" srcset="docs/assets/message-flow-light.svg" />
-  <img src="docs/assets/message-flow-light.svg" alt="Sender browser encrypts locally; the Worker and D1 handle ciphertext; the recipient browser fetches and decrypts locally" width="480" height="824" />
+  <img src="docs/assets/message-flow-light.svg" alt="Sender browser encrypts locally; the Worker and D1 handle ciphertext; the recipient browser fetches and decrypts locally" width="480" />
 </picture>
 
 The same Worker deployment serves the static application and API. An hourly Cron

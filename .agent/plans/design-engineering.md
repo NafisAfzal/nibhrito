@@ -104,6 +104,10 @@ The owner receives the exact local run command and a short manual inspection lis
   all 20 cases too. Across four browsers, 272 automated accessibility scans have
   no violations. GitHub CI remains the final verification step before owner
   visual acceptance.
+- Normal push completed; local and remote hashes match. Actual published
+  desktop/phone light/dark inspection found fixed HTML image heights adding
+  unwanted space on mobile. A narrow documentation-only follow-up removes the
+  heights in the screenshot and all diagram embeds, preserving source assets.
 
 ## 11. Decisions and surprises
 
