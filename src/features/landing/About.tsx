@@ -16,7 +16,6 @@ export function About() {
     <article className="about-page">
       <header className="hero about-hero">
         <div>
-          <p className="eyebrow">{c.eyebrow}</p>
           <h1>{c.title}</h1>
           <p className="lede">{c.intro}</p>
           <p className="purpose-note">
@@ -33,7 +32,6 @@ export function About() {
       <OpenFeedback />
       <section className="story-section" aria-labelledby="about-uses-title">
         <div className="section-heading">
-          <p className="eyebrow">{story.uses.eyebrow}</p>
           <h2 id="about-uses-title">{story.uses.title}</h2>
         </div>
         <UseCases />
@@ -47,7 +45,6 @@ export function About() {
         aria-labelledby="about-privacy-title"
       >
         <div className="section-heading">
-          <p className="eyebrow">Privacy for people</p>
           <h2 id="about-privacy-title">The feedback is yours to read.</h2>
         </div>
         <PrivacyFlow />

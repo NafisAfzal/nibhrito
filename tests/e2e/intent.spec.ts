@@ -82,32 +82,35 @@ test('public storytelling explains constructive feedback without crypto, storage
 test('captioned privacy flows retain reading order and adapt to mobile, tablet and desktop', async ({
   page,
 }) => {
-  for (const width of [320, 360, 375, 390, 412, 430, 768, 1024, 1280, 1440]) {
-    await page.setViewportSize({ width, height: 900 });
-    await page.goto('/about');
-    const flow = page.getByRole('list', {
-      name: 'How a message stays private',
-    });
-    const items = flow.locator(':scope > li');
-    await expect(items).toHaveCount(3);
-    await expect(items.nth(0)).toContainText('Encrypted before it leaves');
-    await expect(items.nth(1)).toContainText('Stored as encrypted data');
-    await expect(items.nth(2)).toContainText('Opened with your key');
-    const first = await items.nth(0).boundingBox(),
-      last = await items.nth(2).boundingBox();
-    expect(first !== null && last !== null).toBe(true);
-    if (width <= 640) expect(last!.y).toBeGreaterThan(first!.y);
-    else {
-      expect(last!.x).toBeGreaterThan(first!.x);
-      expect(last!.y).toBe(first!.y);
+  for (const colorScheme of ['light', 'dark'] as const) {
+    await page.emulateMedia({ colorScheme, reducedMotion: 'reduce' });
+    for (const width of [320, 360, 375, 390, 412, 430, 768, 1024, 1280, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('/about');
+      const flow = page.getByRole('list', {
+        name: 'How a message stays private',
+      });
+      const items = flow.locator(':scope > li');
+      await expect(items).toHaveCount(3);
+      await expect(items.nth(0)).toContainText('Encrypted before it leaves');
+      await expect(items.nth(1)).toContainText('Stored as encrypted data');
+      await expect(items.nth(2)).toContainText('Opened with your key');
+      const first = await items.nth(0).boundingBox(),
+        last = await items.nth(2).boundingBox();
+      expect(first !== null && last !== null).toBe(true);
+      if (width <= 640) expect(last!.y).toBeGreaterThan(first!.y);
+      else {
+        expect(last!.x).toBeGreaterThan(first!.x);
+        expect(last!.y).toBe(first!.y);
+      }
+      for (const icon of await flow.locator('svg').all())
+        await expect(icon).toHaveAttribute('aria-hidden', 'true');
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      ).toBe(true);
     }
-    for (const icon of await flow.locator('svg').all())
-      await expect(icon).toHaveAttribute('aria-hidden', 'true');
-    expect(
-      await page.evaluate(
-        () => document.documentElement.scrollWidth <= innerWidth,
-      ),
-    ).toBe(true);
   }
   await page.goto('/restore');
   await expect(

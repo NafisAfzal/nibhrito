@@ -1,4 +1,50 @@
 import { test, expect } from './test';
+
+test('theme changes keep action text readable throughout the switch', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ colorScheme: 'light' });
+  await page.goto('/');
+  await expect(page.locator('.header-cta')).toBeVisible();
+  for (const reducedMotion of ['no-preference', 'reduce'] as const) {
+    for (const colorScheme of ['dark', 'light'] as const) {
+      await page.emulateMedia({ colorScheme, reducedMotion });
+      const minimum = await page
+        .locator('.header-cta')
+        .evaluate(async (button) => {
+          function luminance(rgb: string) {
+            const c = rgb
+              .match(/[\d.]+/g)!
+              .slice(0, 3)
+              .map(Number)
+              .map((v) => {
+                v /= 255;
+                return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+              });
+            return 0.2126 * c[0]! + 0.7152 * c[1]! + 0.0722 * c[2]!;
+          }
+          let minimum = Infinity;
+          // Sample actual painted colors, not just the final semantic tokens.
+          // Return a number only; no DOM, private values, or screenshots.
+          for (let frame = 0; frame < 20; frame++) {
+            await new Promise<void>((resolve) =>
+              requestAnimationFrame(() => resolve()),
+            );
+            const style = getComputedStyle(button);
+            const a = luminance(style.color),
+              b = luminance(style.backgroundColor);
+            minimum = Math.min(
+              minimum,
+              (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05),
+            );
+          }
+          return minimum;
+        });
+      expect(minimum).toBeGreaterThanOrEqual(4.5);
+    }
+  }
+});
 test('legal navigation, mobile layout and keyboard focus are usable', async ({
   page,
   browserName,

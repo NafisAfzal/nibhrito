@@ -175,7 +175,6 @@ export function OpenFeedback() {
       aria-labelledby="openness-title"
     >
       <div className="section-heading">
-        <p className="eyebrow">{c.eyebrow}</p>
         <h2 id="openness-title">{c.title}</h2>
         <p className="lede">{c.intro}</p>
       </div>

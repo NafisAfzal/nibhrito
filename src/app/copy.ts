@@ -5,7 +5,7 @@ export const copy = {
     title: 'Invite honest feedback.',
     titleQuiet: 'Give it a private space.',
     intro:
-      'Share your personal link. Let people offer opinions, encouragement and thoughtful suggestions, without their name attached.',
+      'Share your link. Receive thoughtful feedback, without the sender’s name attached.',
     create: 'Create your private link',
     how: 'See how it works',
     trust: 'End-to-end encrypted · No account needed to send',

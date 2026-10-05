@@ -16,7 +16,6 @@ export function Landing() {
     <div className="landing">
       <section className="hero" aria-labelledby="hero-title">
         <div className="hero-copy">
-          <p className="eyebrow">{c.eyebrow}</p>
           <h1 id="hero-title">
             {c.title}
             <span>{c.titleQuiet}</span>
@@ -42,7 +41,6 @@ export function Landing() {
 
       <section className="story-section" aria-labelledby="uses-title">
         <div className="section-heading">
-          <p className="eyebrow">{story.uses.eyebrow}</p>
           <h2 id="uses-title">{story.uses.title}</h2>
         </div>
         <UseCases />
@@ -54,7 +52,6 @@ export function Landing() {
         aria-labelledby="how-title"
       >
         <div className="section-heading">
-          <p className="eyebrow">{c.howEyebrow}</p>
           <h2 id="how-title">{c.howTitle}</h2>
         </div>
         <ProductFlow label="How Nibhrito works" steps={story.steps} />
@@ -65,7 +62,6 @@ export function Landing() {
         aria-labelledby="privacy-title"
       >
         <div className="section-heading">
-          <p className="eyebrow">{c.privacyEyebrow}</p>
           <h2 id="privacy-title">{c.privacyTitle}</h2>
           <p className="lede">
             Privacy gives honest feedback a little more room. Here is what

@@ -1,6 +1,6 @@
 @layer components {
   .story-section {
-    padding-block: var(--space-8);
+    padding-block: clamp(2.5rem, 5vw, 4rem);
   }
   .story-section .section-heading {
     max-width: 660px;
@@ -19,34 +19,57 @@
     height: 24px;
   }
   .feedback-example {
+    position: relative;
+    isolation: isolate;
     margin: 0;
-    padding: var(--space-6);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    background: var(--surface-subtle);
+    padding: var(--space-7) var(--space-5) var(--space-6);
     min-width: 0;
+  }
+  .feedback-example::before,
+  .feedback-example::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: 48% 48% 4% 4%;
+  }
+  .feedback-example::before {
+    inset: 0 12px;
+    background: linear-gradient(
+      150deg,
+      var(--hero-wash),
+      var(--surface-subtle) 48%,
+      var(--accent-soft)
+    );
+    border: 1px solid var(--border);
+  }
+  .feedback-example::after {
+    inset: 18px 30px;
+    border: 1px solid var(--border);
   }
   .feedback-example figcaption {
     color: var(--muted);
     font-size: var(--font-caption);
-    margin-bottom: var(--space-5);
+    text-align: center;
+    margin-bottom: var(--space-6);
   }
   .example-question,
   .example-response {
     padding: var(--space-5);
-    background: var(--surface);
+    background: var(--surface-elevated);
     border-radius: var(--radius);
     border: 1px solid var(--border);
   }
   .example-question {
-    margin-right: var(--space-5);
+    margin-right: var(--space-7);
     border-bottom-left-radius: var(--space-1);
+    box-shadow: var(--shadow);
   }
   .example-response {
-    margin-left: var(--space-5);
-    border-left: 3px solid var(--primary);
+    margin-left: var(--space-7);
+    border-color: var(--accent);
     border-bottom-right-radius: var(--space-1);
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-brand);
   }
   .example-label,
   .example-read,
@@ -66,7 +89,7 @@
   }
   .example-question p,
   .example-response p {
-    font-size: var(--font-small);
+    font-size: 1rem;
     line-height: 1.7;
     margin: 0;
   }
@@ -81,8 +104,8 @@
     background: var(--primary-soft);
   }
   .private-person {
-    color: var(--info);
-    background: var(--info-soft);
+    color: var(--accent);
+    background: var(--accent-soft);
   }
   .example-protected {
     display: flex;
@@ -91,14 +114,16 @@
     color: var(--accent);
     font-size: var(--font-caption);
     margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border);
   }
   .example-read {
     color: var(--accent);
-    padding-top: var(--space-4);
+    padding-top: var(--space-3);
   }
   .example-connection {
     color: var(--primary);
-    padding: var(--space-4) var(--space-5);
+    padding: var(--space-4) var(--space-7);
   }
   .example-connection > .icon:last-child {
     margin-left: auto;
@@ -119,6 +144,18 @@
     color: var(--primary);
     background: var(--primary-soft);
   }
+  .use-cases article:nth-child(2) .story-symbol {
+    color: var(--info);
+    background: var(--info-soft);
+  }
+  .use-cases article:nth-child(3) .story-symbol {
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .use-cases article:nth-child(4) .story-symbol {
+    color: var(--profile-rose);
+    background: var(--profile-rose-soft);
+  }
   .use-cases {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
@@ -131,8 +168,7 @@
   }
   .use-cases blockquote {
     margin: var(--space-3) 0 0;
-    padding-left: var(--space-4);
-    border-left: 2px solid var(--accent);
+    color: var(--muted);
     font-size: var(--font-small);
   }
   .product-flow {
@@ -164,20 +200,20 @@
   .pressure-scenario {
     margin: 0;
     padding: var(--space-6);
-    border-top: 3px solid var(--info);
-    background: var(--info-soft);
+    border: 1px solid var(--border);
+    background: var(--surface-subtle);
     border-radius: var(--radius-sm);
   }
   .pressure-scenario h3 {
-    color: var(--info);
+    color: var(--foreground);
     margin-bottom: var(--space-5);
   }
   .private-scenario {
-    border-color: var(--primary);
-    background: var(--primary-soft);
+    background: linear-gradient(135deg, var(--accent-soft), var(--surface));
+    box-shadow: var(--shadow);
   }
   .private-scenario h3 {
-    color: var(--primary);
+    color: var(--accent);
   }
   .pressure-path {
     display: grid;
@@ -198,34 +234,35 @@
     place-items: center;
     width: 44px;
     height: 44px;
-    border: 1px solid var(--info);
-    color: var(--info);
+    border: 1px solid var(--input-border);
+    color: var(--muted);
     border-radius: 50%;
     margin-bottom: var(--space-3);
   }
   .private-scenario .pressure-symbol {
-    color: var(--primary);
-    border-color: var(--primary);
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--surface);
   }
   .pressure-arrow {
     position: absolute;
     right: -8px;
     top: 12px;
-    color: var(--info);
+    color: var(--muted);
   }
   .private-scenario .pressure-arrow {
-    color: var(--primary);
+    color: var(--accent);
   }
   .pressure-scenario blockquote {
     margin: var(--space-5) 0 0;
     padding-top: var(--space-4);
-    border-top: 1px solid var(--info);
+    border-top: 1px solid var(--border);
     font-size: var(--font-small);
-    color: var(--info);
+    color: var(--muted);
   }
   .private-scenario blockquote {
-    color: var(--primary);
-    border-color: var(--primary);
+    color: var(--accent);
+    border-color: var(--border);
   }
   .comparison-qualifier {
     color: var(--muted);
@@ -292,11 +329,19 @@
     color: var(--accent);
     background: var(--accent-soft);
   }
+  .product-flow:not(.flow-privacy) li:nth-child(2) .flow-symbol {
+    color: var(--info);
+    background: var(--info-soft);
+  }
+  .product-flow:not(.flow-privacy) li:nth-child(3) .flow-symbol {
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
   .privacy-story {
-    padding-inline: var(--space-6);
-    background: var(--surface);
+    padding-inline: var(--space-7);
+    background: linear-gradient(115deg, var(--accent-soft), var(--surface));
     border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius);
   }
   .story-limits {
     max-width: 760px;
@@ -388,6 +433,24 @@
     background: var(--success-soft);
     border-color: var(--success);
   }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero .example-question {
+      animation: conversation-arrives 240ms var(--ease-out);
+    }
+    .hero .example-response {
+      animation: conversation-arrives 280ms 60ms var(--ease-out) backwards;
+    }
+  }
+  @keyframes conversation-arrives {
+    from {
+      opacity: 0.95;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
   .expiry-label {
     display: flex;
     flex-wrap: wrap;
@@ -477,7 +540,7 @@
       gap: var(--space-6);
     }
     .feedback-example {
-      padding: var(--space-5);
+      padding: var(--space-6) var(--space-4);
     }
     .example-question,
     .example-response {
@@ -502,11 +565,8 @@
     .story-section {
       padding-block: var(--space-7);
     }
-    .hero h1 {
-      font-size: clamp(2rem, 8.5vw, 2.5rem);
-    }
     .feedback-example {
-      padding: var(--space-5);
+      padding: var(--space-6) var(--space-4);
     }
     .example-question {
       margin-right: var(--space-4);
@@ -517,6 +577,13 @@
     .example-question,
     .example-response {
       padding: var(--space-4);
+    }
+    .example-question p,
+    .example-response p {
+      font-size: var(--font-small);
+    }
+    .example-connection {
+      padding-inline: var(--space-5);
     }
     .use-cases,
     .principles,
@@ -577,7 +644,7 @@
       padding-inline: var(--space-5);
     }
     .privacy-story .flow-arrow {
-      background: var(--surface);
+      background: var(--accent-soft);
     }
     .flow-compact {
       gap: var(--space-5);
