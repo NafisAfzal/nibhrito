@@ -12,6 +12,7 @@ references from historical planning and design evidence.
 - [Data model and API](05_DATA_API.md).
 - [Testing and acceptance](09_TESTING_ACCEPTANCE.md).
 - [Contributing](../CONTRIBUTING.md).
+- [Design guide](../DESIGN.md) — semantic colors, themes, composition, and motion.
 
 ## Security reviewers
 
@@ -39,6 +40,8 @@ references from historical planning and design evidence.
 - [Master plan](01_MASTER_PLAN.md) and [implementation roadmap](06_IMPLEMENTATION_ROADMAP.md).
 - [Product UX plan](12_PRODUCT_UX.md), [UI redesign](17_UI_REDESIGN.md),
   [product-intent UX](18_PRODUCT_INTENT_UX.md) and [mobile polish](19_FINAL_MOBILE_POLISH.md).
+- [Design engineering](22_DESIGN_ENGINEERING.md) — tooling audit, independent
+  critique, visual changes, and final acceptance evidence.
 - [Sources](11_SOURCES.md) — references from the initial planning work.
 - [Agent runbook](10_AGENT_RUNBOOK.md), [execution-plan rules](../.agent/PLANS.md)
   and [original combined planning snapshot](../NIBHRITO_MASTER_PLAN.md).

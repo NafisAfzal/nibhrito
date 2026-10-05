@@ -1,4 +1,49 @@
-# Final local verification — 2026-10-04
+# Final local verification
+
+## Design engineering and presentation — 2026-10-05
+
+This is a local visual/repository pass from verified GitHub commit
+`219d17e634cc0d5adc84d7fad1a0e24f40767366`, not production acceptance.
+`npm run check` exits 0: formatting, lint, strict TypeScript, 113 Vitest tests in
+18 files, all 60 portable browser cases (20 per engine), artifact privacy probe,
+production build, Worker dry run, privacy check and dependency audit. npm reports
+zero vulnerabilities. `npm run test:edge` also exits 0 with all 20 cases. Across
+four browsers, 272 automated accessibility state scans have no violations;
+inconclusive rules remain manual review. Existing assertions, retries, skips and
+deadlines are unchanged.
+
+The new painted-color browser regression catches theme-transition contrast,
+and the existing captioned-flow test now covers both themes. Public geometry
+checks cover 22 combinations and masked synthetic private states cover 176,
+at eleven widths from 320 through 1600 pixels: no horizontal overflow. The
+synthetic request review found no plaintext/recovery-code leakage, browser errors
+or third-party origin. Sampled landing CLS is zero in both themes, and no font is
+downloaded. JS is 337.05 kB / 105.57 kB gzip; CSS 41.46 kB / 9.07 kB gzip.
+No dependency version changes.
+
+Gitleaks current/history scans, OSV lockfile scan (331 packages), Semgrep source
+scan, repository/history audit and its native removed-secret regression pass.
+Four approved public visuals are reviewed: fictional light/dark homepage PNGs and
+script-free architecture SVGs. The same accurate diagram replaces four Mermaid
+blocks. Relative documentation paths and GitHub Markdown picture rendering pass.
+
+The first visual gate caught transient low contrast during color crossfades;
+colors now change immediately, with a measured browser regression. An earlier
+Windows/WebKit run timed out during context cleanup after the phone assertions;
+the unchanged isolated case and fresh complete gate pass. Neither failure is
+hidden by a retry, timeout increase, weakened assertion or skipped test.
+
+Local measurements and publication checks are recorded in
+[design engineering evidence](docs/22_DESIGN_ENGINEERING.md); the published
+commit's remote result is available in the
+[release-check workflow](https://github.com/NafisAfzal/nibhrito/actions/workflows/ci.yml).
+Crypto, verified links, private key handling, recovery, API, Worker/D1 behavior,
+expiry/deletion, abuse controls, headers/CSP and privacy guarantees are unchanged.
+Physical devices, assistive technology, legal review and live deployment acceptance
+remain separate manual gates. No production resource, secret, deployment or tag
+was created. Earlier phase evidence below is retained as history.
+
+## Release QA — 2026-10-04
 
 Release candidate 1.0.0-rc.1 with the complete UI/UX redesign and product-intent UX
 upgrade and final mobile/visual polish, preserving ab5dc7d, 8526c06 and 8c891fa.

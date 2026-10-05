@@ -34,7 +34,14 @@ const rules = [
 ];
 const findings = new Set();
 const visuals = new Set();
-const approvedVisuals = new Set(['docs/assets/overview.png']);
+// Public fictional landing views and reviewed, script-free architecture SVGs.
+// Review the actual pixels/source again whenever any of these assets changes.
+const approvedVisuals = new Set([
+  'docs/assets/overview.png',
+  'docs/assets/overview-dark.png',
+  'docs/assets/message-flow-light.svg',
+  'docs/assets/message-flow-dark.svg',
+]);
 function pathCheck(path, location) {
   if (
     /(?:^|\/)(?:\.env(?:\..*)?|\.dev\.vars(?:\..*)?)$/.test(path) &&

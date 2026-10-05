@@ -104,6 +104,19 @@ cover 272 states across four browsers, without claiming full WCAG conformance.
 See [docs/20_RELEASE_ACCEPTANCE.md](docs/20_RELEASE_ACCEPTANCE.md) for scope,
 the recorded initial Edge startup timeout and exact remaining device/AT checks.
 
+The later design-engineering pass refines this working UI with separate warm
+light/slate dark palettes, native serif public display type, layered conversation
+surfaces and bounded brand gradients. Browser/OS theme selection and first paint
+remain unchanged. Small CSS entrances, press and receipt feedback respect reduced
+motion; action colors change immediately to retain contrast. There are no new
+runtime packages, fonts, requests or persistence. Paired public screenshots and
+reproducible SVG diagrams improve the README without changing architecture.
+The final portable gate passes 113 unit/integration tests and 60 browser cases,
+plus 20 installed-Edge cases and 272 automated accessibility scans.
+See [design guide](DESIGN.md) and
+[design engineering evidence](docs/22_DESIGN_ENGINEERING.md) for measurements,
+security diff, CI and owner inspection.
+
 ## Production and operations
 
 Follow [docs/16_DEPLOYMENT_OPERATIONS.md](docs/16_DEPLOYMENT_OPERATIONS.md) for exact

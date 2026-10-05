@@ -209,3 +209,29 @@ asset names change. Full local/CI acceptance is recorded in docs/21. This limite
 diff review adds no independent security or accessibility certification. The final
 local gate passes 113 Vitest/57 portable/19 Edge cases with 272 local accessibility
 scans; Linux CI 37230785921 passes too. No existing security assertion is removed.
+
+## Design engineering review — 2026-10-05
+
+Scoped diff review from `219d17e634cc0d5adc84d7fad1a0e24f40767366`: semantic
+colors, CSS composition/motion, public heading scaffolding and one factual
+intro change; no crypto, key storage, recovery logic, shared schema, API,
+Worker, D1/migration, authorization, expiry/deletion, rate-limit, CSP/header,
+production configuration or legal policy-body changes. No runtime dependency,
+remote script/font, analytics, telemetry or new persistence. E2EE/protocol,
+API/database behavior and privacy/security guarantees remain unchanged.
+
+The browser regression samples painted action contrast through both theme
+directions. Color crossfades were removed after actual transient low contrast;
+movement remains optional and near-opaque text entrances preserve readability.
+All existing security/privacy assertions and private-artifact safeguards remain.
+Synthetic geometry/request inspection found no message/recovery-code leakage,
+browser errors or third-party origin. Private captures are masked and ignored;
+published previews contain only fictional public homepage content.
+
+Repository/history audit, native removed-secret regression, redacted Gitleaks
+current/history scans, Semgrep and OSV checks pass. The visual allowlist adds
+only the reviewed public screenshot and script-free diagram pairs; unknown
+visual/generated files still fail review. No new Critical/High or actionable
+Medium finding was identified in this scoped self-review. This is not an
+independent security/accessibility certification. Full evidence and recorded
+local verification failures are in [design engineering](docs/22_DESIGN_ENGINEERING.md).

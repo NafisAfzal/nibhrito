@@ -10,9 +10,15 @@ them by decrypting in your browser.
 **Status:** `1.0.0-rc.1`. The MVP and local release checks are complete. Cloudflare
 deployment and live release acceptance are pending. See [project status](PROJECT_STATUS.md).
 
-![Nibhrito's public landing page with a fictional feedback example](docs/assets/overview.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/overview-dark.png" />
+  <source media="(prefers-color-scheme: light)" srcset="docs/assets/overview.png" />
+  <img src="docs/assets/overview.png" alt="Nibhrito's public landing page with a fictional question and constructive reply" width="1440" height="800" />
+</picture>
 
-_Public interface only. The illustration is fictional; no user profile or private inbox is shown._
+Both themes are designed deliberately and follow your browser/system preference.
+[Light preview](docs/assets/overview.png) · [Dark preview](docs/assets/overview-dark.png).
+These show public fictional content, with no private profile or inbox.
 
 ## Capabilities
 
@@ -36,14 +42,11 @@ There are no email/password accounts, attachments, analytics or third-party runt
 4. The authenticated inbox fetches ciphertext and decrypts locally. Expired
    messages stop appearing immediately; bounded cleanup later removes their rows.
 
-```mermaid
-flowchart LR
-    R[Recipient browser] -->|Complete link with public key| S[Sender browser]
-    S -->|Encrypt locally, upload ciphertext| W[Same-origin Worker API]
-    W <-->|Encrypted envelopes and metadata| D[(Cloudflare D1)]
-    W -->|Authenticated ciphertext fetch| R
-    R -->|Decrypt locally| I[Readable inbox]
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/message-flow-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="docs/assets/message-flow-light.svg" />
+  <img src="docs/assets/message-flow-light.svg" alt="Sender browser encrypts locally; the Worker and D1 handle ciphertext; the recipient browser fetches and decrypts locally" width="480" height="824" />
+</picture>
 
 The same Worker deployment serves the static application and API. An hourly Cron
 Trigger performs bounded expiry cleanup. Storage sits behind repository interfaces
@@ -167,6 +170,7 @@ calls on the same origin. Do not tag `v1.0.0` until live acceptance passes.
 
 Start with the [documentation index](docs/README.md) and
 [implementation overview](IMPLEMENTATION.md).
+The [design guide](DESIGN.md) explains the visual system and theme behavior.
 Read [CONTRIBUTING.md](CONTRIBUTING.md) before a pull request.
 Report vulnerabilities privately as described in [SECURITY.md](SECURITY.md);
 use public issues only for non-sensitive bugs and feature suggestions.

@@ -5,6 +5,19 @@ ExecPlans provide the handoff; no chat history is needed.
 
 ## Current state
 
+The final design-engineering and repository-presentation pass is implemented
+against the verified GitHub baseline `219d17e634cc0d5adc84d7fad1a0e24f40767366`.
+Both browser themes now have deliberate semantic colors and surface depth, an
+editorial public hero, a brand-derived conversation composition and short native
+CSS feedback. No theme-storage feature or runtime dependency was added. Paired
+public screenshots and maintainable light/dark architecture SVGs replace the
+single preview and four cramped Mermaid blocks. The source of truth for this
+pass is [design engineering evidence](docs/22_DESIGN_ENGINEERING.md) and
+[the design guide](DESIGN.md). The complete local gate passes 113 Vitest tests,
+60 portable browser cases and 20 installed-Edge cases. Local visual approval and
+physical-device/AT checks remain owner actions before the separate production
+deployment phase.
+
 All locally executable MVP work is complete: Phases 0–7 and Phase 8 deployment
 preparation. The complete UI/UX redesign, product-intent upgrade and final mobile/
 visual polish are implemented and verified. Remaining local accessibility and
@@ -31,7 +44,8 @@ also passes all 19 cases after the correction. Publication is complete; Cloudfla
 deployment and live/manual acceptance remain separate owner actions.
 See [publication evidence](docs/21_GITHUB_PUBLICATION.md).
 No license is selected. Protocol, API, database, key handling and locked dependency
-versions have no changes. The only application change is the scoped setup CSS fix.
+versions have no changes. The scoped setup CSS correction was the only application
+change during publication; this later design pass is separately documented above.
 
 Publication evidence: [passing Linux CI](https://github.com/NafisAfzal/nibhrito/actions/runs/37230785921),
 [source/history audit and verified settings](docs/21_GITHUB_PUBLICATION.md).

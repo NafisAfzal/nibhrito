@@ -87,18 +87,15 @@ Free-tier limits must be treated as capacity constraints, not promises of perman
 
 ## 5. Core data flow
 
-```mermaid
-flowchart LR
-    A[Recipient browser] -->|create profile + public metadata| B[Worker API]
-    B --> C[(D1)]
-    A -->|share URL containing #pk| D[Sender]
-    D -->|plaintext stays local| E[Web Crypto]
-    E -->|ciphertext envelope| B
-    B --> C
-    A -->|authenticated inbox fetch| B
-    B -->|ciphertext envelopes| A
-    A -->|local decrypt| F[Readable inbox]
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/message-flow-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="docs/assets/message-flow-light.svg" />
+  <img src="docs/assets/message-flow-light.svg" alt="The sender encrypts locally, the Worker stores ciphertext in D1, and the authenticated recipient decrypts locally" width="480" height="824" />
+</picture>
+
+The diagram presentation has been refreshed to show the implemented v1 flow.
+The surrounding text remains the original planning snapshot; use the split
+architecture and protocol documents for current implementation details.
 
 The `#pk` URL fragment is not part of the HTTP request sent to the server. The sender client uses that fragment as the recipient public encryption key.
 

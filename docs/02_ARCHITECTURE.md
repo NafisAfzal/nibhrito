@@ -44,42 +44,37 @@ Stores public metadata and opaque encrypted envelopes. It must not contain messa
 
 ## Trust boundaries
 
-```mermaid
-flowchart TB
-    subgraph Browser[Trusted recipient/sender browser runtime]
-        P[Plaintext]
-        K[Private keys]
-        WC[Web Crypto]
-    end
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/message-flow-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="assets/message-flow-light.svg" />
+  <img src="assets/message-flow-light.svg" alt="Separate sender and recipient browsers surround the Worker/D1 server boundary; messages cross that boundary as ciphertext" width="480" height="824" />
+</picture>
 
-    subgraph Edge[Server-side trust boundary]
-        W[Worker API]
-        D[(D1)]
-    end
-
-    P --> WC
-    K --> WC
-    WC -->|ciphertext only| W
-    W --> D
-```
+The diagram separates the two browser roles. The public key arrives through the
+complete verified share link; private keys are used locally. Public profile data
+and delivery metadata remain visible to the server. See the
+[protocol](03_E2EE_PROTOCOL.md) for validation, recovery, and key handling.
+Regenerate both diagram palettes with `node scripts/documentation-diagram.mjs`.
 
 ## Frontend module boundaries
 
-Recommended modules:
+Current modules:
 
 ```text
 src/crypto/protocol.ts
-src/crypto/encoding.ts
-src/crypto/keyring.ts
+src/crypto/keys.ts
 src/crypto/recovery.ts
-src/crypto/fingerprint.ts
+src/crypto/backup.ts
+src/crypto/shareLink.ts
 src/storage/indexedDb.ts
 src/features/profile/
 src/features/send/
 src/features/inbox/
 src/features/recovery/
 src/lib/api.ts
-src/lib/security.ts
+src/lib/browser.ts
+shared/protocol/encoding.ts
+shared/protocol/envelope.ts
 ```
 
 Keep `src/crypto` free of React imports. It should be testable as a pure browser/Web Crypto library.
@@ -90,14 +85,19 @@ Keep `src/crypto` free of React imports. It should be testable as a pure browser
 worker/index.ts
 worker/routes/profiles.ts
 worker/routes/messages.ts
+worker/routes/inbox.ts
+worker/routes/api.ts
 worker/routes/recovery.ts
 worker/middleware/auth.ts
 worker/middleware/rateLimit.ts
 worker/middleware/securityHeaders.ts
 worker/repositories/profileRepository.ts
 worker/repositories/messageRepository.ts
-worker/repositories/recoveryRepository.ts
-worker/security/redaction.ts
+worker/repositories/rateRepository.ts
+worker/repositories/readinessRepository.ts
+worker/repositories/cleanupRepository.ts
+worker/security/request.ts
+worker/security/network.ts
 ```
 
 ## Dependency rules
