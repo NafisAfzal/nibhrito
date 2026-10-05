@@ -122,3 +122,11 @@ assertion stays enabled. This is the only application change during publication.
 Built application JavaScript bytes remain identical to e93fc70. The stylesheet
 change yields index-Dcwf44wJ.css / index-Bd8V0yrB.js. Final local/remote results for
 this correction are recorded in the publication doc.
+
+Final correction results: npm run check exits 0 with 113 Vitest and 57 portable
+browser cases. npm run test:edge exits 0 with all 19 cases; 272 local accessibility
+scans have no violations. All original assertions/retry/skip/artifact settings are
+preserved. Native repository regression and history audit pass. Linux GitHub CI
+37230785921 passes the complete gate at a2469c2. Initial CI failures remain recorded
+and are resolved without weakening checks. Publication handoff docs rerun CI on
+main; final commit/hash/clean-state results are verified after that push.

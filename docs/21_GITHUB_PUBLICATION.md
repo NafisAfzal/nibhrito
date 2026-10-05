@@ -111,9 +111,35 @@ scoped to onboarding at widths <=360px reduce heading size to 26px, introduction
 text to 16px and two existing vertical gaps. Controls, recovery warnings, copy,
 themes, routing and behavior remain unchanged. The ratio=1 viewport assertion,
 touch-target checks and all confidentiality/deletion/recovery assertions remain.
-No fonts/packages/runtime scripts are added. Linux CI must verify the correction.
+No fonts/packages/runtime scripts are added. Linux CI verifies the correction.
 Built JavaScript bytes remain identical to e93fc70. The four CSS additions produce
 index-Dcwf44wJ.css and the dependency-derived filename index-Bd8V0yrB.js.
+
+## Completed acceptance
+
+Application HEAD a2469c2724532b1c1b8a7976131da97409f8db4a passes
+[Linux CI 37230785921](https://github.com/NafisAfzal/nibhrito/actions/runs/37230785921).
+The complete local gate also passes after the fix: 113 Vitest tests, 57 portable
+browser cases, all non-browser checks and zero vulnerabilities. Edge passes all
+19 cases separately; 272 local accessibility state scans report no violations.
+No retries/skips or relaxed assertions. Audit regression and current/full-history
+checks pass again. Final documentation follows this validated application HEAD;
+its unchanged CI workflow runs again on main.
+
+The live GitHub README was checked in a fresh browser: correct brand heading,
+loaded public image, visible diagram frame and twelve documentation links. All
+entry-point relative links resolve. No sensitive/generated content was published.
+The largest audited blob remains the 167979-byte lockfile; the sole deliberate
+binary is the 69785-byte public image. No dependency versions or license rights
+changed. No history was rewritten or force-pushed. Original e93fc70 remains an
+ancestor, with the complete original sixteen-commit history preserved.
+
+Verified free repository settings are listed above; no UI-only setting is claimed.
+Dependabot PRs are left for owner review. No deployment, production D1/secret,
+domain purchase or paid feature was created. E2EE guarantees, cryptographic
+protocol, API contracts, database behavior and privacy/security guarantees remain
+unchanged. Real devices/assistive technology, legal review and live production
+acceptance still belong to the next controlled deployment phase.
 
 No license is selected. The owner must make that decision separately.
 Next production step, after publication verification and operator approval:

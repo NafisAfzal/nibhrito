@@ -25,11 +25,17 @@ default branch. Free security protections/private reports and weekly dependency
 automation are verified. Initial CI failed because its global Wrangler log setting
 suppressed structured D1 test output; that correction passes. Linux CI then found
 the initial phone setup field below the viewport because of extra text wrapping.
-A <=360px onboarding typography/spacing correction is being verified with the
-original viewport and security assertions intact.
+A <=360px onboarding typography/spacing correction passes the complete local gate
+and Linux CI with the original viewport/security assertions intact. Installed Edge
+also passes all 19 cases after the correction. Publication is complete; Cloudflare
+deployment and live/manual acceptance remain separate owner actions.
 See [publication evidence](docs/21_GITHUB_PUBLICATION.md).
 No license is selected. Protocol, API, database, key handling and locked dependency
 versions have no changes. The only application change is the scoped setup CSS fix.
+
+Publication evidence: [passing Linux CI](https://github.com/NafisAfzal/nibhrito/actions/runs/37230785921),
+[source/history audit and verified settings](docs/21_GITHUB_PUBLICATION.md).
+The final handoff commit updates documentation only and runs the same CI again.
 
 ## Implemented
 

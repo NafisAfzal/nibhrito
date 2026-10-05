@@ -19,6 +19,7 @@ Before a pull request:
 
 ```sh
 npm run check
+npm run test:repository
 npm run repository:check
 # When Microsoft Edge is installed:
 npm run test:edge

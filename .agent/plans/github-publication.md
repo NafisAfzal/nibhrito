@@ -93,6 +93,13 @@ pending production/license/manual checks recorded honestly.
 - Numeric diagnostics confirm Linux title/intro wrap adds 67.25px. Four <=360px
   onboarding CSS declarations adjust typography/two gaps only. Original ratio=1,
   touch targets, warnings and all security assertions remain; full gates required.
+- Corrected application a2469c2 passes Linux CI 37230785921 and the full local
+  gate (113 Vitest/57 portable/19 Edge cases, 272 local accessibility scans).
+  Native audit regression/current/history checks pass; no dependency version changes.
+- Publication acceptance met: original history preserved, public main, free security
+  settings verified, README live rendering/links checked, no secrets/generated data.
+  Final documentation handoff triggers the unchanged CI once more; verify its HEAD,
+  working tree and CI before the final report. Cloudflare/license/manual gates remain.
 
 ## Decisions and surprises
 

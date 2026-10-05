@@ -206,4 +206,6 @@ empty setup form before any profile/key generation, returning no DOM/text/values
 Original visibility, touch, confidentiality and lifecycle assertions remain intact.
 Built application JavaScript bytes are identical to e93fc70; stylesheet-dependent
 asset names change. Full local/CI acceptance is recorded in docs/21. This limited
-diff review adds no independent security or accessibility certification.
+diff review adds no independent security or accessibility certification. The final
+local gate passes 113 Vitest/57 portable/19 Edge cases with 272 local accessibility
+scans; Linux CI 37230785921 passes too. No existing security assertion is removed.

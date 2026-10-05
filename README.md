@@ -131,6 +131,7 @@ variables, committed config, issue reports or screenshots.
 
 ```sh
 npm run check
+npm run test:repository
 npm run repository:check
 # Additional local gate when Microsoft Edge is installed:
 npm run test:edge
