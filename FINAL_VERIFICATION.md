@@ -1,5 +1,71 @@
 # Final local verification
 
+## Independent review and two corrections — 2026-10-06
+
+This pass started from verified handoff commit `d041d22` with a clean tree and a
+green workflow run. It audits the running application in a real browser and
+changes only genuine defects; see
+[design engineering evidence](docs/22_DESIGN_ENGINEERING.md) for the findings and
+the deliberate items left alone.
+
+Two corrections, both presentation-only. The link-name `pattern` was rejected by
+the `v`-flag character-class parser that browsers use for HTML `pattern`, so
+native slug validation was silently disabled and every load of the public `/create`
+page logged a console error; the hyphen is now escaped, and a browser regression
+asserts both the absence of the error and the accept/reject behaviour for valid,
+hyphenated, uppercase, spaced, underscored and edge-hyphen values. `/about` — the
+destination behind the "Why Nibhrito" navigation label — duplicated the landing
+page's walkthrough rather than explaining why the product exists; it now carries
+an honest "What Nibhrito does, and what it cannot do." account of capabilities and
+structural limits.
+
+From the repository root, `npm run check` exits 0 and `npm run test:edge` exits 0:
+
+| Check                             | Result                                                                                                                 |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Lint, format, strict TypeScript   | Pass; Prettier reports all matched files use its style                                                                 |
+| Vitest                            | 113 passed in 18 files                                                                                                 |
+| Portable browser cases            | 63 passed, 21 each across Chromium, Firefox and WebKit; no retries or skips                                            |
+| Installed Edge                    | 21 passed, same assertions, isolated profile, no retries or skips                                                      |
+| Automated accessibility           | 272 state scans across four browsers; 68 per engine (53 public/menu, 15 private); no violations                        |
+| Private artifact probe            | Pass before every browser suite; assertion DOM absent from output and artifacts                                        |
+| Production build                  | Pass; JS 338.56 kB / 106.09 kB gzip, CSS 42.44 kB / 9.24 kB gzip                                                       |
+| Worker dry run                    | Pass; 5 asset files, 32.73 KiB total upload; no remote provisioning or upload                                          |
+| Privacy and tracked-secret checks | Pass                                                                                                                   |
+| npm audit --audit-level=low       | 0 vulnerabilities                                                                                                      |
+| Gitleaks 8.30.1                   | Working tree and all 27 commits of history; no leaks, output redacted                                                  |
+| OSV-Scanner                       | Lockfile scan, 331 packages; no vulnerability results                                                                  |
+| Semgrep                           | `p/security-audit` and `p/typescript`, 97 rules on 154 tracked files; 0 findings                                       |
+| Repository audit                  | 188 current files, 433 historical blob versions, no credential or generated-file matches; its native regression passes |
+
+Independent browser audit, Chromium, synthetic data only: ten public routes at
+1440px and 390px, plus an eleven-width sweep from 320 to 1600px in both themes.
+Zero horizontal overflow, zero console or page errors, zero requests to any origin
+other than `127.0.0.1:8787`, zero downloaded fonts and sampled landing CLS of 0 in
+both themes. A separate authenticated walkthrough covered setup, recovery
+acknowledgement, complete link and QR, inbox, composer, send confirmation, the
+mixed Bangla/English/emoji message, decryption, cancelled and confirmed deletion
+and restore validation in both themes at desktop and phone; no synthetic plaintext
+appeared in any request. Reduced motion renders the finished story with no
+transformation and no animation. The design detector reports only the pre-existing
+intentional recovery warning accent and nothing on the changed files.
+
+One machine-level constraint is recorded honestly. The shared Windows host ran
+several unrelated development servers and fell to 1.17 GB free of 7.49 GB during
+the first combined gate run. That produced nondeterministic WebKit failures — a
+whole-browser close in one run and a scattered eight in another, with no common
+test. Isolating the variable proved it was not the change: the untouched baseline
+then passed WebKit 20/20, and the changed code passed 21/21 under identical
+conditions. No assertion, timeout, retry, skip or browser target was changed, and
+the final complete `npm run check` passed all three engines in one run once the
+host had memory available.
+
+E2EE guarantees, P-256 ECDH, HKDF-SHA-256, AES-256-GCM, the verified-link model,
+API contracts, database behavior, expiry and deletion, rate limiting, CSP and
+security headers are unchanged. Physical devices, assistive technology, legal
+review and live deployment acceptance remain separate manual gates. No production
+resource, secret, deployment or tag was created. Earlier phase evidence follows.
+
 ## Design engineering and presentation — 2026-10-05
 
 This is a local visual/repository pass from verified GitHub commit

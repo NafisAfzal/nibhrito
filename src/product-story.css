@@ -171,6 +171,65 @@
     color: var(--muted);
     font-size: var(--font-small);
   }
+  .boundaries {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-7);
+  }
+  .boundary-column {
+    min-width: 0;
+    padding-top: var(--space-5);
+    border-top: 2px solid var(--accent);
+  }
+  .boundary-column h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+  }
+  .boundary-column h3 .icon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    color: var(--accent);
+  }
+  .boundary-cannot {
+    border-top-color: var(--warning);
+  }
+  .boundary-cannot h3 .icon {
+    color: var(--warning);
+  }
+  .boundaries ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .boundaries li {
+    position: relative;
+    padding-block: var(--space-3);
+    padding-left: var(--space-6);
+    color: var(--foreground);
+    font-size: var(--font-small);
+    line-height: 1.6;
+    border-top: 1px solid var(--border);
+  }
+  .boundaries li::before {
+    content: '';
+    position: absolute;
+    top: calc(var(--space-3) + 0.8em - 4px);
+    left: 4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .boundary-cannot li::before {
+    background: var(--warning);
+  }
+  .boundary-note {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+  }
   .product-flow {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -588,6 +647,10 @@
     .use-cases,
     .principles,
     .product-flow {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-6);
+    }
+    .boundaries {
       grid-template-columns: minmax(0, 1fr);
       gap: var(--space-6);
     }

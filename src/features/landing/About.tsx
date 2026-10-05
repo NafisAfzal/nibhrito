@@ -2,12 +2,11 @@ import { copy } from '../../app/copy';
 import { story } from '../../app/story';
 import { Icon } from '../../components/Icon';
 import {
+  Boundaries,
   FeedbackExample,
   OpenFeedback,
   PrivacyFlow,
-  ProductFlow,
   RespectfulUse,
-  UseCases,
 } from '../../components/ProductStory';
 
 export function About() {
@@ -30,15 +29,15 @@ export function About() {
         <FeedbackExample />
       </header>
       <OpenFeedback />
-      <section className="story-section" aria-labelledby="about-uses-title">
+      <section
+        className="story-section"
+        aria-labelledby="about-boundaries-title"
+      >
         <div className="section-heading">
-          <h2 id="about-uses-title">{story.uses.title}</h2>
+          <h2 id="about-boundaries-title">{story.boundaries.title}</h2>
+          <p className="lede">{story.boundaries.intro}</p>
         </div>
-        <UseCases />
-      </section>
-      <section className="story-section" aria-labelledby="about-how-title">
-        <h2 id="about-how-title">From a question to a fresh perspective.</h2>
-        <ProductFlow label="How Nibhrito works" steps={story.steps} />
+        <Boundaries />
       </section>
       <section
         className="story-section privacy-story"
@@ -68,6 +67,9 @@ export function About() {
         <a className="button" href="/create">
           {copy.landing.create}
           <Icon name="arrow" />
+        </a>
+        <a className="text-link restore-link" href="/">
+          {c.stepsLink}
         </a>
       </section>
     </article>

@@ -67,6 +67,34 @@ test('public storytelling explains constructive feedback without crypto, storage
       exact: false,
     }),
   ).toBeVisible();
+  // The "why" page must add an honest account of its own limits rather than
+  // repeating the landing walkthrough.
+  const boundaries = page.getByRole('region', {
+    name: 'What Nibhrito does, and what it cannot do.',
+  });
+  await expect(boundaries).toBeVisible();
+  await expect(
+    boundaries.getByRole('heading', { name: 'What it does', exact: true }),
+  ).toBeVisible();
+  await expect(
+    boundaries.getByRole('heading', { name: 'What it cannot do', exact: true }),
+  ).toBeVisible();
+  await expect(
+    boundaries.getByText(
+      'Read or moderate the content of an encrypted message.',
+    ),
+  ).toBeVisible();
+  await expect(
+    boundaries.getByRole('link', { name: /security model/i }),
+  ).toHaveAttribute('href', '/security');
+  await expect(
+    page.getByRole('list', { name: 'How Nibhrito works' }),
+  ).toHaveCount(0);
+  await page.getByRole('link', { name: 'See how Nibhrito works' }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(
+    page.getByRole('list', { name: 'How Nibhrito works' }),
+  ).toBeAttached();
   expect(apiCalls).toBe(0);
   expect(origins.size).toBe(1);
   // Public explanation must remain readable; operational routes still fail closed.

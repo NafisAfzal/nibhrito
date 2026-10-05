@@ -150,6 +150,29 @@ export const story = {
     ],
     link: 'Our respectful-use guidelines',
   },
+  boundaries: {
+    eyebrow: 'An honest account',
+    title: 'What Nibhrito does, and what it cannot do.',
+    intro:
+      'Privacy here is a safety measure for honest, constructive feedback. It is not a promise of invisibility, and it is not a licence to hurt someone.',
+    providesLabel: 'What it does',
+    provides: [
+      'Keeps a sender’s name away from the person receiving the feedback.',
+      'Encrypts each message in the sender’s browser before it is uploaded.',
+      'Leaves you in control of expiry, pausing and deletion.',
+      'States its limits plainly instead of promising anonymity.',
+    ],
+    cannotLabel: 'What it cannot do',
+    cannot: [
+      'Make a sender untraceable to the network that carries the message.',
+      'Prove who a sender is, or stop someone misusing the space.',
+      'Read or moderate the content of an encrypted message.',
+      'Recover a lost recovery code on your behalf.',
+    ],
+    note: 'These limits are structural, not temporary.',
+    noteLink:
+      'Read the security model before you rely on this for anything sensitive.',
+  },
   about: {
     eyebrow: 'Why Nibhrito exists',
     title: 'Good feedback needs room to breathe.',
@@ -159,6 +182,7 @@ export const story = {
       'Privacy is here to protect people and make honest communication easier. This is a space for constructive expression, not a licence to hurt someone.',
     bangla: 'সৎ মতামত, সম্মান রেখে।',
     finalTitle: 'Start with a thoughtful question.',
+    stepsLink: 'See how Nibhrito works',
   },
   setup: {
     label: 'What you are creating',

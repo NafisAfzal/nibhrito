@@ -1,55 +1,60 @@
 # Nibhrito Project Status
 
-Updated 2026-10-05. This file, IMPLEMENTATION.md, SECURITY_REVIEW.md and the phase
+Updated 2026-10-06. This file, IMPLEMENTATION.md, SECURITY_REVIEW.md and the phase
 ExecPlans provide the handoff; no chat history is needed.
 
 ## Current state
 
-The final design-engineering and repository-presentation pass is implemented
-against the verified GitHub baseline `219d17e634cc0d5adc84d7fad1a0e24f40767366`.
-Both browser themes now have deliberate semantic colors and surface depth, an
-editorial public hero, a brand-derived conversation composition and short native
-CSS feedback. No theme-storage feature or runtime dependency was added. Paired
-public screenshots and maintainable light/dark architecture SVGs replace the
-single preview and four cramped Mermaid blocks. The source of truth for this
-pass is [design engineering evidence](docs/22_DESIGN_ENGINEERING.md) and
-[the design guide](DESIGN.md). The complete local gate passes 113 Vitest tests,
-60 portable browser cases and 20 installed-Edge cases. Local visual approval and
-physical-device/AT checks remain owner actions before the separate production
-deployment phase.
+An independent review pass started from verified handoff commit `d041d22` and
+audited the running application in a real browser. The previous design-engineering
+work was preserved: the dark palette, arch conversation hero, serif display type,
+immediate color changes and reduced-motion behaviour were checked against actual
+pixels in both themes and left unchanged. Two genuine defects were found and
+corrected, both presentation-only.
 
-All locally executable MVP work is complete: Phases 0–7 and Phase 8 deployment
-preparation. The complete UI/UX redesign, product-intent upgrade and final mobile/
-visual polish are implemented and verified. Remaining local accessibility and
-installed-Edge release checks are complete. Phases 1–8 and all three UX passes are recorded
-in reviewable commits, each with its plan, audit and verification handoff.
-Package is 1.0.0-rc.1. No Cloudflare provisioning, production secret/configuration,
-deployment or v1.0.0 tag has occurred. External production acceptance remains pending.
+The link-name `pattern` was rejected by the `v`-flag character-class parser that
+browsers use for HTML `pattern`. Native slug validation was therefore silently
+disabled and every load of the public `/create` page logged a console error. The
+hyphen is now escaped, and a browser regression asserts both the absence of the
+error and the accept/reject behaviour for valid, hyphenated, uppercase, spaced,
+underscored and edge-hyphen values. Server-side validation already rejected
+malformed slugs, so no security boundary was ever affected.
 
-GitHub publication preparation follows the verified e93fc70 baseline. Public-source
-and full-history review found no real secrets or unwanted private/generated files.
-The README, portable start guide and documentation index now provide the developer
-entry point; security/contribution guidance, templates, read-only CI and weekly
-dependency updates are prepared. The publication gate passes 113 Vitest tests,
-57 portable browser cases and 19 installed-Edge cases, plus the new native audit
-regression test. The complete history is published at
-[NafisAfzal/nibhrito](https://github.com/NafisAfzal/nibhrito), public with main as the
-default branch. Free security protections/private reports and weekly dependency
-automation are verified. Initial CI failed because its global Wrangler log setting
-suppressed structured D1 test output; that correction passes. Linux CI then found
-the initial phone setup field below the viewport because of extra text wrapping.
-A <=360px onboarding typography/spacing correction passes the complete local gate
-and Linux CI with the original viewport/security assertions intact. Installed Edge
-also passes all 19 cases after the correction. Publication is complete; Cloudflare
-deployment and live/manual acceptance remain separate owner actions.
-See [publication evidence](docs/21_GITHUB_PUBLICATION.md).
-No license is selected. Protocol, API, database, key handling and locked dependency
-versions have no changes. The scoped setup CSS correction was the only application
-change during publication; this later design pass is separately documented above.
+`/about`, the destination behind the "Why Nibhrito" navigation label, repeated the
+landing page's walkthrough rather than answering why the product exists. It now
+carries an honest "What Nibhrito does, and what it cannot do." account of
+capabilities and structural limits — untraceability, sender identity proof, content
+moderation and lost-code recovery — which was previously only scattered prose in
+the legal and security pages. The duplicated use-case and step-walkthrough sections
+were removed; the comparison, privacy story and respectful-use sections remain
+because they are the substantive shared arguments. No cryptography, key storage,
+recovery, API, Worker, schema, migration, header, dependency or policy change is
+present.
 
-Publication evidence: [passing Linux CI](https://github.com/NafisAfzal/nibhrito/actions/runs/37230785921),
+`git diff --name-only` over `src/crypto`, `shared`, `worker`, `migrations`,
+`index.html`, `.github`, `package.json`, `package-lock.json` and `scripts` is
+empty. The complete local gate passes 113 Vitest tests, 63 portable browser cases
+and 21 installed-Edge cases, with 272 automated accessibility state scans across
+four browsers and no violations. Source of truth for this pass is
+[design engineering evidence](docs/22_DESIGN_ENGINEERING.md) and
+[final verification](FINAL_VERIFICATION.md); the design conventions remain in the
+[design guide](DESIGN.md).
+
+Local visual approval and physical-device/assistive-technology checks remain owner
+actions before the separate production deployment phase. Package is 1.0.0-rc.1.
+No Cloudflare provisioning, production secret/configuration, deployment or v1.0.0
+tag has occurred.
+
+All locally executable MVP work remains complete: Phases 0–7 and Phase 8 deployment
+preparation, plus three UX passes, repository publication and this review pass.
+External production acceptance remains pending.
+
+GitHub publication is complete at
+[NafisAfzal/nibhrito](https://github.com/NafisAfzal/nibhrito), public with main as
+the default branch. Publication evidence: [passing Linux CI](https://github.com/NafisAfzal/nibhrito/actions/runs/37230785921),
 [source/history audit and verified settings](docs/21_GITHUB_PUBLICATION.md).
-The final handoff commit updates documentation only and runs the same CI again.
+Protocol, API, database, key handling and locked dependency versions have no
+changes. No license is selected.
 
 ## Implemented
 
@@ -109,20 +114,18 @@ The final handoff commit updates documentation only and runs the same CI again.
 
 ## Verification
 
-Final local release QA from repository root: full npm run check and npm run test:edge
-exit 0. Both migrations remain applied with no pending migration. This pass adds one
-locked dev dependency, axe-core 4.13.0; no transitive/runtime dependency was updated.
+Final local gate from repository root: full npm run check and npm run test:edge
+exit 0. Both migrations remain applied with no pending migration. No dependency
+version changed in this pass.
 
 - 113 Vitest tests in 18 files: native crypto/unit, D1/API/authorization/security,
   configuration/generator/deployment guards and real encrypted export/import/decrypt.
-- 57 browser cases (19 journeys/checks × Chromium, Firefox, WebKit), no skips/retries,
+- 63 browser cases (21 journeys/checks × Chromium, Firefox, WebKit), no skips/retries,
   isolated database/root; plaintext/network/persistence, XSS, CSP, recovery, archive,
   settings, deletion/expiry, malformed/substituted link, unsupported crypto, clipboard
-  absence and encoded contact-link tests pass.
-- 19 additional cases pass in installed Microsoft Edge 154.0.4258.53 with an isolated
-  profile, no retries/skips and the same security assertions. The first Edge command
-  timed out before tests during server startup; diagnostic health passed and a
-  sequential rerun passed without changing assertions or timeouts.
+  absence, encoded contact-link and native slug-validation tests pass.
+- 21 additional cases pass in installed Microsoft Edge with an isolated profile,
+  no retries/skips and the same security assertions.
 - 272 local automated accessibility state scans across four browsers: 53 public/menu
   and 15 private lifecycle/error states per engine, phone/desktop and light/dark
   where applicable. No rule violations; inconclusive checks remain manual-review
@@ -133,16 +136,22 @@ locked dev dependency, axe-core 4.13.0; no transitive/runtime dependency was upd
   Light/dark WCAG token contrast tests pass. An intentional failed-assertion probe
   confirms private DOM is absent from output and failure artifacts.
 - Intent coverage verifies positive examples, navigation to /about, public explanation
-  without crypto/storage/API access or third-party requests, ten-width captioned
-  diagram orientation/order, and setup/share/recovery/empty guides. All original
-  browser security assertions remain. Actual Worker and native critical journeys pass.
-- Final mobile coverage verifies the first setup field in a 320×568 viewport,
-  horizontal compact overview order, 44px primary targets, maximum-length slug,
-  complete copying/QR and long Bangla/English/mixed drafts in a focused 320×360
-  composer. Network failure preserves the draft; native encryption/decryption,
-  visible expiry and cancelled/confirmed message deletion work in all three engines.
+  without crypto/storage/API access or third-party requests, the honest
+  capability/limit account on /about, ten-width captioned diagram orientation/order,
+  and setup/share/recovery/empty guides. All original browser security assertions
+  remain. Actual Worker and native critical journeys pass.
+- Independent browser audit of the unchanged design: ten public routes at 1440px and
+  390px plus an eleven-width sweep from 320 to 1600px in both themes; zero horizontal
+  overflow, zero console or page errors, zero non-local origins, zero downloaded
+  fonts, sampled landing CLS 0 in both themes, and reduced motion rendering the
+  finished story with no transformation.
 - Strict TypeScript, lint, format, privacy/tracked-secret checks, production build,
   Worker dry run and npm audit --audit-level=low pass. Audit finds zero vulnerabilities.
+- Gitleaks 8.30.1 finds no leak in the working tree or any of the 27 commits;
+  OSV-Scanner reports no result across 331 lockfile packages; Semgrep's
+  security-audit and TypeScript rules find nothing across 97 rules on 154 tracked
+  files; the repository audit covers 188 current files and 433 historical blob
+  versions and its native regression passes.
 - Diff/secret/import review passes. Bundled Worker has no browser decryption or
   recipient private-key payload; schemas/data tests find no plaintext-message/raw
   private-key/recovery-secret persistence. Operator SQL export preserves ciphertext
@@ -220,6 +229,13 @@ availability/CPU/storage must be measured at staging; caps are conservative head
   protected server root, legal review and live HTTPS/headers/no injected scripts,
   quotas/CPU, Cron/log review and second-device recovery require the operator.
   No deployment or release acceptance is claimed locally.
+- Local browser gates are host-sensitive. On a shared Windows machine running other
+  development servers, the combined three-engine run failed nondeterministically in
+  WebKit at roughly 1.2 GB free memory; the untouched baseline and the changed code
+  both pass WebKit in isolation under identical conditions. No assertion, timeout,
+  retry, skip or browser target was changed to compensate. Free memory before a full
+  local gate is worth checking. GitHub CI on a dedicated Linux runner is the
+  authoritative combined result.
 
 ## Run and next action
 
@@ -238,21 +254,23 @@ See docs/20_RELEASE_ACCEPTANCE.md for exact remaining device/AT checks.
 
 ## Commit history and continuation
 
-| Phase      | Commit  | Outcome                                                               |
-| ---------- | ------- | --------------------------------------------------------------------- |
-| 0          | db74924 | Existing accepted foundation; earlier audit 0e1b44f, baseline 451488c |
-| 1          | 7e39a09 | Browser crypto/recovery protocol and tests                            |
-| 2          | d6b7450 | Profile creation/authentication/browser restore                       |
-| 3          | 538a138 | Verified encrypted sender and local QR                                |
-| 4          | 0873ea8 | Owner-scoped inbox/settings/deletion                                  |
-| 5          | 4cdbd11 | Bounded expiry cleanup and atomic quotas                              |
-| 6          | 93e64c9 | Bounded privacy-preserving abuse controls                             |
-| 7          | 3f1515e | Legal UX, encrypted backups and adversarial hardening                 |
-| 8          | 1df1698 | Guarded deployment/operations and clean local acceptance              |
-| UI         | ab5dc7d | Complete consumer UI/UX redesign                                      |
-| Intent UX  | 8526c06 | Positive product story and visual explanations across key flows       |
-| Polish UX  | 8c891fa | Visual meaning, semantic color and final phone/touch refinement       |
-| Release QA | e93fc70 | Local accessibility/Edge acceptance and matched browser theme colors  |
+| Phase      | Commit      | Outcome                                                               |
+| ---------- | ----------- | --------------------------------------------------------------------- |
+| 0          | db74924     | Existing accepted foundation; earlier audit 0e1b44f, baseline 451488c |
+| 1          | 7e39a09     | Browser crypto/recovery protocol and tests                            |
+| 2          | d6b7450     | Profile creation/authentication/browser restore                       |
+| 3          | 538a138     | Verified encrypted sender and local QR                                |
+| 4          | 0873ea8     | Owner-scoped inbox/settings/deletion                                  |
+| 5          | 4cdbd11     | Bounded expiry cleanup and atomic quotas                              |
+| 6          | 93e64c9     | Bounded privacy-preserving abuse controls                             |
+| 7          | 3f1515e     | Legal UX, encrypted backups and adversarial hardening                 |
+| 8          | 1df1698     | Guarded deployment/operations and clean local acceptance              |
+| UI         | ab5dc7d     | Complete consumer UI/UX redesign                                      |
+| Intent UX  | 8526c06     | Positive product story and visual explanations across key flows       |
+| Polish UX  | 8c891fa     | Visual meaning, semantic color and final phone/touch refinement       |
+| Release QA | e93fc70     | Local accessibility/Edge acceptance and matched browser theme colors  |
+| Design     | e550ce8     | Light/dark visual design refinement and repository presentation       |
+| Review     | (this pass) | Independent browser audit; slug `pattern` and `/about` corrections    |
 
 Each phase has a self-contained plan in .agent/plans. Original planning snapshot
 NIBHRITO_MASTER_PLAN.md is preserved; split docs plus documented audit decisions
@@ -267,6 +285,8 @@ The UI phase is documented in .agent/plans/ui-redesign.md and docs/17. The compl
 intent upgrade is in .agent/plans/product-intent-ux.md and docs/18. Final polish is in
 .agent/plans/final-mobile-polish.md and docs/19_FINAL_MOBILE_POLISH.md;
 remaining local QA is in .agent/plans/release-qa.md and docs/20_RELEASE_ACCEPTANCE.md.
-FINAL_VERIFICATION.md records the latest passing gates. The next action remains manual
-device/assistive-technology review and operator-controlled production acceptance,
-not further MVP implementation. No deployment was performed during any UX phase.
+The independent review pass is recorded in docs/22_DESIGN_ENGINEERING.md and
+FINAL_VERIFICATION.md. The next action remains owner local visual approval followed
+by manual device/assistive-technology review and operator-controlled production
+acceptance, not further MVP implementation. No deployment was performed during
+any UX, design or review phase.

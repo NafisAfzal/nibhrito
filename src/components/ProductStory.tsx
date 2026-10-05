@@ -187,6 +187,47 @@ export function OpenFeedback() {
   );
 }
 
+export function Boundaries() {
+  const c = story.boundaries;
+  const columns = [
+    {
+      key: 'provides' as const,
+      label: c.providesLabel,
+      icon: 'check' as const,
+      items: c.provides,
+    },
+    {
+      key: 'cannot' as const,
+      label: c.cannotLabel,
+      icon: 'warning' as const,
+      items: c.cannot,
+    },
+  ];
+  return (
+    <div className="boundaries">
+      {columns.map((column) => (
+        <div
+          className={'boundary-column boundary-' + column.key}
+          key={column.key}
+        >
+          <h3>
+            <Icon name={column.icon} />
+            {column.label}
+          </h3>
+          <ul>
+            {column.items.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+      <p className="story-limits boundary-note">
+        {c.note} <a href="/security">{c.noteLink}</a>
+      </p>
+    </div>
+  );
+}
+
 export function RespectfulUse({ showLink = true }: { showLink?: boolean }) {
   const c = story.respect;
   return (

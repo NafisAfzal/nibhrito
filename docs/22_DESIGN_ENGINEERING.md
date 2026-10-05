@@ -6,6 +6,44 @@ The [design guide](../DESIGN.md) records the resulting visual conventions;
 the [execution plan](../.agent/plans/design-engineering.md) records implementation
 and acceptance progress.
 
+## Independent review and two corrections — 2026-10-06
+
+A separate review pass started from verified handoff commit `d041d22` and audited
+the running application in Chromium rather than its source. The previous design
+work was preserved: the dark palette, the arch conversation hero, serif display
+type, immediate color changes and reduced-motion behaviour were reviewed against
+actual pixels and left unchanged. Two genuine defects were found and corrected.
+
+| Defect                                                                                                                                                  | Evidence                                                                                                                                                                                                                | Correction                                                                                                                                                                                   |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| The link-name `pattern` was not a valid regular expression, so the browser silently dropped native slug validation and logged an error on a public page | `pattern="[a-z0-9][a-z0-9-]{1,30}[a-z0-9]"` is rejected by the `v`-flag character-class parser used for HTML `pattern`; a probe confirmed the console error and that `checkValidity()` stopped blocking malformed slugs | Escape the hyphen: `[a-z0-9][a-z0-9\-]{1,30}[a-z0-9]`. A probe confirms no console error and that valid, hyphenated, uppercase, spaced, underscored and edge-hyphen values resolve correctly |
+| `/about`, the destination behind the "Why Nibhrito" navigation label, repeated the landing page instead of answering "why"                              | `About.tsx` rendered the same `OpenFeedback`, `UseCases`, `ProductFlow`, `PrivacyFlow` and `RespectfulUse` sections as `Landing.tsx`; only the hero and one CTA heading differed                                        | Added "What Nibhrito does, and what it cannot do." — an honest two-column account of capabilities and structural limits — and removed the duplicated use-case and step-walkthrough sections  |
+
+Both corrections are presentation-only. Server-side validation already rejected
+malformed slugs, so the first defect lost a client-side guard and produced a
+console error rather than a security weakness. No cryptography, key storage,
+recovery, API, Worker, schema, migration, header or dependency change is present;
+`git diff --name-only` over `src/crypto`, `shared`, `worker`, `migrations`,
+`index.html`, `.github`, `package.json`, `package-lock.json` and `scripts` is
+empty.
+
+The replacement section uses a composition not otherwise present on the site: two
+hairline-ruled columns of single-line statements, accent teal for capability and
+warning amber for structural limit, rather than another icon-and-caption card
+grid. It states what Nibhrito cannot do — untraceability, sender identity
+proof, content moderation, lost-code recovery — which was previously present only
+as scattered prose in the legal and security pages.
+
+Independent browser review of the unchanged design found no other actionable
+defect. Recorded as deliberate, not corrected: the hero arch is quieter in dark
+mode than in light; the three-step connector motif is reused across five
+surfaces; the "Honest can still be kind." block mixes an indented heading with
+full-width links; and the send header's privacy link wraps at 390px. The
+short vertical arrow between the Worker API and D1 boxes in the message-flow SVG
+reads as a small diamond at full size. None of these break comprehension,
+overflow, contrast, accessibility or a documented convention, and each would
+trade a coherent existing system for a local gain.
+
 ## Development environment
 
 The environment was inspected before application edits. Codex CLI 0.160.0 and

@@ -55,6 +55,44 @@ test('creating and switching multiple local profiles preserves the selected spac
   ).toBeVisible();
 });
 
+test('the link name field keeps a valid native pattern and blocks malformed slugs', async ({
+  page,
+}) => {
+  const consoleErrors: string[] = [];
+  page.on('console', (message) => {
+    if (message.type() === 'error') consoleErrors.push(message.text());
+  });
+  page.on('pageerror', (error) => consoleErrors.push(error.message));
+  await page.goto('/create');
+  const slug = page.getByLabel('Link name', { exact: true });
+  // A pattern the browser cannot compile is silently dropped, so assert both the
+  // absence of the compile error and that constraint validation still runs.
+  const nativeCheck = await slug.evaluate((field) => {
+    const input = field as HTMLInputElement;
+    const verdict = (value: string) => {
+      input.value = value;
+      return input.checkValidity();
+    };
+    return {
+      validSlug: verdict('my-link-2'),
+      hyphenated: verdict('a-b-c'),
+      upperCase: verdict('MyLink'),
+      space: verdict('my link'),
+      underscore: verdict('my_link'),
+      edgeHyphen: verdict('-my-link'),
+    };
+  });
+  expect(nativeCheck).toEqual({
+    validSlug: true,
+    hyphenated: true,
+    upperCase: false,
+    space: false,
+    underscore: false,
+    edgeHyphen: false,
+  });
+  expect(consoleErrors).toEqual([]);
+});
+
 test('all public destinations fit mobile, tablet and desktop in light and dark', async ({
   page,
 }) => {
